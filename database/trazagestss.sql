@@ -24,33 +24,24 @@ CREATE TABLE `tbl_actividad` (
   `descripcion` varchar(255) DEFAULT NULL,
   `descripciongeneral` text,
   PRIMARY KEY (`actividadid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tbl_actividad
 -- ----------------------------
+-- ----------------------------
+-- Table structure for tbl_sisliqui
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_sisliqui`;
+CREATE TABLE `tbl_sisliqui` (
+  `sisliquiid` int(11) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`sisliquiid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tbl_detaactiv
+-- Records of tbl_sisliqui
 -- ----------------------------
-DROP TABLE IF EXISTS `tbl_detaactiv`;
-CREATE TABLE `tbl_detaactiv` (
-  `detaactivid` int(11) NOT NULL,
-  `empleaid` int(11) DEFAULT NULL,
-  `actividadid` int(11) DEFAULT NULL,
-  `detaactivrubro` varchar(255) DEFAULT NULL,
-  `detaactivconvenio` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`detaactivid`),
-  KEY `empleaid` (`empleaid`),
-  KEY `actividadid` (`actividadid`),
-  CONSTRAINT `tbl_detaactiv_ibfk_1` FOREIGN KEY (`empleaid`) REFERENCES `tbl_empleadores` (`empleaid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tbl_detaactiv_ibfk_2` FOREIGN KEY (`actividadid`) REFERENCES `tbl_actividad` (`actividadid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- ----------------------------
--- Records of tbl_detaactiv
--- ----------------------------
-
 -- ----------------------------
 -- Table structure for tbl_empleadores
 -- ----------------------------
@@ -72,11 +63,33 @@ CREATE TABLE `tbl_empleadores` (
   PRIMARY KEY (`empleaid`),
   KEY `empleasliquiid` (`empleasliquiid`),
   CONSTRAINT `tbl_empleadores_ibfk_1` FOREIGN KEY (`empleasliquiid`) REFERENCES `tbl_sisliqui` (`sisliquiid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tbl_empleadores
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for tbl_detaactiv
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_detaactiv`;
+CREATE TABLE `tbl_detaactiv` (
+  `detaactivid` int(11) NOT NULL,
+  `empleaid` int(11) DEFAULT NULL,
+  `actividadid` int(11) DEFAULT NULL,
+  `detaactivrubro` varchar(255) DEFAULT NULL,
+  `detaactivconvenio` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`detaactivid`),
+  KEY `empleaid` (`empleaid`),
+  KEY `actividadid` (`actividadid`),
+  CONSTRAINT `tbl_detaactiv_ibfk_1` FOREIGN KEY (`empleaid`) REFERENCES `tbl_empleadores` (`empleaid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tbl_detaactiv_ibfk_2` FOREIGN KEY (`actividadid`) REFERENCES `tbl_actividad` (`actividadid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Records of tbl_detaactiv
+-- ----------------------------
+
+
 
 -- ----------------------------
 -- Table structure for tbl_libro
@@ -90,22 +103,10 @@ CREATE TABLE `tbl_libro` (
   PRIMARY KEY (`libroid`),
   KEY `empleaid` (`empleaid`),
   CONSTRAINT `tbl_libro_ibfk_1` FOREIGN KEY (`empleaid`) REFERENCES `tbl_empleadores` (`empleaid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tbl_libro
 -- ----------------------------
 
--- ----------------------------
--- Table structure for tbl_sisliqui
--- ----------------------------
-DROP TABLE IF EXISTS `tbl_sisliqui`;
-CREATE TABLE `tbl_sisliqui` (
-  `sisliquiid` int(11) NOT NULL,
-  `descripcion` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`sisliquiid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- ----------------------------
--- Records of tbl_sisliqui
--- ----------------------------

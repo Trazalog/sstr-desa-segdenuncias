@@ -1,11 +1,13 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteBase /codeigniter
+RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /trazalog/segdenuncias/index.php/$1 [L]
+RewriteRule ^(.*)$ /sstr-desa-segdenuncias/index.php/$1 [L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>
-ErrorDocument 404 /trazalog/segdenuncias/index.php
+ErrorDocument 404 /sstr-desa-segdenuncias/index.php
 </IfModule>
+
+
