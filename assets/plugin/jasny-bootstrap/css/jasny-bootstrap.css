@@ -534,7 +534,7 @@
   direction: ltr;
 }
 .fileinput {
-  display: inline-block;
+  display: block;
   margin-bottom: 9px;
 }
 .fileinput .form-control {
