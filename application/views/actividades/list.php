@@ -23,27 +23,27 @@
             </thead>
             <tbody>
               <?php
-              	foreach($list as $c)
-    		        {
-	                $id=$c['actividadid'];
+                foreach($list as $c)
+                {
+                  $id=$c['actividadid'];
 
                     echo '<tr id="'.$id.'" class="'.$id.'" >';
                     echo '<td>';
                     if (strpos($permission,'Edit') !== false) {
-	                	echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;"></i>';
+                    echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;"></i>';
                     }
                     if (strpos($permission,'Del') !== false) {
-	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i>';
+                    echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i>';
                     }
                     
 
-	                echo '</td>';
-	                echo '<td>'.$c['actividadid'].'</td>';
+                  echo '</td>';
+                  echo '<td>'.$c['actividadid'].'</td>';
                     echo '<td>'.$c['descripcion'].'</td>';
                     echo '<td>'.$c['descripciongeneral'].'</td>';
-	                echo '</tr>';
+                  echo '</tr>';
 
-    		        }
+                }
               ?>
             </tbody>
           </table>
@@ -71,7 +71,7 @@
     }
 
     $('#error').fadeOut('slow');
-
+    WaitingOpen();
     $.ajax({
      type: 'POST',
      data: {  "descripcion" : nombre, "descripciongeneral": descripcion },
@@ -79,11 +79,10 @@
      success: function(result){
       WaitingClose();
       $('#modalAgregar').modal('hide');
-      setTimeout("cargarView('Actividad', 'index', '"+$('#permission').val()+"');",1000);
-
-
+      regresa();
     },
     error: function(result){
+      WaitingClose();
       alert("OPERACIÓN FALLIDA");
     }
   });
@@ -143,7 +142,7 @@
     }
 
     $('#errorE').fadeOut('slow');
-     
+     WaitingOpen();
      $.ajax({
        type: 'POST',
        dataType : "json",
@@ -152,10 +151,11 @@
        success: function(result){
         WaitingClose();
        $('#modalEditar').modal('hide');
-        setTimeout("cargarView('Actividad', 'index', '"+$('#permission').val()+"');",1000);  
+        regresa();
 
         },
         error: function(result){
+            WaitingClose();
             alert("OPERACION FALLIDA");
             console.log(result);
         }
@@ -164,27 +164,31 @@
 
     }
 
+    $(".fa-times-circle").click(function (e) 
+    { 
+    id = $(this).parents('tr').find('td').eq(1).html();
+    $('#modalEliminar').modal('show');
+    });
  
-    //eliminar cliente
-    $(".fa-times-circle").click(function (e) {
-        var id = $(this).parents('tr').find('td').eq(1).html();
-        console.log(id);
+    //eliminar 
+    function eliminarActividad(){
+      WaitingOpen();
         $.ajax({
                 type: 'POST',
                 data: { "actividadid": id},
                 url: 'index.php/Actividad/Eliminar_tbl_actividade', 
                 success: function(data){
-                        console.log(data);
-                        alert("OPERACIÓN EXITOSA");
-                        regresa();
+                        WaitingClose();
+                        regresa(); 
                       
                       },
                   
                 error: function(result){
+                     WaitingClose();
                       alert("OPERACIÓN FALLIDA");
                    }
         });
-    });
+    }
 
 
     function regresa(){
@@ -212,12 +216,12 @@ $(function(){
         "paging": true,
         "language": {
             "sProcessing":     "Procesando...",
-            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sLengthMenu":     "Mostrar MENU registros",
             "sZeroRecords":    "No se encontraron resultados",
             "sEmptyTable":     "Ningún dato disponible en esta tabla",
-            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfo":           "Mostrando registros del START al END de un total de TOTAL registros",
             "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered":   "(filtrado de un total de MAX registros)",
             "sInfoPostFix":    "",
             "sSearch":         "Buscar:",
             "sUrl":            "",
@@ -253,17 +257,17 @@ $(function(){
     }
 </style>
 
-<!-- Modal -->
-<div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+
+
+<div class="modal" id="modalAgregar">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Nueva Actividad</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Nueva Actividad</h4>
       </div>
-      <div class="modal-body" id="modalBodyCustomer">
-
-          <div class="row">
+      <div class="modal-body">
+       <div class="row">
           <div class="col-xs-12">
             <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
              <h4><i class="icon fa fa-ban"></i> Error!</h4>
@@ -289,37 +293,71 @@ $(function(){
 
             </div>
         </div><br>
-
-
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnSave"  onclick="guardarActividad()">Guardar</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>       
       </div>
-    </div>
-  </div>
-</div>
+      <div class="modal-footer">
 
-<!-- Modal -->
-<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+        <button type="button" class="btn btn-primary" onclick="guardarActividad()" >Guardar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<div class="modal" id="modalEditar">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Nueva Actividad</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Editar Actividad</h4>
+      </div>
+        <div class="modal-body" id="cuerpoModalEditar">
+         <div class="row">
+            <div class="col-xs-12">
+              <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+               <h4><i class="icon fa fa-ban"></i> Error!</h4>
+               Revise que todos los campos esten completos
+             </div>
+           </div>
+         </div>
+        </div>
+
+       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="editarActividad()" >Guardar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+      
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal" id="modalEliminar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Eliminar Actividad</h4>
       </div>
       <div class="modal-body" id="cuerpoModalEditar">
-
-
-
-          
-
-
-        </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="btnSave"  onclick="editarActividad()">Guardar</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>       
+       <h5>¿Desea eliminar el registro?</h5> 
       </div>
-    </div>
-  </div>
-</div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarActividad()" >Eliminar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
