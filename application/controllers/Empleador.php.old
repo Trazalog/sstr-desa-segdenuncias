@@ -212,7 +212,7 @@ class Empleador extends CI_Controller
 
 
 	/***   NOTAS   ***/
-	
+
 	// agrega nota
 	public function guardarNota(){
 		//El metodo is_ajax_request() de la libreria input permite verificar
@@ -229,10 +229,10 @@ class Empleador extends CI_Controller
 			if ($this->upload->do_upload('nota')) {
 				$data = array("upload_data" => $this->upload->data());
 				$datos = array(
-					"fecha" => $fechaEntregaNota,
-					"res" => $resolucion,											
-					"imagen" => $data['upload_data']['file_name'],
-					"empleaid" => $idEmpleador,
+					"fecha"      => $fechaEntregaNota,
+					"res"        => $resolucion,											
+					"imagen"     => $data['upload_data']['file_name'],
+					"empleaid"   => $idEmpleador,
 					"notaestado" => "AC"
 				);
 				if($this->Empleadores->guardarNota($datos) == true)
@@ -252,74 +252,44 @@ class Empleador extends CI_Controller
 
 	// Guarda edicion de Nota
 	public function editarNota(){
-		//dump( $_POST );
-		//dump ( $_FILES );
-		$idEmpleador = $this->input->post("mEmpleadorId");
-		$idNota = $this->input->post("mNotaId");
-		$fecEntrega = $this->input->post("mFecha");
-		$resolucion = $this->input->post("mResolucion");
-		$nomcodif = $this->codifNombre($idEmpleador,$idNota);   //codifico nombre para guardar 
+		dump( $_POST );
+		dump ( $_FILES );
+		echo json_encode( true );
+		// si viene $_FILES es porque no toco la imagen
+		// por lo tanto hay que actualizar fecha y resolucion, pero no la imagen!!!
+		// (no hice mas porque encontre errores que tuve que arreglar)
 
-		// si trae imagen nueva
-		if(isset($_FILES)){
-
-			$config = [
-				"upload_path" => "./assets/notas",
-				'allowed_types' => "png|jpg",
-				'file_name' => $nomcodif
-			];
-			$this->load->library("upload",$config);
-
-			// si subio la imagen
-			//if ($this->upload->do_upload('myimage')) {
-			if ($this->upload->do_upload('myimage')) {
-
-				$datos = array(
-					"fecha" => $fecEntrega,
-					"res" => $resolucion,           
-					"imagen" => $nomcodif.$this->upload->data('file_ext')
-				);
-
-				if($this->Empleadores->updateNota($datos,$idNota) == true){
-					//elimina el archivo en servidor
-					//unlink("./assets/notas".$file);     
-					$response['notas'] = $this->Empleadores->getEmpleadorNotas($idEmpleador);
-					echo json_encode($response);
-				}else{
-					echo json_encode(false);
-				}
+		/* esto esta en usuario * /
+		$dataForm['id'] = $_POST['id'];
+		$dataForm['act'] = $_POST['act'];
+		$dataForm['usrNick'] = $_POST['usrNick'];
+		if (isset($_POST['myimage']) && $_POST['myimage'] == 1) {
+			$data['id'] = $_POST['id'];
+			$data['act'] = 'View';
+			$dataUser = $this->Users->getUser($data);
+			$dataForm['usrimag'] = $dataUser['user']['usrimag'];
+		} else {
+			if( isset($_FILES['myimage']['size']) && $_FILES['myimage']['size'] != 0 ) {
+				//Convertimos la información de la imagen en binario para insertarla en la BBDD
+				$imagenBinaria = file_get_contents($_FILES['myimage']['tmp_name']);
+				$dataForm['usrimag'] = $imagenBinaria;
+			} else {
+				$dataForm['usrimag'] = '';
 			}
-   
-		// update de nombre y fecha solamente
-		}else{
-			//update nnombre fecha e imagen y borro anterior
-			echo "vacio!!!";
-			echo json_encode(false);
 		}
+		$data = $this->Users->setUser( $dataForm );
+		/* hasta aca de usuarios */
+
+		$idEmpleador = $_POST['empleaid'];
+		$response['libros'] = $this->Empleadores->getEmpleadorNotas($idEmpleador);
+		echo json_encode($response);
 	}
 
-	// Codifica nombre de imagen para no repetir en servidor
-	// formato "12_11_2018-05-21-15-26-24" idempleador_idnota_fecha(año-mes-dia-hora-min-seg)
-	function codifNombre($idempleador,$idnota){
-		$guion       = '_';
-		$guion_medio = '-';
-		$hora        = date('Y-m-d H:i:s');// hora actual del sistema 
-		$delimiter   = array(" ",",",".","'","\"","|","\\","/",";",":");
-		$replace     = str_replace($delimiter, $delimiter[0], $hora);
-		$explode     = explode($delimiter[0], $replace);
-		
-		$strigHora   = $explode[0].$guion_medio.$explode[1].$guion_medio.$explode[2].$guion_medio.$explode[3];
-		
-		$nomImagen   = $idempleador.$guion.$idnota.$guion.$strigHora;
-		
-		return $nomImagen;
-	}
-
-	// Elimina nota
+	// Elimina libro
 	public function deleteNotaPorId(){
 		$idNota      = $this->input->post('notid');
 		$idEmpleador = $this->input->post('empleadorid');
-		$response['isOk']  = $this->Empleadores->deleteNota($idNota );
+		$response['isOk']  = $this->Empleadores->deleteNota($idNota);
 		$response['notas'] = $this->Empleadores->getEmpleadorNotas($idEmpleador);
 		echo json_encode($response);
 	}

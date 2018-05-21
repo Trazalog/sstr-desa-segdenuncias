@@ -1454,12 +1454,14 @@
       type: "POST",
       url: "index.php/Empleador/editarNota",
       success: function(data){
+        data = JSON.parse(data);
         $('#tbl-nota').DataTable().clear();
         for(i = 0; i < data['notas'].length; i++) {
           var notid      = data['notas'][i]['notid'];
           var fecha      = data['notas'][i]['fecha'];
           var resolucion = data['notas'][i]['res'];
           var imagen     = data['notas'][i]['imagen'];
+          console.info(imagen);
           //agrego valores a la tabla
           $('#tbl-nota').DataTable().row.add( [
             '<i class="fa fa-fw fa-pencil text-light-blue btnEditNota" style="cursor: pointer; margin-left: 15px;" data-notaid="'+notid+'"></i>'+
@@ -1467,10 +1469,16 @@
             notid,
             fecha,
             resolucion,
-            '<a href="#" class="pop"><img style="width: 20px; height: 20px;" src="<?php echo base_url() ?>assets/notas/'+imagen+'""></a>',
+            '<a href="#" class="pop"><img style="width: 20px; height: 20px;" src="<?php echo base_url() ?>assets/notas/'+imagen+'"></a>',
             ] ).node().id = notid;
           $('#tbl-nota').DataTable().draw();
         }
+
+        $('#modalEditNotas').modal('hide');
+        // nosexq bacdrop no se va... entonces lo oculto 
+        $('#modalEditNotas').on('hidden.bs.modal', function () {
+          $(".modal-backdrop.in").hide();
+        });
         WaitingClose();
       },
       error: function(result){

@@ -401,6 +401,14 @@ class Empleadores extends CI_Model
         }
     }
 
+    //Edita notas
+    function updateNota($datos,$idNota){
+        $this->db->where('notid', $idNota);
+        $query = $this->db->update('tbl_notas', $datos);
+        
+        return $query;
+    }
+    
     // Cambia a estado 'AN' nota
     function deleteNota($id){
         $this->db->where('notid', $id);
