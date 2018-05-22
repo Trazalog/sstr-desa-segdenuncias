@@ -71,7 +71,7 @@
     }
 
     $('#error').fadeOut('slow');
-
+    WaitingOpen();
     $.ajax({
      type: 'POST',
      data: {  "descripcion" : nombre, "descripciongeneral": descripcion },
@@ -82,6 +82,7 @@
       regresa();
     },
     error: function(result){
+      WaitingClose();
       alert("OPERACIÓN FALLIDA");
     }
   });
@@ -141,7 +142,7 @@
     }
 
     $('#errorE').fadeOut('slow');
-     
+     WaitingOpen();
      $.ajax({
        type: 'POST',
        dataType : "json",
@@ -154,6 +155,7 @@
 
         },
         error: function(result){
+            WaitingClose();
             alert("OPERACION FALLIDA");
             console.log(result);
         }
@@ -162,27 +164,31 @@
 
     }
 
+    $(".fa-times-circle").click(function (e) 
+    { 
+    id = $(this).parents('tr').find('td').eq(1).html();
+    $('#modalEliminar').modal('show');
+    });
  
-    //eliminar cliente
-    $(".fa-times-circle").click(function (e) {
-        var id = $(this).parents('tr').find('td').eq(1).html();
-        console.log(id);
+    //eliminar 
+    function eliminarActividad(){
+      WaitingOpen();
         $.ajax({
                 type: 'POST',
                 data: { "actividadid": id},
                 url: 'index.php/Actividad/Eliminar_tbl_actividade', 
                 success: function(data){
-                        console.log(data);
-                        alert("OPERACIÓN EXITOSA");
-                        regresa();
+                        WaitingClose();
+                        regresa(); 
                       
                       },
                   
                 error: function(result){
+                     WaitingClose();
                       alert("OPERACIÓN FALLIDA");
                    }
         });
-    });
+    }
 
 
     function regresa(){
@@ -298,6 +304,9 @@ $(function(){
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+
+
 <div class="modal" id="modalEditar">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -305,24 +314,50 @@ $(function(){
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Editar Actividad</h4>
       </div>
-      <div class="modal-body" id="cuerpoModalEditar">
-       <div class="row">
-          <div class="col-xs-12">
-            <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
-             <h4><i class="icon fa fa-ban"></i> Error!</h4>
-             Revise que todos los campos esten completos
+        <div class="modal-body" id="cuerpoModalEditar">
+         <div class="row">
+            <div class="col-xs-12">
+              <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+               <h4><i class="icon fa fa-ban"></i> Error!</h4>
+               Revise que todos los campos esten completos
+             </div>
            </div>
          </div>
-       </div>
+        </div>
 
-         
+       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="editarActividad()" >Guardar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+      
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal" id="modalEliminar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Eliminar Actividad</h4>
+      </div>
+      <div class="modal-body" id="cuerpoModalEditar">
+       <h5>¿Desea eliminar el registro?</h5> 
       </div>
       <div class="modal-footer">
 
-        <button type="button" class="btn btn-primary" onclick="editarActividad()" >Guardar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarActividad()" >Eliminar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+
+
+
+

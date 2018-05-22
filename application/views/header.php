@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/font-awesome.min.css">
     <!-- Ionicons 2.0.1 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/ionicons.min.css">
-    <!-- Jquery UI 1.12.1 -->
+    <!-- jquery UI 1.12.1 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.min.css">
     <!-- DataTables 1.10.7 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.css">
@@ -151,7 +151,7 @@
 </style>
 
 <script>
-/* Inicialización en español para la extensión 'UI date picker' para jQuery. */
+/* Inicialización en español para la extensión 'UI date picker' para jquery. */
 /* Traducido por Vester (xvester@gmail.com). */
 (function( factory ) {
     if ( typeof define === "function" && define.amd ) {
@@ -159,7 +159,7 @@
         define([ "../widgets/datepicker" ], factory );
     } else {
         // Browser globals
-        factory( jQuery.datepicker );
+        factory( jquery.datepicker );
     }
 }(function( datepicker ) {
     datepicker.regional['es'] = {

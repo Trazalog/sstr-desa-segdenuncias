@@ -68,7 +68,7 @@
     }
 
     $('#error').fadeOut('slow');
-
+          WaitingOpen();
           $.ajax({
              type: 'POST',
              data: { "descripcion": descripcion },
@@ -82,6 +82,7 @@
 
             },
             error: function(result){
+              WaitingClose();
                 alert("OPERACIÓN FALLIDA");
             }
             });
@@ -125,14 +126,13 @@
       hayError = true;
     }
    
-
-    if(hayError == true){
+   if(hayError == true){
       $('#errorE').fadeIn('slow');
       return;
     }
 
     $('#errorE').fadeOut('slow');
-     
+     WaitingOpen();
      $.ajax({
        type: 'POST',
        dataType : "json",
@@ -145,6 +145,7 @@
 
     },
     error: function(result){
+      WaitingClose();
         alert("OPERACIÓN FALLIDA");
         console.log(result);
     }
@@ -153,27 +154,33 @@
 
  }
 
+$(".fa-times-circle").click(function (e) { 
+
+    id= $(this).parents('tr').find('td').eq(1).html();
+    $('#modalEliminar').modal('show');
+    
+  });
  
-    //eliminar cliente
-    $(".fa-times-circle").click(function (e) {
-        var id = $(this).parents('tr').find('td').eq(1).html();
-        console.log(id);
+    //eliminar 
+    function eliminarLiquidacion(){
+      WaitingOpen();
         $.ajax({
                 type: 'POST',
                 data: { "sisliquiid": id},
                 url: 'index.php/Liquidacion/Eliminar_liquidacione', 
                 success: function(data){
+                  WaitingClose();
                         console.log(data);
-                        alert("OPERACIÓN EXITOSA");
                         regresa();
                       
                       },
                   
                 error: function(result){
+                  WaitingClose();
                       alert("OPERACIÓN FALLIDA");
                    }
         });
-    });
+    }
 
 
     function regresa(){
@@ -242,44 +249,6 @@ $(function(){
     }
 </style>
 
-<!--  Modal -->
-<!-- <div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Nueva Liquidacion</h4>
-      </div>
-      <div class="modal-body" id="modalBodyCustomer">
-
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
-             <h4><i class="icon fa fa-ban"></i> Error!</h4>
-             Revise que todos los campos esten completos
-           </div>
-         </div>
-       </div>
-
-       <div class="row">
-        <div class="col-xs-4">
-          <label style="margin-top: 7px;">Descripción <strong style="color: #dd4b39">*</strong>: </label>
-        </div>
-        <div class="col-xs-5">
-          <input type="text" class="form-control"  id="descripcion" >
-
-        </div>
-      </div><br>
-
-
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" id="btnSave" onclick="guardarLiquidacion()">Guardar</button>
-      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>       
-    </div>
-  </div>
-</div>
-</div> -->
 <!-- Modal -->
 <div class="modal" id="modalAgregar">
   <div class="modal-dialog">
@@ -342,6 +311,26 @@ $(function(){
       <div class="modal-footer">
 
         <button type="button" class="btn btn-primary" onclick="editarLiquidacion()" >Guardar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal" id="modalEliminar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Eliminar Liquidacion</h4>
+      </div>
+      <div class="modal-body" id="cuerpoModalEditar">
+       <h5>¿Desea eliminar el registro?</h5> 
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="eliminarLiquidacion()" >Eliminar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         
       </div>
