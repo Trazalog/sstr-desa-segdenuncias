@@ -303,13 +303,141 @@
   });
   /* Edito empleador */
   $(".btnEdit").on("click", function(e){
-    WaitingOpen();
+    e.preventDefault();
+    //$('#confirmDelete').modal('show');
     var idEmpleador = $(this).data("idempleador");
-    var url = "<?php echo base_url(); ?>index.php/Empleador/editEmpleador/<?php echo $permission; ?>/"+idEmpleador;
-    //alert(url);
-    $('#content').empty();
-    $("#content").load(url);
-    WaitingClose();
+    console.debug(idEmpleador);
+    WaitingOpen('Cargando Empleador');
+    $('#btnSave').html('Editar').show();
+
+    $.ajax({
+      data: { id_empleador : idEmpleador },
+      dataType: 'json',
+      type: 'POST',
+      url: 'index.php/Empleador/getEmpleadorPorId',
+      success: function(data){
+        $('#fecha').removeAttr('disabled');
+        $('#nro-inscripcion').removeAttr('disabled');
+        $('#expediente').removeAttr('disabled');
+        $('#cuit').removeAttr('disabled');
+        $('#razon-social').removeAttr('disabled');
+        $('#domicilio-legal').removeAttr('disabled');
+        $('#personal-masculino').removeAttr('disabled');
+        $('#personal-femenino').removeAttr('disabled');
+        //console.log('datos: ' + data['empleador'][0]['empleaexp']);
+        
+        tipo = data['empleador'][0]['empleatipo'];
+        $("input[name='tipoEmpleador'][value='"+tipo+"']").prop('checked', true);
+        $('#fecha').val( data['empleador'][0]['empleafecha'] );
+        $('#nro-inscripcion').val( data['empleador'][0]['empleainscrip'] );
+        $('#expediente').val( data['empleador'][0]['empleaexp'] );
+        $('#cuit').val( data['empleador'][0]['empleacui'] );
+        $('#razon-social').val( data['empleador'][0]['emplearazsoc'] );
+        $('#domicilio-real').val( data['empleador'][0]['empleadomicilior'] );
+        $("#departamentos").removeAttr( "disabled" );
+
+        idProvincia = data['empleador'][0]['empleaprovid'];
+        $("#provincias option[value='"+idProvincia+"']").attr("selected","selected");
+        idDepartamento = data['empleador'][0]['empleadepid'];
+        idDepartamento = parseInt(idDepartamento);
+        traerDepartamentos( idProvincia, idDepartamento );
+        //console.info(idDepartamento);
+        $("#departamentos option[value='"+idDepartamento+"']").attr("selected","selected");
+
+        idLiquidacion = data['empleador'][0]['empleasliquiid']
+        $("#liquidacion option[value='"+idLiquidacion+"']").attr("selected",true);
+
+        $('#personal-masculino').val( data['empleador'][0]['empleapmasc'] ); 
+        $('#personal-femenino').val( data['empleador'][0]['empleapfem'] );
+        
+        //cargo establecimientos
+        $('#tbl-establecimiento_wrapper').prev().show();
+        $('#tbl-establecimiento_wrapper').prev().prev().show();
+        $('#tbl-establecimiento').DataTable().clear();
+        console.table( data );
+        for(i = 0; i < data['establecimientos'].length; i++) {
+          var establecalle    = data['establecimientos'][i]['establecalle'];
+          var establealtura   = data['establecimientos'][i]['establealtura'];
+          var establepiso     = data['establecimientos'][i]['establepiso'];
+          var establedpto     = data['establecimientos'][i]['establedpto'];
+          var establelatitud  = data['establecimientos'][i]['establelatitud'];
+          var establelongitud = data['establecimientos'][i]['establelongitud'];
+          var provid          = data['establecimientos'][i]['provid'];
+          var dptoid          = data['establecimientos'][i]['dptoid'];
+
+          //agrego valores a la tabla
+          $('#tbl-establecimiento').DataTable().row.add( [
+              "<i class ='fa fa-ban elirow delEstablecimiento text-primary' style='cursor:pointer'></i>",
+              establecalle,
+              establealtura,
+              establepiso,
+              establedpto,
+              provid,
+              dptoid,
+              establelatitud,
+              establelongitud,
+            ]
+          ).draw();
+        }
+        //cargo actividades
+        $('#tbl-actividad_wrapper').prev().show();
+        $('#tbl-actividad_wrapper').prev().prev().show();
+        $('#tbl-actividad').DataTable().clear();
+        console.table( data['actividad'] );
+        for(i = 0; i < data['actividad'].length; i++) {
+          var actividad = data['actividad'][i]['descripcion'];
+          var rubro     = data['actividad'][i]['detaactivrubro'];
+          var convenio  = data['actividad'][i]['detaactivconvenio'];
+
+          //agrego valores a la tabla
+          $('#tbl-actividad').DataTable().row.add( [
+              "<i class ='fa fa-ban elirow delActividad text-primary' style='cursor:pointer'></i>",
+              actividad,
+              rubro,
+              convenio
+            ]
+          ).draw();
+        }
+        //cargo libros
+        $('#tbl-libros_wrapper').prev().show();
+          $('#tbl-libros_wrapper').prev().prev().show();
+        $('#tbl-libros').DataTable().clear();
+        for(i = 0; i < data['libros'].length; i++) {
+          var librofechaentrega = data['libros'][i]['librofechaentrega'];
+          var librotomo         = data['libros'][i]['librotomo'];
+          //agrego valores a la tabla
+          $('#tbl-libros').DataTable().row.add( [
+              "<i class ='fa fa-ban elirow delLibro text-primary' style='cursor:pointer'></i>",
+              librofechaentrega,
+              librotomo
+            ]
+          ).draw();
+        }
+        // cargo notas 
+        $('#tbl-nota').DataTable().clear();
+        for(i = 0; i < data['notas'].length; i++) {
+          var notid      = data['notas'][i]['notid'];
+          var fecha      = data['notas'][i]['fecha'];
+          var resolucion = data['notas'][i]['res'];
+          var imagen     = data['notas'][i]['imagen'];
+          //agrego valores a la tabla
+          $('#tbl-nota').DataTable().row.add( [
+                "<i class ='fa fa-ban elirow delNote text-primary' style='cursor:pointer'></i>",
+                notid,
+                fecha,
+                resolucion,
+                '<img style="width: 20px; height: 20px;" src="<?php echo base_url() ?>assets/notas/'+imagen+'"">']
+          ).draw();
+        }
+
+        $('#modalEmpleador').modal('show');
+        WaitingClose();
+      },
+      error: function(result){
+        console.error("Error editando Empleador");
+        WaitingClose();
+      },
+    });
   });
   /* Elimino empleador */
   $(".btnDelete").on("click", function(e){
@@ -388,6 +516,7 @@
         $('#tbl-establecimiento_wrapper').prev().hide();
         $('#tbl-establecimiento_wrapper').prev().prev().hide();
         $('#tbl-establecimiento').DataTable().clear();
+        console.table( data );
         for(i = 0; i < data['establecimientos'].length; i++) {
           var establecalle    = data['establecimientos'][i]['establecalle'];
           var establealtura   = data['establecimientos'][i]['establealtura'];
@@ -416,6 +545,7 @@
         $('#tbl-actividad_wrapper').prev().hide();
         $('#tbl-actividad_wrapper').prev().prev().hide();
         $('#tbl-actividad').DataTable().clear();
+        console.table( data['actividad'] );
         for(i = 0; i < data['actividad'].length; i++) {
           var actividad = data['actividad'][i]['descripcion'];
           var rubro     = data['actividad'][i]['detaactivrubro'];
@@ -440,8 +570,8 @@
           //agrego valores a la tabla
           $('#tbl-libros').DataTable().row.add( [
               '<i class ="fa fa-ban elirow text-primary" style="cursor:not-allowed"></i>',
-              librotomo,
               librofechaentrega,
+              librotomo
             ]
           ).draw();
         }
@@ -545,7 +675,7 @@
         establecimiento[j] = est;
         j++;
     });
-    console.log(establecimiento);
+    console.table(establecimiento);
     // actividad 
     var actividad = new Array(); 
     var j = 0;
@@ -563,7 +693,7 @@
         actividad[j] = act;
         j++;
     });
-    console.log(actividad);
+    console.table(actividad);
     // libros 
     var libro = new Array(); 
     var j = 0;
@@ -581,7 +711,7 @@
       libro[j] = lib;
       j++;
     });
-    console.log(libro);
+    console.table(libro);
 
     // valido datos 
     hay_error = false;
@@ -864,11 +994,11 @@
       "aLengthMenu": [ 10, 25, 50, 100 ],
       "autoWidth": true,
       "columnDefs": [ {
-          "targets": [ 0, 4 ], //no busco en acciones
+          "targets": [ 0 ], //no busco en acciones
           "searchable": false
       },
       {
-          "targets": [ 0, 4 ], //no ordena columna 0
+          "targets": [ 0 ], //no ordena columna 0
           "orderable": false
       } ],
       "info": true,
@@ -910,11 +1040,11 @@
       "aLengthMenu": [ 10, 25, 50, 100 ],
       "autoWidth": true,
       "columnDefs": [ {
-          "targets": [ 0, 4 ], //no busco en acciones
+          "targets": [ 0 ], //no busco en acciones
           "searchable": false
       },
       {
-          "targets": [ 0, 4 ], //no ordena columna 0
+          "targets": [ 0 ], //no ordena columna 0
           "orderable": false
       } ],
       "info": true,
@@ -1358,8 +1488,8 @@
                       <thead>
                         <tr>
                           <th>Acción</th>
-                          <th>Tomo</th>
                           <th>Fecha de Entrega</th>
+                          <th>Tomo</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1421,6 +1551,7 @@
     </div><!-- /.modal-dialog -->
   </div>
 </div>
+
 
 <!-- Modal Notas-->
 <div class="modal fade" id="modalNotas" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
