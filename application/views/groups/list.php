@@ -7,7 +7,7 @@
                     <h3 class="box-title">Grupos</h3>
                     <?php
                     if (strpos($permission,'Add') !== false) {
-                        echo '<button class="btn btn-block btn-success" style="width: 100px; margin-top: 10px;" data-toggle="modal" onclick="LoadGrp(0,\'Add\')" id="btnAdd" >Agregar</button>';
+                        echo '<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" data-toggle="modal" onclick="LoadGrp(0,\'Add\')" id="btnAdd" >Agregar</button>';
                     }
                     ?>
                 </div><!-- /.box-header -->

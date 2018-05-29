@@ -7,7 +7,7 @@
           <h3 class="box-title">BackUp</h3>
           <?php
           if (strpos($permission,'Add') !== false) {
-            echo '<button class="btn btn-block btn-success" style="width: 100px; margin-top: 10px;" data-toggle="modal" onclick="GenerarBackup()" id="btnAdd" >Generar</button>';
+            echo '<button class="btn btn-block btn-primary" style="width: 100px; margin-top: 10px;" data-toggle="modal" onclick="GenerarBackup()" id="btnAdd" >Generar</button>';
           }
           ?>
         </div><!-- /.box-header -->

@@ -5,7 +5,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <title>log&track - Base</title>
+    <title>Trazagest</title>
 
     <link rel="shortcut icon" href="<?php echo base_url();?>assets/img/favicon.png" type="image/x-icon">
     <!-- Bootstrap 3.3.7 -->
@@ -20,12 +20,15 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/font-awesome.min.css">
     <!-- Ionicons 2.0.1 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/ionicons.min.css">
-    <!-- Jquery UI 1.12.1 -->
+    <!-- jquery UI 1.12.1 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.min.css">
     <!-- DataTables 1.10.7 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.css">
     <!-- Jasny Bootstrap -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/jasny-bootstrap/css/jasny-bootstrap.min.css">
+    <!-- Bootstrap datetimepicker -->
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datetimepicker/css/bootstrap-datetimepicker.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -33,7 +36,7 @@
         <script src="<?php echo base_url();?>assets/js/respond.min.js"></script>
     <![endif]-->
     <!-- jQuery 2.1.4 -->
-    <script src="<?php echo base_url();?>assets/js/jQuery-2.1.4.min.js"></script>
+    <script src="<?php echo base_url();?>assets/js/jquery-2.1.4.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
     <script src="<?php echo base_url();?>assets/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
@@ -55,6 +58,10 @@
 
     <!-- Jasny Bootstrap -->
     <script src="<?php echo base_url();?>assets/plugin/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+    
+    <!-- Bootstrap datetimepicker -->
+    <script src="<?php echo base_url();?>assets/plugin/moment/moment-with-locales.min.js"></script>
+    <script src="<?php echo base_url();?>assets/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 
     <!-- iCheck - ->
     <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/iCheck/square/blue.css">
@@ -144,7 +151,7 @@
 </style>
 
 <script>
-/* Inicialización en español para la extensión 'UI date picker' para jQuery. */
+/* Inicialización en español para la extensión 'UI date picker' para jquery. */
 /* Traducido por Vester (xvester@gmail.com). */
 (function( factory ) {
     if ( typeof define === "function" && define.amd ) {
@@ -152,7 +159,7 @@
         define([ "../widgets/datepicker" ], factory );
     } else {
         // Browser globals
-        factory( jQuery.datepicker );
+        factory( jquery.datepicker );
     }
 }(function( datepicker ) {
     datepicker.regional['es'] = {

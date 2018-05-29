@@ -53,3 +53,47 @@ if (!function_exists('dump_exit')) {
         exit;
     }
 }
+
+// --------------------------------------------------------------------
+
+
+/**
+ * Filtra entradas basadas en una lista blanca. Este filtro elimina todos los caracteres que no son:
+ * - letras
+ * - números
+ * - Caracteres especiales de marcado de texto ( _-.*#;:|!"+%{}@ ).
+ *
+ * Este filtro también pasa caracteres como é y ü.
+ *
+ * Basada en el helper de Joos Van Veen.
+ *
+ * Uso típico:
+ * $string = '_ - . * # ; : | ! " + % { } @ abcdefgABCDEFG12345 áéíóúüÁÉÍÓÚÜ ' . "\nY otra línea!";
+ * echo textile_sanitize($string);
+ *
+ * @author Pablo Andrés Rojo
+ * @param  string   $string
+ * @return string   The sanitized string
+ */
+function textile_sanitize($string){
+    $whitelist = '/[^a-zA-Z0-9а-áéíóúü-ÁÉÍÓÚÜ \.\*\+\\n|#;:!"%@{} _-]/';
+    return preg_replace($whitelist, '', $string);
+}
+
+function escape($string){
+    return textile_sanitize($string);
+}
+
+// --------------------------------------------------------------------
+
+
+/**
+ * Filtra texto para usar en cadenas de javascript.
+ *
+ * @author Pablo Andrés Rojo
+ * @param  string   $string
+ * @return string   The sanitized string
+ */
+function javascript_escape($string) {
+  return str_replace("\n", '\n', str_replace('"', '\"', addcslashes(str_replace("\r", '', (string)$string), "\0..\37'\\")));
+}
