@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/font-awesome.min.css">
     <!-- Ionicons 2.0.1 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/ionicons.min.css">
-    <!-- jquery UI 1.12.1 -->
+    <!-- Jquery UI 1.12.1 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.min.css">
     <!-- DataTables 1.10.7 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.css">
@@ -29,6 +29,8 @@
     <!-- Bootstrap datetimepicker -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datetimepicker/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <!-- Bootstrap Typeahead -->
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/typeahead/typeahead.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -62,6 +64,10 @@
     <!-- Bootstrap datetimepicker -->
     <script src="<?php echo base_url();?>assets/plugin/moment/moment-with-locales.min.js"></script>
     <script src="<?php echo base_url();?>assets/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- Bootstrap Typeahead -->
+    <script src="<?php echo base_url();?>assets/plugin/typeahead/bootstrap3-typeahead.min.js"></script>
+    <script src="<?php echo base_url();?>assets/plugin/typeahead/typeahead.bundle.min.js"></script>
 
     <!-- iCheck - ->
     <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/iCheck/square/blue.css">
@@ -151,7 +157,7 @@
 </style>
 
 <script>
-/* Inicialización en español para la extensión 'UI date picker' para jquery. */
+/* Inicialización en español para la extensión 'UI date picker' para jQuery. */
 /* Traducido por Vester (xvester@gmail.com). */
 (function( factory ) {
     if ( typeof define === "function" && define.amd ) {
@@ -159,7 +165,7 @@
         define([ "../widgets/datepicker" ], factory );
     } else {
         // Browser globals
-        factory( jquery.datepicker );
+        factory( jQuery.datepicker );
     }
 }(function( datepicker ) {
     datepicker.regional['es'] = {
