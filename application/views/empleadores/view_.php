@@ -629,7 +629,10 @@
     var empleafecha          = $('#fecha').val(); 
     var empleainscrip        = $('#nro-inscripcion').val(); 
     var empleaexp            = $('#expediente').val(); 
-    var empleacui            = $('#cuit').val(); 
+    //var empleacui            = $('#cuit').val(); 
+    var cuitformateado       = $('#cuit').val();
+        cuitformateado       = cuitformateado.split('-');
+    var empleacui            = cuitformateado[0]+cuitformateado[1]+cuitformateado[2]; 
     var emplearazsoc         = $('#razon-social').val(); 
     var empleadomicilior     = null;
     var empleadomiciliolegal = $('#domicilio-legal').val(); 
