@@ -168,6 +168,7 @@ class Empleadores extends CI_Model
             $dato['establelatitud']  = $comp[6];
             $dato['establelongitud'] = $comp[7];
             $dato['empleaid']        = $idEmpleador;
+            $dato['estableestado']   = 'AC';
             
             $response = $this->db->insert('tbl_establecimiento', $dato);
         }   
@@ -359,7 +360,7 @@ class Empleadores extends CI_Model
         return $response;
     }
 
-    // Actualiza actividad
+    //
     function updateActividadPorIds($detaActiv,$idDetaActiv){
         $this->db->where('tbl_detaactiv.detaactivid', $idDetaActiv);
         $response = $this->db->update('tbl_detaactiv', $detaActiv);
@@ -401,14 +402,6 @@ class Empleadores extends CI_Model
         }
     }
 
-    //Edita notas
-    function updateNota($datos,$idNota){
-        $this->db->where('notid', $idNota);
-        $query = $this->db->update('tbl_notas', $datos);
-        
-        return $query;
-    }
-    
     // Cambia a estado 'AN' nota
     function deleteNota($id){
         $this->db->where('notid', $id);
@@ -416,5 +409,28 @@ class Empleadores extends CI_Model
         
         return $query;
     }
+
+    //Edita notas
+    function updateNota($datos,$idNota){
+        $this->db->where('notid', $idNota);
+        $query = $this->db->update('tbl_notas', $datos);
+        
+        return $query;
+    }
+/*
+    // Actualiza datos de edicion de Informacion de Empleador
+    function updateEmpleadores($empleador,$id){
+        $this->db->where('tbl_empleadores.empleaid', $id);
+        $response = $this->db->update('tbl_empleadores', $empleador)
+        return $response;
+    }
+
+    // Actualiza datos de edicion de Actividad (detaactividad)
+    function updateActividadPorIds($actividad,$id){
+       $this->db->where('tbl_detaactiv.empleaid', $id);
+       $response = $this->db->update('tbl_detaactiv', $actividad)
+       return $response;
+    }
+*/
 
 }

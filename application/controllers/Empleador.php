@@ -219,21 +219,21 @@ class Empleador extends CI_Controller
 		//si se esta accediendo mediante el metodo AJAX 
 		if ($this->input->is_ajax_request()) {			
 			$fechaEntregaNota = $this->input->post("fechaEntregaNota");
-			$resolucion = $this->input->post("resolucion");
-			$idEmpleador = $this->input->post("idEmpleador");			
-			$config = [
-				"upload_path" => "./assets/notas",
+			$observacion       = $this->input->post("observacion");
+			$idEmpleador      = $this->input->post("idEmpleador");			
+			$config           = [
+				"upload_path"   => "./assets/notas",
 				'allowed_types' => "png|jpg"
 			];
 			$this->load->library("upload",$config);
 			if ($this->upload->do_upload('nota')) {
 				$data = array("upload_data" => $this->upload->data());
 				$datos = array(
-					"fecha" => $fechaEntregaNota,
-					"res" => $resolucion,											
-					"imagen" => $data['upload_data']['file_name'],
-					"empleaid" => $idEmpleador,
-					"notaestado" => "AC"
+					"fecha"       => $fechaEntregaNota,
+					"observacion" => $observacion,											
+					"imagen"      => $data['upload_data']['file_name'],
+					"empleaid"    => $idEmpleador,
+					"notaestado"  => "AC"
 				);
 				if($this->Empleadores->guardarNota($datos) == true)
 					echo "exito";
@@ -252,37 +252,30 @@ class Empleador extends CI_Controller
 
 	// Guarda edicion de Nota
 	public function editarNota(){
-		//dump( $_POST );
-		//dump ( $_FILES );
+		
 		$idEmpleador = $this->input->post("mEmpleadorId");
-		$idNota = $this->input->post("mNotaId");
-		$fecEntrega = $this->input->post("mFecha");
-		$resolucion = $this->input->post("mResolucion");
-		$nomcodif = $this->codifNombre($idEmpleador,$idNota);   //codifico nombre para guardar 
+		$idNota      = $this->input->post("mNotaId");
+		$fecEntrega  = $this->input->post("mFecha");
+		$observacion = $this->input->post("mObservacion");
+		$nomcodif    = $this->codifNombre($idEmpleador,$idNota);   //codifico nombre para guardar 
 
 		// si trae imagen nueva
-		if(isset($_FILES)){
-
+		if(!empty($_FILES)){			
 			$config = [
-				"upload_path" => "./assets/notas",
+				"upload_path"   => "./assets/notas",
 				'allowed_types' => "png|jpg",
-				'file_name' => $nomcodif
+				'file_name'     => $nomcodif
 			];
 			$this->load->library("upload",$config);
 
-			// si subio la imagen
-			//if ($this->upload->do_upload('myimage')) {
+			// si subio la imagen			
 			if ($this->upload->do_upload('myimage')) {
-
 				$datos = array(
-					"fecha" => $fecEntrega,
-					"res" => $resolucion,           
-					"imagen" => $nomcodif.$this->upload->data('file_ext')
+					"fecha"       => $fecEntrega,
+					"observacion" => $observacion,           
+					"imagen"      => $nomcodif.$this->upload->data('file_ext')
 				);
-
-				if($this->Empleadores->updateNota($datos,$idNota) == true){
-					//elimina el archivo en servidor
-					//unlink("./assets/notas".$file);     
+				if($this->Empleadores->updateNota($datos,$idNota) == true){					 
 					$response['notas'] = $this->Empleadores->getEmpleadorNotas($idEmpleador);
 					echo json_encode($response);
 				}else{
@@ -292,9 +285,17 @@ class Empleador extends CI_Controller
    
 		// update de nombre y fecha solamente
 		}else{
-			//update nnombre fecha e imagen y borro anterior
-			echo "vacio!!!";
-			echo json_encode(false);
+
+			$datos = array(
+					"fecha"       => $fecEntrega,
+					"observacion" => $observacion  
+				);
+			if($this->Empleadores->updateNota($datos,$idNota) == true){					 
+				$response['notas'] = $this->Empleadores->getEmpleadorNotas($idEmpleador);
+				echo json_encode($response);
+			}else{
+				echo json_encode(false);
+			}			
 		}
 	}
 

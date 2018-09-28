@@ -77,6 +77,26 @@
 </section><!-- /.content -->
 
 <script>
+  // formateo texto para mostrar en tabla
+  function text_en_tabla(content) {
+    //filtro tags html
+    var fragmento   = document.createDocumentFragment();
+    var elementoDiv = document.createElement('div');
+    fragmento.appendChild(elementoDiv);
+    elementoDiv.innerHTML = content;
+    var cadena = fragmento.firstChild.innerText;
+    // elimino espacio al inicio y final
+    cadena = cadena.trim();
+    // recorto texto a 200 caracteres
+    cadena = cadena.substring(0,200);
+    //agrego puntos suspensivos
+    if(cadena.length == 200) {
+      cadena = cadena + "...";
+    }
+    return cadena;
+  }
+
+
   /* formato de cuit */
   $('#cuit').inputmask({
     mask: '99-99999999-9'
@@ -270,8 +290,10 @@
 
 
 	var hay_error = false;
+  var max_char = false;
   function limpiarValidacion() {
     hay_error = false;
+    max_char = false;
     $('#error').hide();
     $(".has-error").removeClass("has-error");
   }
@@ -347,7 +369,7 @@
       type: 'POST',
       url: 'index.php/Empleador/getEmpleadorPorId',
       success: function(data){
-        //console.log('datos: ' + data['empleador'][0]);
+        console.table(data);
         tipo = data['empleador'][0]['empleatipo'];
 
         $("input[name='tipoEmpleador'][value='"+tipo+"']").prop('checked', true);
@@ -387,7 +409,7 @@
         //cargo establecimientos
         $('#tbl-establecimiento_wrapper').prev().hide();
         $('#tbl-establecimiento_wrapper').prev().prev().hide();
-        $('#tbl-establecimiento').DataTable().clear();
+        $('#tbl-establecimiento').DataTable().clear().draw();
         for(i = 0; i < data['establecimientos'].length; i++) {
           var establecalle    = data['establecimientos'][i]['establecalle'];
           var establealtura   = data['establecimientos'][i]['establealtura'];
@@ -415,7 +437,7 @@
         //cargo actividades
         $('#tbl-actividad_wrapper').prev().hide();
         $('#tbl-actividad_wrapper').prev().prev().hide();
-        $('#tbl-actividad').DataTable().clear();
+        $('#tbl-actividad').DataTable().clear().draw();
         for(i = 0; i < data['actividad'].length; i++) {
           var actividad = data['actividad'][i]['descripcion'];
           var rubro     = data['actividad'][i]['detaactivrubro'];
@@ -433,7 +455,7 @@
         //cargo libros
         $('#tbl-libros_wrapper').prev().hide();
         $('#tbl-libros_wrapper').prev().prev().hide();
-        $('#tbl-libros').DataTable().clear();
+        $('#tbl-libros').DataTable().clear().draw();
         for(i = 0; i < data['libros'].length; i++) {
           var librofechaentrega = data['libros'][i]['librofechaentrega'];
           var librotomo         = data['libros'][i]['librotomo'];
@@ -446,18 +468,19 @@
           ).draw();
         }
         // cargo notas 
-        $('#tbl-nota').DataTable().clear();
+        $('#tbl-nota').DataTable().clear().draw();
         for(i = 0; i < data['notas'].length; i++) {
-          var notid      = data['notas'][i]['notid'];
-          var fecha      = data['notas'][i]['fecha'];
-          var resolucion = data['notas'][i]['res'];
-          var imagen     = data['notas'][i]['imagen'];
+          var notid       = data['notas'][i]['notid'];
+          var fecha       = data['notas'][i]['fecha'];
+          var observacion = data['notas'][i]['observacion'];
+          observacion     = text_en_tabla(observacion);
+          var imagen      = data['notas'][i]['imagen'];
           //agrego valores a la tabla
           $('#tbl-nota').DataTable().row.add( [
                 '<i class ="fa fa-ban elirow text-primary" style="cursor:not-allowed"></i>',
                 notid,
                 fecha,
-                resolucion,
+                observacion,
                 '<a href="#" class="pop"><img style="width: 20px; height: 20px;" src="<?php echo base_url() ?>assets/notas/'+imagen+'""></a>']
           ).draw();
         }
@@ -475,7 +498,7 @@
   $(".btnNote").on("click", function(e){
     e.preventDefault();
     var idEmpleador = $(this).data("idempleador");
-    console.info(idEmpleador);
+    //console.info(idEmpleador);
     WaitingOpen('Agregar Empleador');
     //elimino errores
     $('#errorNota').fadeOut('slow');
@@ -483,7 +506,7 @@
     //limpio inputs
     //$('#frmNotas').reset();
     //$("#frmNotas :input").val(null);
-    $("#resolucion, #fecha-entrega-nota").val('');
+    $("#observacion, #fecha-entrega-nota").val('');
     $("#nota").replaceWith($("#nota").val(null).clone(true));
     //$('#frmNotas')[0].reset();
 
@@ -969,12 +992,17 @@
 
     //valido datos
     hay_error = false;
+    max_char = false;
+    $(".list-errors").empty();
     $('#errorNota').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error");
 
-    if ( $("#resolucion").val() == '') {
-      $("#resolucion").parent().addClass("has-error");
-      hay_error = true;
+    //console.info("chars: "+$("#observacion").val().length);
+    if ( $("#observacion").val().length > 21844 ) { 
+      //maximos caracteres permitidos en un campo text con codificacion utf-8: 21,844 caracteres
+      // https://stackoverflow.com/questions/4420164/how-much-utf-8-text-fits-in-a-mysql-text-field
+      $("#observacion").parent().addClass("has-error");
+      max_char = true;
     }
     if ( $("#fecha-entrega-nota").val() == '') {
       $("#fecha-entrega-nota").parent().addClass("has-error");
@@ -989,8 +1017,21 @@
       $('#errorNota').fadeIn('slow');
       $(".list-errors").html('Complete los campos obligatorios');
       WaitingClose();
+      if( max_char ) {
+        $('#errorNota').fadeIn('slow');
+        $(".list-errors").append('<br>El texto debe tener un máximo de 21844 caracteres');
+        WaitingClose();
+        return;
+      }
       return;
-    } 
+    }
+    if( max_char ) {
+      $('#errorNota').fadeIn('slow');
+      $(".list-errors").html('El texto debe tener un máximo de 21844 caracteres');
+      WaitingClose();
+      return;
+    }
+    max_char = false;
     hay_error = false;
     $('#errorNota').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error");
@@ -1070,7 +1111,7 @@
                 <ul class="nav nav-tabs">
                   <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Información Personal</a></li>
                   <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Libros</a></li>
-                  <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Notas</a></li>
+                  <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Observaciones</a></li>
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="tab_1">
@@ -1375,7 +1416,7 @@
                           <th>Acción</th>
                           <th>Id Nota</th>
                           <th>Fecha</th>
-                          <th>Resolución</th>
+                          <th>Observación</th>
                           <th>Imagen</th>
                         </tr>
                       </thead>
@@ -1431,7 +1472,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"></span> Notas</h4>
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"></span> Observaciones</h4>
         </div>
         <div class="modal-body" id="modalBodyUsr">
             
@@ -1442,13 +1483,7 @@
 
             <input type="hidden" name="idEmpleador" id="id-empleador" value="">
             <div class="row">
-              <div class="col-xs-12 col-md-3">
-                <div class="form-group">
-                  <label for="resolucion">Resolución</label>
-                  <input type="text" name="resolucion" class="form-control" placeholder="" id="resolucion" value="">
-                </div>
-              </div>
-              <div class="col-xs-12 col-md-3">
+              <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                   <label for="fecha-entrega-nota">Fecha de entrega</label>
                   <input type="date" name="fechaEntregaNota" class="form-control" id="fecha-entrega-nota" value="<?php echo date("Y-m-d") ?>">
@@ -1461,6 +1496,12 @@
                     <span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="nota" name="nota"/></span>
                     <span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
                   </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label for="observacion">Observación</label>
+                  <textarea name="observacion" class="form-control" id="observacion"></textarea> 
                 </div>
               </div>
 

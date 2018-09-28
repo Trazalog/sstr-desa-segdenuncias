@@ -21,8 +21,7 @@ class Inspeccion extends CI_Controller {
 	public function Obtener_Inspeccion(){
 		$id=$_POST['inspeccionid'];
 		$result = $this->Inspecciones->Obtener_Inspecciones($id);
-		print_r($result);
-		return $result;
+		echo json_encode($result);
 	}
 
 	public function Guardar_Inspeccion(){
@@ -30,20 +29,18 @@ class Inspeccion extends CI_Controller {
 		$inspeccionfechaasigna=$this->input->post('inspeccionfechaasigna');
 		$inspeccionfecharecp=$this->input->post('inspeccionfecharecp');
 		$inspectorid=$this->input->post('inspectorid');
-		$inspeccionestado=$this->input->post('inspeccionestado');
+		$inspecciondescrip=$this->input->post('inspecciondescrip');
 		$estableid=$this->input->post('estableid');
-		$inspeestado=$this->input->post('inspeestado');
 		$data = array(
 			'inspeccionfechaasigna' => $inspeccionfechaasigna,
 			'inspeccionfecharecp' => $inspeccionfecharecp,
 			'inspectorid' => $inspectorid,
-			'inspeccionestado' => $inspeccionestado,
+			'inspecciondescrip' => $inspecciondescrip,
 			'estableid' => $estableid,
-			'inspeestado' => $inspeestado,
-			'inspeccionelimina' =>"AC"
+			'inspeestado' =>"C"
 		);
 		$sql = $this->Inspecciones->Guardar_Inspecciones($data);
-		print_r($sql);
+		echo json_encode($sql);
 	}
 
 	public function Modificar_Inspeccion(){
@@ -51,20 +48,20 @@ class Inspeccion extends CI_Controller {
 		$inspeccionfechaasigna=$this->input->post('inspeccionfechaasigna');
 		$inspeccionfecharecp=$this->input->post('inspeccionfecharecp');
 		$inspectorid=$this->input->post('inspectorid');
-		$inspeccionestado=$this->input->post('inspeccionestado');
+		$inspecciondescrip=$this->input->post('inspecciondescrip');
 		$estableid=$this->input->post('estableid');
-		$inspeestado=$this->input->post('inspeestado');
+		
 		$data = array(
 			'inspeccionid' => $id,
 			'inspeccionfechaasigna' => $inspeccionfechaasigna,
 			'inspeccionfecharecp' => $inspeccionfecharecp,
 			'inspectorid' => $inspectorid,
-			'inspeccionestado' => $inspeccionestado,
+			'inspecciondescrip' => $inspecciondescrip,
 			'estableid' => $estableid,
-			'inspeestado' => $inspeestado
+			'inspeestado' =>"C"
 		);
 		$sql = $this->Inspecciones->Modificar_Inspecciones($data);
-		print_r($sql);
+		echo json_encode($sql);
 	}
 
 
@@ -72,7 +69,7 @@ class Inspeccion extends CI_Controller {
 
 		$id=$_POST['inspeccionid'];	
 		$result = $this->Inspecciones->Eliminar_Inspecciones($id);
-		print_r($result);	
+		echo json_encode($result);	
 	}
 
 	public function getEstablecimiento(){
