@@ -57,7 +57,7 @@
   function guardarActividad(){
     var nombre=$('#nombre').val();
     var descripcion=$('#descripcion').val();
-
+    var actividadestado="AC";
     var hayError = false;
     if($('#descripcion').val() == '' || $('#nombre').val() == '')
     {
@@ -74,7 +74,7 @@
     WaitingOpen();
     $.ajax({
      type: 'POST',
-     data: {  "descripcion" : nombre, "descripciongeneral": descripcion },
+     data: {  "descripcion" : nombre, "descripciongeneral": descripcion,"actividadestado":actividadestado},
      url: 'index.php/Actividad/Guardar_tbl_actividade', 
      success: function(result){
       WaitingClose();

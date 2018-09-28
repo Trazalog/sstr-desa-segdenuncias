@@ -14,12 +14,6 @@ user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 /vendor/
 
-# Config Files
-#-------------------------
-application/congif/development/*
-.htaccess
-
-
 # IDE Files
 #-------------------------
 /nbproject/

@@ -8,21 +8,35 @@ class Inspecciones extends CI_Model
 
 	function Listado_Inspecciones(){
 
-		$query= $this->db->query('SELECT E.*,F.inspectorid,F.inspectornombre FROM (SELECT D.*,C.empleainscrip FROM tbl_empleadores as C JOIN (SELECT A.*,B.empleaid,concat(B.establecalle," " ,B.establealtura,"--",B.localidad) as establecalle FROM jobs24_segdenuncias.tbl_inspecciones as A JOIN (SELECT * FROM tbl_establecimiento JOIN localidades on id=dptoid) as B on A.estableid=B.estableid WHERE A.inspeccionelimina="AC") as D ON C.empleaid=D.empleaid) as E JOIN tbl_inspectores as F on E.inspectorid=F.inspectorid;');
+		$this->db->select('*,concat(C.establecalle," - ",C.establealtura," - ",E.localidad) as direccionCompleta');
+		$this->db->from('tbl_inspecciones as A');
+		$this->db->join('tbl_inspectores as B','A.inspectorid=B.inspectorid');
+		$this->db->join('tbl_establecimiento as C','A.estableid=C.estableid');
+		$this->db->join('tbl_empleadores D','C.empleaid=D.empleaid');
+		$this->db->join('localidades as E','C.dptoid=E.id');
+		$this->db->where('A.inspeestado= "C" ');
+		
+		$query=$this->db->get();
 
-		if ($query->num_rows()!=0)
+
+		if ($query->num_rows()!=0)    
 		{
 			return $query->result_array();	
 		}
+		else{
+				return array();
+			}
 
 	}
 
+
 	function getEstablecimientos($id){
 
-		$this->db->SELECT('tbl_establecimiento.estableid,concat(establecalle," " ,establealtura,"-",localidad) as establecalle');
-		$this->db->FROM('jobs24_segdenuncias.tbl_establecimiento');
-		$this->db->JOIN('localidades',"id=dptoid");
-		$this->db->WHERE('empleaid',$id);
+		$this->db->select('tbl_establecimiento.estableid,concat(establecalle," " 
+			,establealtura,"-",localidad) as establecalle');
+		$this->db->from('jobs24_segdenuncias.tbl_establecimiento');
+		$this->db->join('localidades',"id=dptoid");
+		$this->db->where('empleaid',$id);
 		$query=$this->db->get();
 		if ($query->num_rows()!=0){
 			return $query->result_array();
@@ -32,13 +46,13 @@ class Inspecciones extends CI_Model
 
 	function getDenominacionSocial(){
 
-		$this->db->select('tbl_empleadores.empleaid,tbl_empleadores.empleainscrip');
+		$this->db->select('tbl_empleadores.empleaid,tbl_empleadores.emplearazsoc');
 		$this->db->from('tbl_empleadores');
 		$query = $this->db->get();				
 		$i=0;
 		foreach ($query->result() as $row){
 
-			$empleadores[$i]['label'] = $row->empleainscrip;
+			$empleadores[$i]['label'] = $row->emplearazsoc;
 			$empleadores[$i]['value'] = $row->empleaid;
 			$i++;
 		}
@@ -67,15 +81,15 @@ class Inspecciones extends CI_Model
 	function Modificar_Inspecciones($data){
 
 		$query =$this->db->update('tbl_inspecciones', $data, array('inspeccionid' => $data['inspeccionid']));
-		print_r($query);
+		return $query;
 	}
 
 	function Eliminar_Inspecciones($id){
 	
-		$this->db->set('inspeccionelimina', 'AN');
+		$this->db->set('inspeestado', 'AN');
 		$this->db->where('inspeccionid', $id);
 		$query=$this->db->update('tbl_inspecciones');
-		print_r($query);
+		return $query;
 
 	}
 	
