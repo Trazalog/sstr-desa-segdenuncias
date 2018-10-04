@@ -72,10 +72,18 @@ class Inspecciones extends CI_Model
 		}
 	}
 
+	// guarda inspecciones nuevas
 	function Guardar_Inspecciones($data){
 
 		$query = $this->db->insert("tbl_inspecciones",$data);
-		return $query;
+		$idIns = $this->db->insert_id();
+		return $idIns;
+	}
+
+	// guarda la relacion de denuncias en inspecciones
+	function setInsDenIds($datosInspDenun){
+		$response = $this->db->insert_batch('trg_inspecciondenuncia', $datosInspDenun);
+		return $response;
 	}
 
 	function Modificar_Inspecciones($data){
@@ -93,6 +101,30 @@ class Inspecciones extends CI_Model
 
 	}
 	
+	// funciones nuevas
+	function getDenPorEstabIds($idEstab){		
+
+			$this->db->select('tbl_denuncias.denunciaid,
+												tbl_denuncias.denunciasfecha,
+												tbl_denuncias.denunciariesgo,
+												tbl_denuncias.denunciaprograma,
+												tbl_denuncias.denunciafechaverif,
+												tbl_denuncias.denunciainclucion,
+												tbl_denuncias.denuncianroobra,
+												tbl_denuncias.denuncianroacta,
+												tbl_denuncias.denunciamotivos,
+												tbl_denuncias.estableid,
+												tbl_denuncias.denunciaestado,
+												tbl_denuncias.case_id');
+			$this->db->from('tbl_denuncias');
+			$this->db->where('tbl_denuncias.estableid', $idEstab);
+			$query = $this->db->get();
+			if ($query->num_rows()!=0){   
+				return $query->result_array();  
+			}
+	}
+
+
 }	
 
 ?>

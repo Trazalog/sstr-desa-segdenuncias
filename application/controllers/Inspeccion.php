@@ -31,6 +31,7 @@ class Inspeccion extends CI_Controller {
 		$inspectorid=$this->input->post('inspectorid');
 		$inspecciondescrip=$this->input->post('inspecciondescrip');
 		$estableid=$this->input->post('estableid');
+		$idsDenuncias = $this->input->post('idsDenuncias');
 		$data = array(
 			'inspeccionfechaasigna' => $inspeccionfechaasigna,
 			'inspeccionfecharecp' => $inspeccionfecharecp,
@@ -39,8 +40,30 @@ class Inspeccion extends CI_Controller {
 			'estableid' => $estableid,
 			'inspeestado' =>"C"
 		);
-		$sql = $this->Inspecciones->Guardar_Inspecciones($data);
-		echo json_encode($sql);
+
+		$idInsercion = $this->Inspecciones->Guardar_Inspecciones($data);
+		
+		if($idInsercion > 0){
+			$datosInspDenun = $this->armarBatch($idInsercion,$idsDenuncias);
+			$response = $this->Inspecciones->setInsDenIds($datosInspDenun);
+			if($response){
+				echo json_encode($response);
+			}
+		}else{
+			$response = false;
+			echo json_encode($response);
+		}		
+	}
+
+	function armarBatch($idInsercion,$idsDenuncias){
+		
+		$batch = array();
+		foreach ($idsDenuncias as $value) {
+			$comp = array('denunciaid' => $value,
+										'inspeccionid'=> $idInsercion);
+			array_push($batch,$comp); 
+		}
+		return $batch;
 	}
 
 	public function Modificar_Inspeccion(){
@@ -82,6 +105,13 @@ class Inspeccion extends CI_Controller {
 
 		$result= $this->Inspecciones->getDenominacionSocial();
 		echo json_encode($result);
+	}
+
+	public function getDenPorEstabId(){
+		$idEstab = $this->input->post('idEstab');
+		$response = $this->Inspecciones->getDenPorEstabIds($idEstab);
+		//var_dump($response);
+		echo json_encode($response);
 	}
 }	
 
