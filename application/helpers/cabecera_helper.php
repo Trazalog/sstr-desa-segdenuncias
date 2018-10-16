@@ -1,159 +1,175 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 if(!function_exists('cargarCabecera')){
-    // id de pedido es el petr_id de la tabla trj_pedido_trabajo se obtiene con el bpm_id de esa tabla
-    function cargarCabecera($idPedido){
-                    //get main CodeIgniter object
-            $ci =& get_instance();
-            
-            //load databse library
-            $ci->load->database();
-            
-            //get data from database
-           
-            $ci->db->from('trj_pedido_trabajo as A');
-            $ci->db->join('admcustomers as B','A.clie_id=B.cliId');
-            $ci->db->where('petr_id',$idPedido);
-            $query = $ci->db->get();
-            
-            if($query->num_rows() > 0){
-                $result = $query->row_array();
-            }
-            echo '
-        
-                            <div id="collapseDivCli" class="box box-default collapsed-box box-solid">
-                                <div class="box-header with-border">
-                                    <h3 id="tituloInfo" class="box-title">Cliente: '.$result['cliName'].' / Mas Detalles</h3>
-        
-                                    <div class="box-tools pull-right">
-                                        <button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" onclick="mostrarCliente()">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                    <!-- /.box-tools -->
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <label style="margin-top: 7px;">Domicilio: </label>
-                                            <input type="text" id="domicilio" class="form-control"  value="'.$result['cliAddress'].'" disabled/>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Teléfono: </label>
-                                                <input type="text" id="telefono" class="form-control" value="'.$result['cliMovil'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Celular: </label>
-                                                <input type="text" id="celular" class="form-control" value="'.$result['cliPhone'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Contacto: </label>
-                                                <input type="text" id="contacto" class="form-control" value="'.$result['cliEmail'].'" disabled/>
-                                            </div>
-                                        </div>
-                                    </div>
-        
-                                </div>
-                                <!-- /.box-body -->
-                            </div>
-                            <div id="collapseDiv" class="box box-default collapsed-box box-solid">
-                                <div class="box-header with-border">
-                                    <h3 id="pedidoInfo" class="box-title">N° Interno: '.$result['cod_interno'].'</h3>
+    
+		function cargarCabecera($caseId){
+			// echo "bpm id: ";
+			// var_dump($caseId);
+			//get main CodeIgniter object
+			$ci =& get_instance();			
+			//load databse library
+			$ci->load->database();			
+			//get data from database	
+			$ci->db->select('tbl_empleadores.empleaid,
+										tbl_empleadores.empleatipo,
+										tbl_empleadores.empleacui,
+										tbl_empleadores.empleafecha,
+										tbl_empleadores.empleainscrip,
+										tbl_empleadores.emplearazsoc,
+										tbl_empleadores.empleaexp,
+										tbl_empleadores.empleadomicilior,
+										tbl_empleadores.empleadomiciliolegal,
+										tbl_empleadores.empleadepid,
+										tbl_empleadores.emplealocid,
+										tbl_empleadores.empleaprovid,
+										tbl_empleadores.empleasliquiid,
+										tbl_empleadores.empleapmasc,
+										tbl_empleadores.empleapfem,
+										tbl_empleadores.ampleafechaalta,
+										tbl_empleadores.empleaestado,
+										tbl_establecimiento.establecalle,
+										tbl_establecimiento.establealtura,
+										tbl_establecimiento.dptoid,
+										tbl_establecimiento.provid,
+										tbl_inspecciones.bpm_id,
+										tbl_establecimiento.establelongitud,
+										provincias.provincia,
+										localidades.localidad');
+			$ci->db->from('tbl_establecimiento');
+			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
+			$ci->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
+			$ci->db->join('provincias', 'provincias.id = tbl_establecimiento.provid');
+			$ci->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
+			$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
+			$query = $ci->db->get();
 
-                                    <input type="text" id="cod_interno" class="form-control hidden" value="'.$result['cod_interno'].'">
-                                    <input type="text" id="id_pedido" class="form-control hidden" value="'.$idPedido.'">
+			if($query->num_rows() > 0){
+					$result = $query->row_array();
+			}
 
-                                    <div class="box-tools pull-right">
-                                        <button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" >
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                    <!-- /.box-tools -->
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label>Parte / Vehículo: </label>
-                                                <input type="text" id="parte" class="form-control obligatorio" value="'.$result['parte_vehiculo'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label>Patente: </label>
-                                                <input type="text" id="patente" class="form-control" value="'.$result['patente'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label>N° de Motor: </label>
-                                                <input type="text" id="num_motor" class="form-control obligatorio" value="'.$result['num_motor'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label>Indice: </label>
-                                                <input type="text" id="indice" class="form-control obligatorio" value="'.$result['indice'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label>Motor: </label>
-                                                <input type="text" id="motor" class="form-control obligatorio" value="'.$result['motor'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">N° de Chásis: </label>
-                                                <input type="text" id="num_chasis" class="form-control" value="'.$result['num_chasis'].'" disabled/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Condición : </label>
-                                                <input type="text" id="condicion" class="form-control" value="'.$result['condicion'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Familia de Productos : </label>
-                                                <input type="text" id="familia_productos" class="form-control" value="'.$result['familia_producto'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Subfamilia : </label>
-                                                <input type="text" id="subfamilia" class="form-control" value="'.$result['subfamilia'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label style="margin-top: 7px;">Fecha Compromiso Entrega Informe: </label>
-                                                <input type="text" id="fecha_entrega" class="form-control" value="'.$result['fec_entrega'].'" disabled/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4">
-                                            <div class="form-group">
-                                                <label>Observaciones:</label>
-                                                <textarea id="observacion" class="form-control" disabled>'.$result['observacion'].'</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--FIN ROW   -->
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- /.box-body -->';
-} } 
+			// //get main CodeIgniter object
+			// $den =& get_instance();			
+			// //load databse library
+			// $den->load->database();			
+			//get data from database
+			//  $ci->db->select('tbl_denuncias.denunciaid,
+			// 								tbl_denuncias.denunciasfecha,
+			// 								tbl_denuncias.denunciariesgo,
+			// 								tbl_denuncias.denunciaprograma,
+			// 								tbl_denuncias.denunciafechaverif,
+			// 								tbl_denuncias.denunciainclucion,
+			// 								tbl_denuncias.denuncianroobra,
+			// 								tbl_denuncias.denuncianroacta,
+			// 								tbl_denuncias.denunciamotivos,
+			// 								tbl_denuncias.estableid,
+			// 								tbl_denuncias.denunciaestado');
+			// $ci->db->from('tbl_denuncias');
+			// $ci->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid');
+			// $ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
+
+			// $ci->db->where('tbl_inspecciones.bpm_id', $caseId);
+			// $queryDenuncias = $ci->db->get();
+			// if ($queryDenuncias->num_rows()!=0){ 
+			// 	$resultDenuncias = $queryDenuncias->row_array();  
+		 		 
+			// } 
+			
+			//var_dump($resultDenuncias);
+
+			
+			
+
+
+			echo '
+
+				<div id="collapseDivCli" class="box box-default collapsed-box box-solid">
+					<div class="box-header with-border">
+						<h3 id="tituloInfo" class="box-title">Empresa: '.$result['empleacui'].' - '.$result['emplearazsoc'].' / Mas Detalles</h3>
+
+						<div class="box-tools pull-right">
+								<button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" onclick="mostrarCliente()">
+										<i class="fa fa-plus"></i>
+								</button>
+						</div>
+						<!-- /.box-tools -->
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<div class="row">
+
+							<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+											<label style="margin-top: 7px;">CUIT: </label>
+											<input type="text" id="cuit" class="form-control" value="'.$result['empleacui'].'" disabled/>
+									</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+											<label style="margin-top: 7px;">Razón Social: </label>
+											<input type="text" id="razon" class="form-control" value="'.$result['emplearazsoc'].'" disabled/>
+									</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+											<label style="margin-top: 7px;">Domicilio Legal: </label>
+											<input type="text" id="domicilio" class="form-control" value="'.$result['empleadomiciliolegal'].'" disabled/>
+									</div>
+							</div>
+
+							<div class="col-xs-12">
+								<h5>Establecimiento</h5>		
+							</div>	
+
+							<!-- <div class="col-xs-12">
+									<label style="margin-top: 7px;">Domicilio Legal: </label>
+									<input type="text" id="domicilio" class="form-control"  value="'.$result['empleadomiciliolegal'].'" disabled/>
+							</div> -->
+							<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+											<label style="margin-top: 7px;">Calle: </label>
+											<input type="text" id="calle" class="form-control" value="'.$result['establecalle'].'  '.$result['establealtura'].'" disabled/>
+									</div>
+							</div>
+								
+							<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+											<label style="margin-top: 7px;">Localidad: </label>
+											<input type="text" id="localidad" class="form-control" value="'.$result['localidad'].'" disabled/>
+									</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+									<div class="form-group">
+											<label style="margin-top: 7px;">Provincia: </label>
+											<input type="text" id="provincia" class="form-control" value="'.$result['provincia'].'" disabled/>
+									</div>
+							</div>
+						</div>
+
+					</div>
+					<!-- /.box-body -->
+			</div>
+
+
+
+			<div id="collapseDiv" class="box box-default collapsed-box box-solid">
+					<div class="box-header with-border">
+							<h3 id="pedidoInfo" class="box-title">Inspeccion Nº: </h3>
+
+							
+
+							<div class="box-tools pull-right">
+									<button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" >
+											<i class="fa fa-plus"></i>
+									</button>
+							</div>
+							<!-- /.box-tools -->
+					</div>
+					
+			</div> <!-- /.box-body -->';
+		}
+} 
 
 ?>
+

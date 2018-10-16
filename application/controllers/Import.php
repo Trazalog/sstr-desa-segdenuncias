@@ -30,7 +30,7 @@ class Import extends CI_Controller{
     	//comprobamos si el archivo ha subido para poder utilizarlo
 		if ($file && copy($_FILES['excel']['tmp_name'],"./excel_files/".$file)){
 
-      		//queremos obtener la extensión del archivo
+      	//queremos obtener la extensión del archivo
 			$trozos = explode(".", $file);
 
       		//solo queremos archivos excel

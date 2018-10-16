@@ -29,7 +29,6 @@ class Inspecciones extends CI_Model
 
 	}
 
-
 	function getEstablecimientos($id){
 
 		$this->db->select('tbl_establecimiento.estableid,concat(establecalle," " 
@@ -53,7 +52,7 @@ class Inspecciones extends CI_Model
 		foreach ($query->result() as $row){
 
 			$empleadores[$i]['label'] = $row->emplearazsoc;
-			$empleadores[$i]['value'] = $row->empleaid;
+			$empleadores[$i]['id'] = $row->empleaid;
 			$i++;
 		}
 
@@ -72,12 +71,6 @@ class Inspecciones extends CI_Model
 		}
 	}
 
-	function Guardar_Inspecciones($data){
-
-		$query = $this->db->insert("tbl_inspecciones",$data);
-		return $query;
-	}
-
 	function Modificar_Inspecciones($data){
 
 		$query =$this->db->update('tbl_inspecciones', $data, array('inspeccionid' => $data['inspeccionid']));
@@ -93,6 +86,113 @@ class Inspecciones extends CI_Model
 
 	}
 	
+
+	
+	/* FUNCIONES NUEVAS */
+	function getDenPorEstabIds($idEstab){		
+
+		$this->db->select('tbl_denuncias.denunciaid,
+											tbl_denuncias.denunciasfecha,
+											tbl_denuncias.denunciariesgo,
+											tbl_denuncias.denunciaprograma,
+											tbl_denuncias.denunciafechaverif,
+											tbl_denuncias.denunciainclucion,
+											tbl_denuncias.denuncianroobra,
+											tbl_denuncias.denuncianroacta,
+											tbl_denuncias.denunciamotivos,
+											tbl_denuncias.estableid,
+											tbl_denuncias.denunciaestado');
+		$this->db->from('tbl_denuncias');
+		$this->db->where('tbl_denuncias.estableid', $idEstab);
+		$query = $this->db->get();
+		if ($query->num_rows()!=0){   
+			return $query->result_array();  
+		}
+	}
+
+	// guarda inspecciones nuevas
+	function Guardar_Inspecciones($data){
+
+		$query = $this->db->insert("tbl_inspecciones",$data);
+		$idIns = $this->db->insert_id();
+		return $idIns;
+	}
+
+	// guarda la relacion de denuncias en inspecciones
+	function setInsDenIds($datosInspDenun){
+		$response = $this->db->insert_batch('trg_inspecciondenuncia', $datosInspDenun);
+		return $response;
+	}
+
+	// lanza proceso en BPM
+	function lanzarProcesoBPM($param){
+		$resource = 'API/bpm/process/';
+		$url = BONITA_URL.$resource;
+		$com = '/instantiation';
+		try {
+			$result = file_get_contents($url.BPM_PROCESS_ID.$com, false, $param);
+		} catch (Exception $e) {
+			echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+			echo 'respuestas: ';
+			var_dump( $http_response_header);
+		} 
+			
+		return $result;
+	}
+
+	//
+	function getInspeccionesCriterio($data){		
+		var_dump($data);
+		//if( ($data === 'inspeccion') || ($data === 'verificacion') || ($data === 'suspension')){
+		// if( (strcmp($data, 'inspeccion') === 0) || (strcmp($data, 'verificacion') === 0) || (strcmp($data, 'suspension') === 0) ){
+					
+			$this->db->select('tbl_inspecciones.*');
+			$this->db->from('tbl_inspecciones');
+			$this->db->where('tbl_inspecciones.tipoacta', $data);
+			$query = $this->db->get();
+			if ($query->num_rows()!=0){   
+				return $query->result_array();  
+			}
+
+		// }else{
+		
+		// 	$this->db->select('tbl_inspecciones.*');
+		// 	$this->db->from('tbl_inspecciones');
+		// 	$this->db->where('tbl_inspecciones.accion', $data);
+		// 	$query = $this->db->get();
+		// 	if ($query->num_rows()!=0){   
+		// 		return $query->result_array();  
+		// 	}
+		// }
+	}
+
+
+	// function getInspeccionesCriterio($data){		
+	// 	var_dump($data);
+	// 	//if( ($data === 'inspeccion') || ($data === 'verificacion') || ($data === 'suspension')){
+	// 	if( (strcmp($data, 'inspeccion') === 0) || (strcmp($data, 'verificacion') === 0) || (strcmp($data, 'suspension') === 0) ){
+					
+	// 		$this->db->select('tbl_inspecciones.*');
+	// 		$this->db->from('tbl_inspecciones');
+	// 		$this->db->where('tbl_inspecciones.tipoacta', $data);
+	// 		$query = $this->db->get();
+	// 		if ($query->num_rows()!=0){   
+	// 			return $query->result_array();  
+	// 		}
+
+	// 	}else{
+		
+	// 		$this->db->select('tbl_inspecciones.*');
+	// 		$this->db->from('tbl_inspecciones');
+	// 		$this->db->where('tbl_inspecciones.accion', $data);
+	// 		$query = $this->db->get();
+	// 		if ($query->num_rows()!=0){   
+	// 			return $query->result_array();  
+	// 		}
+	// 	}
+	// }
+
+
 }	
 
 ?>
