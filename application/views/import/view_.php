@@ -18,7 +18,7 @@
                         </form>
                         <br /><br />
                         <div class="alert alert-success" id="grabsuccess" role="alert" style="display: none">La planilla se ha grabado exitosamente.</div>
-                        <div class="alert alert-danger" id="graberror" role="alert" style="display: none">Ha ocurrido un error.</div>
+                        <div class="alert alert-danger" id="graberror" role="alert" style="display: none">Error! el formato del archvo a subir es incorrecto. Por favor guradelo con extension ".xsl".</div>
                     
                     </div>  
                   </div>

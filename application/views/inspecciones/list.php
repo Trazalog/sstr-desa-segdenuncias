@@ -4,9 +4,11 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <center>
+          <!-- <center>
             <h2> Inspecciones </h2>  
-          </center>
+          </center> -->
+          <h3 class="box-title">Inspecciones</h3>
+          <br><br>
           <?php
           if (strpos($permission,'Add') !== false) {
             echo '<button class="btn btn-block btn-success" style="width: 100px; margin-top: 10px;" data-toggle="modal" data-target="#modalAgregar" id="btnAdd" title="Nueva">Agregar</button>';
@@ -15,67 +17,103 @@
 
         </div><!-- /.box-header -->
         <div class="box-body">
-          <table id="inspeccion" class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th width="12%">Acciones</th>
-                <th>Nro</th>
-                <th>Fecha</th>
-                <th style="display:none">idEmpleador</th> 
-                <th>Empleador</th> 
-                <th style="display:none">idEstablecimiento</th>
-                <th>Establecimiento</th>
-                <th style="display:none">idInspector</th>
-                <th>Inspector</th>
-                <th width="5%">Estado</th>
-                <th style="display:none">detalleInspeccion</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              foreach($list as $f)
-              {
+         
+          <!-- <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <h4>Criterios de Búsqueda</h4>
+                <div class="btn-group" data-toggle="buttons">
+                  <label class="btn btn-primary">
+                    <input type="radio" name="accion" id="inspeccion" autocomplete="off"  value="inspeccion"> Inspeccion
+                  </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="accion" id="verificacion" autocomplete="off"  value="verificacion"> Verificación
+                  </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="accion" id="suspension" autocomplete="off"  value="suspension"> Suspensión
+                  </label>
+                  
+                  <label class="btn btn-primary" style="margin-left:20px;">
+                    <input type="radio" name="accion" id="cierre" autocomplete="off" value="cierre">Cierre
+                  </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="accion" id="ampliacion" autocomplete="off" value="ampliacion">Ampliación Plazos
+                    </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="accion" id="infraccion" autocomplete="off" value="infraccion">Infracción
+                  </label>
+                </div>
+            </div>    <!- - /col-sm-12 col-md-12- ->
+          </div>   -->
 
-                echo '<tr>';
-                echo '<td>';
-                
+          <div class="row" style="margin-top:20px;">
+         
+            <table id="inspeccion" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th width="12%">Acciones</th>
+                  <th>Nro</th>
+                  <th>Fecha</th>
+                  <th style="display:none">idEmpleador</th> 
+                  <th>Empleador</th> 
+                  <th style="display:none">idEstablecimiento</th>
+                  <th>Establecimiento</th>
+                  <th style="display:none">idInspector</th>
+                  <th>Inspector</th>
+                  <th width="5%">Estado</th>
+                  <th style="display:none">detalleInspeccion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                foreach($list as $f)
+                {
 
-              if (strpos($permission,'Edit') !== false) {
-              echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;"></i>';
+                  echo '<tr>';
+                  echo '<td>';
+                  
+
+                if (strpos($permission,'Edit') !== false) {
+                //echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;"></i>';
+                }
+                if (strpos($permission,'Del') !== false) {
+                //echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i>';
+                }
+
+                echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-idempleador="1"></i>';
+
+                echo '</td>';
+                echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
+                echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';
+                echo '<td style="text-align: left;display:none">'.$f['empleaid'].'</td>';
+                echo '<td style="text-align: left">'.$f['emplearazsoc'].'</td>';
+                echo '<td style="text-align: left;display:none">'.$f['estableid'].'</td>';
+                echo '<td style="text-align: left">'.$f['direccionCompleta'].'</td>';
+                echo '<td style="text-align: left;display:none">'.$f['inspectorid'].'</td>';
+                echo '<td style="text-align: left">'.$f['inspectornombre'].'</td>';
+                echo '<td style="text-align: left">'.($f['inspeestado'] == 'C' ? '<small class="label pull-left bg-green">Curso</small>' :'<small class="label pull-left bg-yellow">Asignado</small>').'</td>';
+
+
+                echo '<td style="text-align: left;display:none">'.$f['inspecciondescrip'].'</td>';
+                echo '</tr>';
+
               }
-              if (strpos($permission,'Del') !== false) {
-              echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i>';
-              }
 
-              echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-idempleador="1"></i>';
+              ?>
+            </tbody>
+            </table>
 
-              echo '</td>';
-              echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
-              echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';
-              echo '<td style="text-align: left;display:none">'.$f['empleaid'].'</td>';
-              echo '<td style="text-align: left">'.$f['emplearazsoc'].'</td>';
-              echo '<td style="text-align: left;display:none">'.$f['estableid'].'</td>';
-              echo '<td style="text-align: left">'.$f['direccionCompleta'].'</td>';
-              echo '<td style="text-align: left;display:none">'.$f['inspectorid'].'</td>';
-              echo '<td style="text-align: left">'.$f['inspectornombre'].'</td>';
-              echo '<td style="text-align: left">'.($f['inspeestado'] == 'C' ? '<small class="label pull-left bg-green">Curso</small>' :'<small class="label pull-left bg-yellow">Asignado</small>').'</td>';
+          </div>
 
-
-              echo '<td style="text-align: left;display:none">'.$f['inspecciondescrip'].'</td>';
-              echo '</tr>';
-
-            }
-
-            ?>
-          </tbody>
-        </table>
-      </div><!-- /.box-body -->
+        </div><!-- /.box-body -->
     </div><!-- /.box -->
   </div><!-- /.col -->
 </div><!-- /.row -->
 </section><!-- /.content -->
 
 <script>
+  
+
+
   function guardarInspeccion(){
     var inspeccionfechaasigna=$('#fecha').val();
     var inspeccionfecharecp=$('#fecha').val();
@@ -86,6 +124,7 @@
     // arma array de ids de denuncias
     var idsTr = $('#tblDenEstab tbody tr');
     var idsDenuncias = [];
+    
     $(idsTr).each(function(){       
       celId = $(this).find('td.denunciaId').html();
       idsDenuncias.push(celId);    
@@ -128,9 +167,9 @@
     //console.log("Inspeccion Guardada");
   }
 
-
+//var dataF;
   $( function() {
-    var dataF = function () {
+     var dataF = function () {
       var tmp = null;
       $.ajax({
         'async': false,
@@ -144,64 +183,61 @@
         }
       });
       return tmp;
-    }();
-
-
-  $(function() {
-    $(".busEmpleador").autocomplete({
-      source: dataF,
-      delay: 100,
-      minLength: 1,
-      focus: function(event, ui) {
-                  // prevent autocomplete from updating the textbox
-                  event.preventDefault();
-                  // manually update the textbox
-                  $(this).val(ui.item.label);
-                },
-                select: function(event, ui) {
-                  // prevent autocomplete from updating the textbox
-                  event.preventDefault();
-                  // manually update the textbox and hidden field
-                  $(this).val(ui.item.label);
-                  $("#empleaid").val(ui.item.value);
-
-                  $("#estable").html("");
-                  // guardo el id de sector
-                  var idEmpleador =  $("#empleaid").val();
-
-                  getEstablecimientos(idEmpleador,-1,$('#estable'));
-
-                }
-              });
+    }
   });
 
 
-  $(function() {
-    $(".busEmpleadorE").autocomplete({
-      source: dataF,
-      delay: 100,
+   //$( 
+    autocompEmp();
+    function autocompEmp() {  
+    $( "#busEmpleador" ).autocomplete({
+      source: "Inspeccion/getDenominacionSocial",
       minLength: 1,
-      focus: function(event, ui) {
-                  // prevent autocomplete from updating the textbox
-                  event.preventDefault();
-                  // manually update the textbox
-                  $(this).val(ui.item.label);
+      select: function( event, ui ) {        
+        $( "#busEmpleador" ).val(ui.item.value);
+        $("#empleaid").val(ui.item.id);
+        
+        //getEstablecimientos(idEmpleador,-1,$('#estable'));
+      }
+    });
+  }
+  //);
+  // llena select de establecimientos
+  $('#busEmpleador').on("change", function(){
+    var selector = $('#estable');
+    var idEmp = $("#empleaid").val();
+    $.ajax({
+        async: true,
+        global: false,
+        url: "Inspeccion/getEstablecimiento",
+        type: 'POST',
+        dataType : "json",
+        data: {"empleaid" : idEmp },
+        'success': function (result) {
+                    
+                    selector.html('');
+                    if(result!=null){
+                      var opcion  = "<option value='-1'>Seleccione...</option>" ; 
+                      selector.append(opcion); 
+                      for(var i=0; i < result.length ; i++){    
+                        var direccion = result[i]['establecalle'];
+                        var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
+                        selector.append(opcion); 
+                      }
+                      selector.val(idEstablecimiento);
+                    }
+                    else{
+                      selector.append("<option value='-1'>No hay Establecimientos</option>");
+                    }
                 },
-                select: function(event, ui) {
-                  // prevent autocomplete from updating the textbox
-                  event.preventDefault();
-                  // manually update the textbox and hidden field
-                  $(this).val(ui.item.label);
-                  $("#empleaidE").val(ui.item.value);
-                  // guardo el id de sector
-                  var idEmpleador =  $("#empleaidE").val();
-
-                  getEstablecimientos(idEmpleador,-1,$('#estableE'));
-
-                }
-              });
+        'error' : function (result){
+                  console.log('Funcion: getEstablecimientos ERROR');
+                  alert('error');
+              }
+    });
   });
 
+ 
   function getEstablecimientos(idEmpleador,idEstablecimiento,selector){
 
     var id =  idEmpleador;
@@ -231,32 +267,30 @@
         selector.append("<option value='-1'>No hay Establecimientos</option>");
       }
 
-    }
+      },
+      'error' : function (result){
+        console.log('Funcion: getEstablecimientos ERROR');
+        alert('error');
+      },
 
-    ,
-    'error' : function (result){
-      console.log('Funcion: getEstablecimientos ERROR');
-      alert('error');
-    },
-
-  });
+    });
   }
 
-  $(".fa-pencil").click(function (e) { 
-    id_=$(this).parents('tr').find('td').eq(1).html();
-    var idInspector=$(this).parents('tr').find('td').eq(7).html();
-    $('select#inspeE').val(idInspector);
-    var nombreEmplador = $(this).parents('tr').find('td').eq(4).html();
-    $(".busEmpleadorE").val(nombreEmplador);
-    var idEmpleador=$(this).parents('tr').find('td').eq(3).html();
-    var idEstablecimiento=$(this).parents('tr').find('td').eq(5).html();
-    getEstablecimientos(idEmpleador,idEstablecimiento,$('#estableE'));
-    var detalle=$(this).parents('tr').find('td').eq(10).html();
-    $('textarea#notaE').val(detalle);
-    $('#modalEditar').modal('show');
+  // $(".fa-pencil").click(function (e) { 
+  //   id_=$(this).parents('tr').find('td').eq(1).html();
+  //   var idInspector=$(this).parents('tr').find('td').eq(7).html();
+  //   $('select#inspeE').val(idInspector);
+  //   var nombreEmplador = $(this).parents('tr').find('td').eq(4).html();
+  //   $(".busEmpleadorE").val(nombreEmplador);
+  //   var idEmpleador=$(this).parents('tr').find('td').eq(3).html();
+  //   var idEstablecimiento=$(this).parents('tr').find('td').eq(5).html();
+  //   getEstablecimientos(idEmpleador,idEstablecimiento,$('#estableE'));
+  //   var detalle=$(this).parents('tr').find('td').eq(10).html();
+  //   $('textarea#notaE').val(detalle);
+  //   $('#modalEditar').modal('show');
 
-  });
-});
+  // });
+//
 
   $('#Guardar').click(function (e) { 
 
@@ -299,35 +333,32 @@
 
 
   });
-</script>
 
 
-<script>
+  // $(".fa-times-circle").click(function (e) { 
 
-  $(".fa-times-circle").click(function (e) { 
-
-    id_ = $(this).parents('tr').find('td').eq(1).html();
-    $('#modalEliminar').modal('show');
+  //   id_ = $(this).parents('tr').find('td').eq(1).html();
+  //   $('#modalEliminar').modal('show');
     
-  });
+  // });
 
 
-  function eliminarInspeccion(){
-    WaitingOpen();
-    $.ajax({
-      type: 'POST',
-      data: { "inspeccionid": id_},
-      url: 'index.php/Inspeccion/Eliminar_Inspeccion', 
-      success: function(data){
-        WaitingClose();
-        ActualizarPagina();                
-      },
+  // function eliminarInspeccion(){
+  //   WaitingOpen();
+  //   $.ajax({
+  //     type: 'POST',
+  //     data: { "inspeccionid": id_},
+  //     url: 'index.php/Inspeccion/Eliminar_Inspeccion', 
+  //     success: function(data){
+  //       WaitingClose();
+  //       ActualizarPagina();                
+  //     },
 
-      error: function(result){
-        WaitingClose();
-        alert("OPERACION FALLIDA");
-      }
-    });}
+  //     error: function(result){
+  //       WaitingClose();
+  //       alert("OPERACION FALLIDA");
+  //     }
+  //   });}
 
 
   function reset(){
@@ -337,43 +368,40 @@
 
     }
 
+  
+  // datatable
+  // $(function () {
+
+  //   $('#inspeccion').DataTable({
+  //     "paging": true,
+  //     "lengthChange": true,
+  //     "searching": true,
+  //     "ordering": true,
+  //     "info": true,
+  //     "autoWidth": true,
+  //     "language": {
+  //       "lengthMenu": "Ver _MENU_ filas por página",
+  //       "zeroRecords": "No hay registros",
+  //       "info": "Mostrando pagina _PAGE_ de _PAGES_",
+  //       "infoEmpty": "No hay registros disponibles",
+  //       "infoFiltered": "(filtrando de un total de _MAX_ registros)",
+  //       "sSearch": "Buscar:  ",
+  //       "oPaginate": {
+  //         "sNext": "Sig.",
+  //         "sPrevious": "Ant."
+  //       }
+  //     }
+  //   });
+  // });
+
+
+
   //Funcion Resfresca
   function ActualizarPagina(){ 
 
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>");
-
   }
-
-  $(function () {
-
-    $('#inspeccion').DataTable({
-      "paging": true,
-      "lengthChange": true,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": true,
-      "language": {
-        "lengthMenu": "Ver _MENU_ filas por página",
-        "zeroRecords": "No hay registros",
-        "info": "Mostrando pagina _PAGE_ de _PAGES_",
-        "infoEmpty": "No hay registros disponibles",
-        "infoFiltered": "(filtrando de un total de _MAX_ registros)",
-        "sSearch": "Buscar:  ",
-        "oPaginate": {
-          "sNext": "Sig.",
-          "sPrevious": "Ant."
-        }
-      }
-    });
-  });
-
-</script>
-
-
-
-<script>
 
 // FUNCIONES NUEVAS HUGO
   // carga modal ver 
@@ -453,6 +481,52 @@
     });
 
   });
+
+  // busca inspecciones segun distintos criterios 
+  $('input:radio[name=accion]').change(function() {
+      
+    if (this.value == 'inspeccion') {
+        //alert("inspeccion");
+        getInspecciones('inspeccion');
+    }
+    if (this.value == 'verificacion') {
+        //alert("verificacion");
+        getInspecciones('verificacion');      
+    }
+    if (this.value == 'suspension') {
+        //alert("suspension"); 
+        getInspecciones('suspension');                   
+    }
+    if (this.value == 'cierre') {
+        //alert("cierre"); 
+        getInspecciones('cierre');                   
+    }
+    if (this.value == 'ampliacion') {
+        //alert("ampliacion"); 
+        getInspecciones('ampliacion');                   
+    }
+    if (this.value == 'infraccion') {
+        //alert("infraccion"); 
+        getInspecciones('infraccion');                   
+    }
+  });  
+  function getInspecciones(criterio){
+    
+    $.ajax({
+      type: 'POST',
+      data: {criterio},
+      dataType: 'json',
+      url: 'index.php/Inspeccion/getInspeccionesCriterio',
+      success: function(result){
+        
+      },
+      error: function(result){
+        //alert(result);
+        console.error("error al cargar inspecciones por criterios: " + result);
+        WaitingClose();
+      },
+    });
+  }
 
 
 </script>

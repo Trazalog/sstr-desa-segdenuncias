@@ -11,16 +11,82 @@ class Tareas extends CI_Model
 	 function getTareas($param){
 
 	 	$userdata = $this->session->userdata('user_data');
-	 	$usrId= $userdata[0]["usrId"];
+		$usrId= $userdata[0]["usrId"];
+		//FIXME: SACAR HARDCODEO 
+		//$usrId = 2;		//lia.busatto
+		//$usrId = 3;		//juan.perez
 	 	//$tareas = file_get_contents(BONITA_URL.'API/bpm/humanTask?p=0&c=10&f=user_id%3D5', false, $param);
 	 	$resource = 'API/bpm/humanTask?p=0&c=1000&f=user_id%3D';
 	 	$url = BONITA_URL.$resource.$usrId;
 	 	$tareas = file_get_contents($url, false, $param);
-
+		// agrega datos de inspeccion para mostrar en bandeja entrada
 	 	$tar = $this->AgregarDatos($tareas);
+		return $tar;
+	 }	
 
-	 	return $tar;
-	 }
+	function getInspector(){
+		$sql= "SELECT *
+					FROM tbl_inspectores";
+
+		$query= $this->db->query($sql);
+		if ($query->num_rows()!=0){
+			return $query->result_array();	
+		}
+		else{
+			return false;
+		}
+	}
+
+	// agrega datos de inspeccion a lista de bpm para mostrar en bandeja entrada	
+	function AgregarDatos($tareas){
+		
+		$tar = json_decode($tareas,true);
+		foreach ($tar as $key => $value) {
+			$caseId = $tar[$key]["caseId"];
+			// trae datos de inspeccion por case_id
+			$datos = $this->getDatInspeccion($caseId);
+			$tar[$key]['establecalle'] = $datos[0]['establecalle'];
+			$tar[$key]['establealtura'] = $datos[0]['establealtura'];
+			$tar[$key]['empleacui'] = $datos[0]['empleacui'];
+			$tar[$key]['emplearazsoc'] = $datos[0]['emplearazsoc'];
+		}
+		//var_dump($tar);
+		return $tar;
+	}
+	// trae datos establecimiento en funcion del caseId de BPM
+	function getDatInspeccion($caseId){	
+
+		$this->db->select('tbl_establecimiento.establecalle,
+											tbl_establecimiento.establealtura,
+											tbl_empleadores.empleacui,
+											tbl_empleadores.emplearazsoc,
+											tbl_establecimiento.estableid');		
+		$this->db->from('tbl_inspecciones');
+		$this->db->join('tbl_establecimiento', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
+		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');		
+		$this->db->where('tbl_inspecciones.bpm_id', $caseId);
+		$query = $this->db->get();
+		if ($query->num_rows()!=0)
+		{
+			return $query->result_array();
+		}
+	}
+
+	// trae cod interno de pedido trabajo en funcion del caseId de BPM
+	// function getDatPedidoTrabajo($caseId){
+
+	// 	$this->db->select('trj_pedido_trabajo.petr_id,
+	// 						trj_pedido_trabajo.cod_interno');
+	// 	$this->db->from('trj_pedido_trabajo');
+	// 	$this->db->where('trj_pedido_trabajo.bpm_id',$caseId);
+
+	// 	$query = $this->db->get();
+
+	// 	if ($query->num_rows()!=0)
+	// 	{
+	// 		return $query->result_array();
+	// 	}
+	// }
 
 	function getUsuariosBPM($param){
 
@@ -29,37 +95,6 @@ class Tareas extends CI_Model
 	 	$url = BONITA_URL.$resource;
 		$usrs = file_get_contents($url, false, $param);
 		return json_decode($usrs,true) ;
-	}
-
-	function AgregarDatos($tareas){
-		//dump_exit($tareas);
-		$tar = json_decode($tareas,true);
-
-		foreach ($tar as $key => $value) {
-
-			$caseId = $tar[$key]["caseId"];
-			$datos = $this->getDatPedidoTrabajo($caseId);
-
-			$tar[$key]['petr_id'] = $datos[0]['petr_id'];
-			$tar[$key]['cod_interno'] = $datos[0]['cod_interno'];
-		}
-
-		return $tar;
-	}
-	// trae cod interno de pedido trabajo en funcion del caseId de BPM
-	function getDatPedidoTrabajo($caseId){
-
-		$this->db->select('trj_pedido_trabajo.petr_id,
-							trj_pedido_trabajo.cod_interno');
-		$this->db->from('trj_pedido_trabajo');
-		$this->db->where('trj_pedido_trabajo.bpm_id',$caseId);
-
-		$query = $this->db->get();
-
-		if ($query->num_rows()!=0)
-		{
-			return $query->result_array();
-		}
 	}
 
 	function getIdPedTrabajo($caseId){
@@ -134,7 +169,39 @@ class Tareas extends CI_Model
 		return $respuesta;
 	}
 
-	// FIXME: CAMBIE ID TAR BONITA PO ID DE USR
+	// cerrar tarea SST
+	function cerrarTarea($idTarBonita,$param){
+		
+		$method = '/execution';
+		$resource = 'API/bpm/userTask/';
+		$url = BONITA_URL.$resource.$idTarBonita.$method;
+		file_get_contents($url, false, $param);
+		$response = $this->parseHeaders( $http_response_header );
+		return $response;
+	}	
+
+	function setDatosInspeccion($data,$idCaseBonita){
+		$this->db->where('bpm_id', $idCaseBonita);	//
+		$response = $this->db->update('tbl_inspecciones', $data);
+		return $response;
+	}
+
+	function getDenPorBpmId($bpm_Id){	
+		$this->db->select('tbl_denuncias.*');
+		$this->db->from('tbl_denuncias');
+		$this->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid');
+		$this->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
+
+		$this->db->where('tbl_inspecciones.bpm_id', $bpm_Id);
+		$query = $this->db->get();
+		if ($query->num_rows()!=0){   
+			return $query->result_array();  
+		}
+	}
+
+
+
+	
 	// Terminar Tarea
 	function terminarTarea($idTarBonita,$param){
 
@@ -352,28 +419,42 @@ class Tareas extends CI_Model
 	}
 
 	// devuelve detalle de tareas para notificacion standart a partir de id_listarea
-	function detaTareas($id_listarea){
+	// function detaTareas($id_listarea){
 
-	 	$this->db->select('tbl_listarea.id_listarea,
-							tbl_listarea.id_orden,
-							tareas.duracion_std,
-							tbl_listarea.tareadescrip,
-							tbl_listarea.id_tarea,
-							tbl_listarea.id_usuario,
-							tbl_listarea.estado,
-							tbl_listarea.fecha');
-	 	$this->db->from('tbl_listarea');
-		$this->db->join('tareas', 'tareas.id_tarea = tbl_listarea.id_tarea');
-		$this->db->where('tbl_listarea.id_listarea', $id_listarea);
+	//  	$this->db->select('tbl_listarea.id_listarea,
+	// 						tbl_listarea.id_orden,
+	// 						tareas.duracion_std,
+	// 						tbl_listarea.tareadescrip,
+	// 						tbl_listarea.id_tarea,
+	// 						tbl_listarea.id_usuario,
+	// 						tbl_listarea.estado,
+	// 						tbl_listarea.fecha');
+	//  	$this->db->from('tbl_listarea');
+	// 	$this->db->join('tareas', 'tareas.id_tarea = tbl_listarea.id_tarea');
+	// 	$this->db->where('tbl_listarea.id_listarea', $id_listarea);
+	// 	$query = $this->db->get();
+
+	// 	if ($query->num_rows()!=0){
+	//  		return $query->result_array();
+	//  	}else{
+	//  		return false;
+	//  	}
+	// }
+
+	function detaInspecciones($caseId){
+
+		$this->db->select('tbl_inspecciones.*');
+		$this->db->from('tbl_inspecciones');	 
+		$this->db->where('tbl_inspecciones.bpm_id', $caseId);
 		$query = $this->db->get();
 
-		if ($query->num_rows()!=0){
-	 		return $query->result_array();
-	 	}else{
-	 		return false;
-	 	}
-	}
-
+	 if ($query->num_rows()!=0){
+			return $query->result_array();
+		}else{
+			return false;
+		}
+ }
+	
 	function getOtNroyDurStdTarea($id_listarea){
 
 

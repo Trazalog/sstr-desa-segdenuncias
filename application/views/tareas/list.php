@@ -17,13 +17,14 @@
             <thead>
               <tr>
                 <th width="10%"> </th>
-                <th>Id Pedido Trabajo:</th>
-                <th>Tarea:</th>
-                <th>Descripcion:</th>
-                <th>Fecha Asignacion:</th>
-                <th>Fecha Vto.:</th>
+                <th>Razón Social</th>
+                <th>Tarea</th>
+                <th>Detalle</th>
+                <!-- <th>Descripcion:</th> -->
+                <th>Fecha</th>
+                <!-- <th>Fecha Vto.:</th>
                 <th>Estado:</th>
-                <th>Prioridad:</th>
+                <th>Prioridad:</th> -->
 
                 <th style="display:none">id tarea bonit</th>
                 <th style="display:none">Estado:</th>
@@ -32,11 +33,12 @@
             <tbody>
               <?php
 
-                //$lista = json_decode($list,true);
-                // echo "<pre>";
-                // var_dump($lista);
-                foreach($list as $f)
-                {
+                $lista = json_decode($list,true);
+                //FIXME: SACAR VAR DUMP
+                 //echo "<pre>";
+                 //var_dump($list);
+                foreach($list as $f){
+
                   $id=$f["id"];
                   $asig = $f['assigned_id'];
                   echo '<tr id="'.$id.'" class="'.$id.'" >';
@@ -53,7 +55,7 @@
                     }
                   echo '</td>';
                   // td 1
-                  echo '<td class="celda" style="text-align: left">'.$f['cod_interno'].'</td>';
+                  echo '<td class="celda" style="text-align: left">C.U.I.T.: '.$f["empleacui"].' - '.$f["emplearazsoc"].'<br>'. $f["establecalle"].' - '. $f["establealtura"].' </td>';
                   // td 2
                   echo '<td class="celda nomTarea" style="text-align: left">'.$f['displayName'].'</td>';
                   // td 3
@@ -61,7 +63,7 @@
                   // td 4
                   echo '<td class="celda" style="text-align: left">'.$f['assigned_date'].'</td>';
                   // td 5
-                  echo '<td class="celda" style="text-align: left">'.$f['dueDate'].'</td>';
+                  echo '<td class="celda hidden" style="text-align: left">'.$f['dueDate'].'</td>';
                   if ( $asig != "")  {
                     echo '<td class="celda" style="text-align: left"><i class="fa fa-user" style="color: #A9A9A9 ; cursor: pointer;"" title="Tomado" data-toggle="modal" data-target="#modalSale"></i></td>';
                   }else{
@@ -69,7 +71,7 @@
                       echo '<td class="celda" style="text-align: left"></td>';
                   }
                   // td 6
-                  echo '<td class="celda" style="text-align: left">'.$f['priority'].'</td>';
+                  echo '<td class="celda hidden" style="text-align: left">'.$f['priority'].'</td>';
 
                   // id de tarea en bonita
                   // td 7
