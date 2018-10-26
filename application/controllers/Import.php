@@ -27,7 +27,7 @@ class Import extends CI_Controller{
 		if(!is_dir("./excel_files/")) 
 			mkdir("./excel_files/", 0777);
 
-    	//comprobamos si el archivo ha subido para poder utilizarlo
+    //comprobamos si el archivo ha subido para poder utilizarlo
 		if ($file && copy($_FILES['excel']['tmp_name'],"./excel_files/".$file)){
 
       	//queremos obtener la extensión del archivo
@@ -82,29 +82,25 @@ class Import extends CI_Controller{
 			
 				$CUIT  = $sql[$i]['CUIT'];
 				$CALLE = $sql[$i]['CALLE'];
+				
+				$ALTURA = $sql[$i]["ALTURA"];
 				$FECHA_DENUNCIA = $sql[$i]["FECHA_x0020_DENUNCIA"];	
 				$MOTIVO = $sql[$i]["MOTIVOS_x0020_INFRINGIDOS"];
+				//var_dump($CUIT);
+				//var_dump($CALLE);
+				//var_dump($ALTURA);
 				// si el empleador esta registrado devuelve el id de empleador
-				if ($idEmpleador = $this->Imports->matchCuit($CUIT)) {		
-					// si existe el establecimiento trae el id
-					if ($idEstab = $this->Imports->matchEstablecimiento($idEmpleador, $CALLE)) {
-						// busca en Bd registro que coincida en motivos, fecha e id estab		
-						$registro = $this->Imports->matchRegistro($FECHA_DENUNCIA,$MOTIVO,$idEstab);
-						// si existe un registro, se guarda	en $inconsistencias					
-						if ($registro) {
-							//echo "  Existe la denuncia, el id es: ".$registro;
-							$inconsistencias[$y] = $sql[$i];
-							$y++;
-						}else{							
-							//echo "La denuncia no existe en BD, guardar!!";
-							$nuevaDenuncia[$nueva] = $sql[$i];
-							$nueva++;					
-						}
-					}else{
-						$noEstabl[$f] = $CALLE;
-						$f++;
-						echo "no coinciden datos de empleador (calle/s)";
-					}
+				if ($idEmpleador = $this->Imports->matchCuit($CUIT)) {	
+					// busca el establecimiento por calle y altura
+					$idEstab = $this->Imports->matchEstablecimiento($idEmpleador, $CALLE, $ALTURA);							
+					// echo "id estabecimiento: ";
+					// var_dump($idEstab);
+					// agrego id de establecimiento si se encuentra si agrega 0
+					$sql[$i]['ID_ESTABLECIMIENTO'] = $idEstab;
+					$nuevaDenuncia[$nueva] = $sql[$i];
+					// echo "nueva denuncia con cuit encontrado: ";
+					// var_dump($nuevaDenuncia);
+					$nueva++;	
 				}else{
 					//echo "no esta registrado el cuit de empleador: ".$CUIT;
 					$noCuit[$e]= $CUIT;
@@ -119,39 +115,45 @@ class Import extends CI_Controller{
 		//finalmente, eliminamos el archivo pase lo que pase
 		unlink("./excel_files/".$file);
 
-		// si existen nuevas denuncias se arman y se guardan
+		// si existen nuevas denuncias se arman y se guardan temporalmente
 		if (isset($nuevaDenuncia)) {
-			$denListas = $this->armarDenunciasNuevas($nuevaDenuncia, $idEstab);
-			$response['respGuardado'] = $this->Imports->setDenuncias($denListas);
+			// arma las denuncias para grabar en BD temporalmente
+			$denListas = $this->armarDenunciasNuevas($nuevaDenuncia);
+			//dump_exit($denListas);
+			// borra las denuncias que pudieran estar guardadas anteriormente
+			$delete = $this->Imports->deleteDenuncias();			
+			// guarda denuncias temporales con cuit coincidente con CUITS registrados
+			$response['respGuardado'] = $this->Imports->setDenunciasTemp($denListas);
+			// trae denuncias guardada en tabla temporal
+			$response['denTemporales'] = $this->Imports->getDenTemporales();
+			//var_dump($response['denTemporales']);
 		}else{
 			$response['respGuardado'] = 'sin denuncias';
 		}
-		// si existen denuncias ya cargadas anteriormente se devuelven para mostrar
-		if (isset($inconsistencias)){
-			$response['inconsistencias'] = $inconsistencias;	
-		}else{
-			$response['inconsistencias'] = array();
-		}
+		
 		// si existen cuits sin registrar se devuelven
 		if (isset($noCuit)) {			
 			$response['noCuit'] = $noCuit;
 		}else{
 			$response['noCuit'] = array();
-		}
-		// si existen establecimientos sin registrar se devuelven
-		if (isset($noEstabl)) {			
-			$response['noEstabl'] = $noEstabl;
-		}else{
-			$response['noEstabl'] = array();
 		}		
 
+		echo json_encode($response);		
+	}
+
+	function getEstablecimientos(){
+		$response = $this->Imports->getEstablecimientos($this->input->post('idEstab'));
+		//var_dump($response);
 		echo json_encode($response);
-		
 	}
 
 	// Procesa el array de denuncias para insertar en BD
-	function armarDenunciasNuevas($nuevaDenuncia, $idEstab){
-
+	function armarDenunciasNuevas($nuevaDenuncia){
+		
+		//// USUARIO LOGUEADO
+		$userdata = $this->session->userdata('user_data');
+		$usrId = $userdata[0]['usrId'];     // guarda usuario logueado   
+		
 		for ($i=0; $i < count($nuevaDenuncia) ; $i++) { 
 			$denuncia[$i]['denunciasfecha'] = $this->formatoFecha($nuevaDenuncia[$i]["FECHA_x0020_DENUNCIA"]);
 			$denuncia[$i]['denunciariesgo'] = $nuevaDenuncia[$i]["RIESGO_x0020_GRAVE_x0020_O_x0020_INMINENTE"];
@@ -159,12 +161,18 @@ class Import extends CI_Controller{
 			$denuncia[$i]['denunciafechaverif'] = $this->formatoFecha($nuevaDenuncia[$i]["FECHA_x0020_DE_x0020_VERIFICACION_x0020_DE_x0020_LA_x0020_DENUNCIA"]);
 			$denuncia[$i]['denunciainclucion'] = $nuevaDenuncia[$i]['PROGRAMA_x0020_INCLUSION'];
 			$denuncia[$i]['denuncianroobra'] = $nuevaDenuncia[$i]["NRO_x0020_OBRA"];
-			$denuncia[$i]['denuncianroacta'] = $nuevaDenuncia[$i]["NRO_x0020_ACTA_x0020_ANTERIOR_x0020_A_x0020_LA_x0020_VERIFICACION"];
+			$denuncia[$i]['denunciacuit'] = $nuevaDenuncia[$i]["CUIT"];			
 			$denuncia[$i]['denunciamotivos'] = $nuevaDenuncia[$i]["MOTIVOS_x0020_INFRINGIDOS"];
-			$denuncia[$i]['estableid'] = $idEstab;
+			$idEstab = (int)$nuevaDenuncia[$i]["ID_ESTABLECIMIENTO"];			
+			if($idEstab == 0){
+				$denuncia[$i]['estableid'] = 1;	//registro que se configura asi en tbl_establecimiento				
+			}else{
+				$denuncia[$i]['estableid'] = $nuevaDenuncia[$i]["ID_ESTABLECIMIENTO"];
+			}
 			$denuncia[$i]['denunciaestado'] = 'AC';
+			$denuncia[$i]['usrId'] = $usrId;
 		}
-
+	
 		return $denuncia;
 	}
 	// Cambia el formato de fecha para insertar en BD
@@ -173,6 +181,18 @@ class Import extends CI_Controller{
 	    $date = explode('/', $date);                    
 	    $date = $date[2].'-'.$date[1].'-'.$date[0];
 	    return $date;
+	}
+
+	// guardar denuncia definitiva
+	function setDenuncias(){
+	
+		$den = $this->input->post('data');
+		$denuncias = json_decode($den ,true);
+		$response = $this->Imports->setDenuncias($denuncias);		
+		if($response){
+			$den = $this->Imports->getDenTemporales();
+		}
+		echo json_encode($den);	
 	}
 
 

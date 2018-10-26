@@ -14,11 +14,8 @@ class Inspecciones extends CI_Model
 		$this->db->join('tbl_establecimiento as C','A.estableid=C.estableid');
 		$this->db->join('tbl_empleadores D','C.empleaid=D.empleaid');
 		$this->db->join('localidades as E','C.dptoid=E.id');
-		$this->db->where('A.inspeestado= "C" ');
-		
+		$this->db->where('A.inspeestado= "C" ');		
 		$query=$this->db->get();
-
-
 		if ($query->num_rows()!=0)    
 		{
 			return $query->result_array();	
@@ -26,8 +23,8 @@ class Inspecciones extends CI_Model
 		else{
 				return array();
 			}
-
 	}
+
 
 	function getEstablecimientos($id){
 
@@ -50,15 +47,12 @@ class Inspecciones extends CI_Model
 		$query = $this->db->get();				
 		$i=0;
 		foreach ($query->result() as $row){
-
 			$empleadores[$i]['label'] = $row->emplearazsoc;
 			$empleadores[$i]['id'] = $row->empleaid;
 			$i++;
 		}
 
 		return $empleadores;
-		
-
 	}
 
 	function Obtener_Inspecciones($id){
@@ -89,6 +83,21 @@ class Inspecciones extends CI_Model
 
 	
 	/* FUNCIONES NUEVAS */
+	// trae detalle de inspeccion
+	function getGetDetaInspeccion(){
+
+	}
+
+	// trae todos los inspectores 
+	function getInspector(){
+		$this->db->select('tbl_inspectores.inspectorid, tbl_inspectores.inspectornombre');
+		$this->db->from('tbl_inspectores');	
+		$query=$this->db->get();
+		if ($query->num_rows()!=0){
+			return $query->result_array();
+		}	
+	}
+	
 	function getDenPorEstabIds($idEstab){		
 
 		$this->db->select('tbl_denuncias.denunciaid,
@@ -140,57 +149,74 @@ class Inspecciones extends CI_Model
 		return $result;
 	}
 
-	//
-	function getInspeccionesCriterio($data){		
-		var_dump($data);
-		//if( ($data === 'inspeccion') || ($data === 'verificacion') || ($data === 'suspension')){
-		// if( (strcmp($data, 'inspeccion') === 0) || (strcmp($data, 'verificacion') === 0) || (strcmp($data, 'suspension') === 0) ){
-					
-			$this->db->select('tbl_inspecciones.*');
-			$this->db->from('tbl_inspecciones');
-			$this->db->where('tbl_inspecciones.tipoacta', $data);
-			$query = $this->db->get();
-			if ($query->num_rows()!=0){   
-				return $query->result_array();  
-			}
+	// devuelve inspecciones por tipo acta o accion
+	function getInspeccionesCriterio($data,$idInspector){					
 
-		// }else{
+		$this->db->select('tbl_inspecciones.inspeccionid,
+											tbl_inspecciones.inspeccionfechaasigna,
+											tbl_inspecciones.inspeccionfecharecp,
+											tbl_inspecciones.inspectorid,
+											tbl_inspecciones.inspecciondescrip,
+											tbl_inspecciones.estableid,
+											tbl_inspecciones.inspeestado,
+											tbl_inspecciones.bpm_id,
+											tbl_inspecciones.adjunto,
+											tbl_inspecciones.tipoacta,
+											tbl_inspecciones.accion,
+											tbl_inspecciones.fechaProrroga,
+											concat(tbl_establecimiento.establecalle, " ",tbl_establecimiento.establealtura) as direccion,
+											
+											tbl_empleadores.emplearazsoc,
+											tbl_inspectores.inspectornombre');
+		$this->db->from('tbl_inspecciones');
+		$this->db->join('tbl_establecimiento', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
+		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
+		$this->db->join('tbl_inspectores', 'tbl_inspecciones.inspectorid = tbl_inspectores.inspectorid');
 		
-		// 	$this->db->select('tbl_inspecciones.*');
-		// 	$this->db->from('tbl_inspecciones');
-		// 	$this->db->where('tbl_inspecciones.accion', $data);
-		// 	$query = $this->db->get();
-		// 	if ($query->num_rows()!=0){   
-		// 		return $query->result_array();  
-		// 	}
-		// }
+		if( ($data == 'inspeccion') || ($data == 'verificacion') || ($data == 'suspension') ){
+			$this->db->where('tbl_inspecciones.tipoacta', $data);
+		}
+		if( ($data =='cierre') || ($data =='ampliacion-plazo') || ($data =='infraccion') ){
+			$this->db->where('tbl_inspecciones.accion', $data);
+		}			
+		if( ($data == 'inspectorAsignado') ){
+			$this->db->where('tbl_inspecciones.inspectorid', $idInspector);
+		}
+
+		$query = $this->db->get();
+		if ($query->num_rows()!=0){   
+			return $query->result_array();  
+		}
 	}
 
+	// devuelve listado de inspecciones por id de denuncia
+	function listInspPorDenuncia($idDenuncia){
+		//FIXME: SACAR HARDCODE JEJE
+		$idDenuncia = 55;
+		$this->db->select('*,concat(tbl_establecimiento.establecalle," - ",tbl_establecimiento.establealtura," - ",localidades.localidad) as direccionCompleta');
+		$this->db->from('tbl_inspecciones');
+		$this->db->join('tbl_inspectores', 'tbl_inspecciones.inspectorid = tbl_inspectores.inspectorid');
+		$this->db->join('tbl_establecimiento', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
+		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
+		$this->db->join('localidades', 'localidades.id = tbl_establecimiento.provid');
+		$this->db->join('provincias', 'provincias.id = localidades.id_privincia');
+		$this->db->join('trg_inspecciondenuncia', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
+		$this->db->where('tbl_inspecciones.inspeestado= "C" ');
+		$this->db->where('trg_inspecciondenuncia.denunciaid', $idDenuncia);
+			
+		$query=$this->db->get();
+		if ($query->num_rows()!=0)    
+		{
+			return $query->result_array();	
+		}
+		else{
+				return array();
+			}
+	}
 
-	// function getInspeccionesCriterio($data){		
-	// 	var_dump($data);
-	// 	//if( ($data === 'inspeccion') || ($data === 'verificacion') || ($data === 'suspension')){
-	// 	if( (strcmp($data, 'inspeccion') === 0) || (strcmp($data, 'verificacion') === 0) || (strcmp($data, 'suspension') === 0) ){
-					
-	// 		$this->db->select('tbl_inspecciones.*');
-	// 		$this->db->from('tbl_inspecciones');
-	// 		$this->db->where('tbl_inspecciones.tipoacta', $data);
-	// 		$query = $this->db->get();
-	// 		if ($query->num_rows()!=0){   
-	// 			return $query->result_array();  
-	// 		}
+	
 
-	// 	}else{
-		
-	// 		$this->db->select('tbl_inspecciones.*');
-	// 		$this->db->from('tbl_inspecciones');
-	// 		$this->db->where('tbl_inspecciones.accion', $data);
-	// 		$query = $this->db->get();
-	// 		if ($query->num_rows()!=0){   
-	// 			return $query->result_array();  
-	// 		}
-	// 	}
-	// }
+
 
 
 }	
