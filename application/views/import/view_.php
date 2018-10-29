@@ -75,24 +75,36 @@
 			var fileName = file.name;
 			//obtenemos la extensión del archivo
 			fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+			alert(fileExtension);
 			//obtenemos el tamaño del archivo
 			var fileSize = file.size;
 			//obtenemos el tipo de archivo image/png ejemplo
 			var fileType = file.type;
 			//mensaje con la información del archivo
 			showMessage("<span class='info'>Archivo para subir: "+fileName+", peso total: "+fileSize+" bytes.</span>");
-    }
+		}
+		// cambios de select con domicilios
+		function cambioSelect(){
+			$("select").change( function(){ 
+				var idEst = $(this).val();
+				if (idEst == -1) {
+					$(this).parents("tr").find("td").eq(4).html("<span class='glyphicon glyphicon-remove' style='color: #e20909'></span>");
+				} else {
+					$(this).parents("tr").find("td").eq(4).html("<span class='glyphicon glyphicon-ok' style='color: #6aa61b'></span>");
+				}				
+			});
+		}
 
     //sube el archivo excel al server
-    $('#importar').click(function(event){
+    $('#importar').click(function(event){	
+
 			event.preventDefault();
 			if ($('#excel').val() == '') {
 				alert('Por favor suba un archivo formato .xsl...');
 			} else {	
 				//información del formulario
 				var formData = new FormData($(".formulario")[0]);
-				var message = ""; 
-				//hacemos la petición ajax  
+				var message = ""; 			
 				$.ajax({
 						url: 'Import/to_mysql',  
 						type: 'POST',            
@@ -105,22 +117,17 @@
 						beforeSend: function(){
 								message = $("<span class='before'>Subiendo su archivo, por favor espere...</span>");
 								showMessage(message);        
-						},
-						//una vez finalizado correctamente
+						},					
 						success: function(data){
 								$('#graberror').hide(100);
 								$('#grabsuccess').show(800);
 								$('#grabsuccess').delay(2000).hide(600);
 								showMessage("");
-
-								var datos = JSON.parse(data);
-								
+								var datos = JSON.parse(data);								
 								// si todos los CUIT estan inscriptos dibuja tabla
-								if (datos['noCuit'][0] == null) { 
-									//console.log(datos['denTemporales'][0]['denunciamotivos']);
+								if (datos['noCuit'][0] == null) { 								
 									tabla = $('#tabladetalle').DataTable();
-									tabla.clear().draw();
-									
+									tabla.clear().draw();									
 									for(i = 0; i < datos['denTemporales'].length; i++) {		
 										var idEstab = datos['denTemporales'][i]['estableid'];
 										var dom =	datos['denTemporales'][i]['establecalle'] + ' '+datos['denTemporales'][i]['establealtura'];
@@ -136,42 +143,11 @@
 										$('#tabladetalle').DataTable().draw();
 									}	
 									llenaSelect();
+									cambioSelect();
 								}else{
 									infoCuit(datos);
-									//alert("hay noCuit");
-								}
-								
-								
-								
-									// console.log("Respuesta de guardado: ");
-									// //console.info(datos['inconsistencias'][0]["DESCRIPCION_x0020_PROGRAMA"]);
-									// console.log(" - Inconsistencias: ");
-									// console.info(datos);
-
-
-									//infoInconsistencias(datos);
-									// if (datos['inconsistencias'] == "") {                    
-									// 		//alert("no hay inconsistencias");
-									// }else{
-									// 		infoInconsistencias(datos);
-									// 		//alert("hay incosistencias");
-									// }
-
-									// if (datos['noCuit'] == "") {                    
-									// 		//alert("noCuit");
-									// }else{
-									// 		infoCuit(datos);
-									// 		//alert("hay noCuit");
-									// }
-
-									// if (datos['noEstabl'] == "") {                    
-									// 		//alert("noEstabl");
-									// }else{
-									// 		infoEstab(datos);
-									// 		//alert("hay noEstabl");
-									// }               
-									
-									//console.log(data[0]["DESCRIPCION_x0020_PROGRAMA"]);
+									cambioSelect();
+								}								
 						},
 						//si ha ocurrido un error
 						error: function(){
@@ -180,8 +156,7 @@
 						}
 				});
 			}
-		});
-			
+		});			
 	})
 
 	$('#excel').click(function(event){
@@ -191,14 +166,24 @@
 			$("#nocuit").html("");
 			$('#cuitNoReg').html("");
 	});
-	
 
+	$("#excel").change( function(){ 		
+			var fileExtension = "";			
+			var file = $("#excel")[0].files[0];		
+			//nombre del archivo
+			var fileName = file.name;
+			//extensión del archivo
+			fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+			
+			if(fileExtension != 'xlsx'){
+				alert("El formato de archivo no es el correcto...");
+			}
+	});
 
 	// llena select de establecimientos ingresados por cuit de empleador
 	function llenaSelect(){		
 
-		var tabla = $("#tabladetalle tr");	
-	
+		var tabla = $("#tabladetalle tr");
 		$.each(tabla, function (index) {
 			cuit = $(this).find("td").eq(0).html();
 			idEstab = $(this).find("td").eq(5).find("select").attr("class");			
@@ -238,7 +223,6 @@
 								selector.append("<option value='-1'>No hay Establecimientos</option>");
 							}
 							matchEstablecimientos();
-
 			},
 			error: function (result) {
 
@@ -257,15 +241,11 @@
 			
 			domDenuncia = $( this ).find("td").eq(3).html();
 			domEstab = $( this ).find("td").eq(5).find("select option:selected").text();
-			
-			//if(domDenuncia!=undefined){
-				if(domDenuncia == domEstab){
-					//alert('vamoooo putooo');
-					$( this ).find("td").eq(4).html("<span class='glyphicon glyphicon-ok' style='color: #6aa61b'></span>");
-				}else{
-					$( this ).find("td").eq(4).html("<span class='glyphicon glyphicon-remove' style='color: #e20909'></span>");
-				}
-			//}
+			if(domDenuncia == domEstab){				
+				$( this ).find("td").eq(4).html("<span class='glyphicon glyphicon-ok' style='color: #6aa61b'></span>");
+			}else{
+				$( this ).find("td").eq(4).html("<span class='glyphicon glyphicon-remove' style='color: #e20909'></span>");
+			}			
 		});
 	}
 
@@ -396,12 +376,7 @@
 		// 		}
 		// 	//}
 		// });
-	}
-
-	$(":selected").change(function(){
-		alert('selecc');
-		console.log('seleccionado');
-	});
+	}  
 
 	// Datatable
 	$('#tabladetalle').DataTable({

@@ -146,7 +146,6 @@ class Import extends CI_Controller{
 		//var_dump($response);
 		echo json_encode($response);
 	}
-
 	// Procesa el array de denuncias para insertar en BD
 	function armarDenunciasNuevas($nuevaDenuncia){
 		
@@ -182,7 +181,6 @@ class Import extends CI_Controller{
 	    $date = $date[2].'-'.$date[1].'-'.$date[0];
 	    return $date;
 	}
-
 	// guardar denuncia definitiva
 	function setDenuncias(){
 	
