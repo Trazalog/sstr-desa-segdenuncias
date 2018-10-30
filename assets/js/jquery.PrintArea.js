@@ -163,7 +163,7 @@
             var frameId = settings.id;
             var iframeStyle = 'border:0;position:absolute;width:0px;height:0px;right:0px;top:0px;';
             var iframe;
-
+     
             try
             {
                 iframe = document.createElement('iframe');
@@ -171,6 +171,7 @@
                 $(iframe).attr({ style: iframeStyle, id: frameId, src: "#" + new Date().getTime() });
                 iframe.doc = null;
                 iframe.doc = iframe.contentDocument ? iframe.contentDocument : ( iframe.contentWindow ? iframe.contentWindow.document : iframe.document);
+               
             }
             catch( e ) { throw e + ". iframes may not be supported in this browser."; }
 

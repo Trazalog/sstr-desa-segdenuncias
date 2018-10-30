@@ -24,6 +24,24 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.min.css">
     <!-- DataTables 1.10.7 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.css">
+
+<!--esto agregue -->
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.bootstrap.min.css">
+
+
+<script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.4/js/buttons.bootstrap.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
+
+<!-- <link rel="stylesheet" href="">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css">
+<script src=""></script>
+<script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
+
+<!--hasta aca agregue -->
+
     <!-- Jasny Bootstrap -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/jasny-bootstrap/css/jasny-bootstrap.min.css">
     <!-- Bootstrap datetimepicker -->

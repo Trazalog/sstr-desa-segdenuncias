@@ -19,6 +19,8 @@
            <div class="row">
             <div class="col-sm-12 col-md-12">
                 <h4>Criterios de Búsqueda</h4>
+                
+                <input type="text" class="hidden" name="" id="criterio" autocomplete="off"  value="">
 
                 <input type="text" class="hidden" name="accion" id="tipoAccion" autocomplete="off"  value="tipoAccion">
 
@@ -66,11 +68,11 @@
                   
           </div>  
           <div class="row" style="margin-top:20px;">
-            <div class="col-xs-12">
-              <table id="tbl_inspeccion" class="table table-bordered table-hover">
+            <div class="col-xs-12" id="tablaImp">
+              <table id="tbl_inspeccion" class="table table-hover">
                 <thead>
                   <tr>
-                    <th width="12%">Acciones</th>
+                    <th width="" class="acciones">Acciones</th>
                     <th>Nro</th>
                     <th>Fecha</th>                    
                     <th>Empleador</th>                  
@@ -84,8 +86,8 @@
                   foreach($list as $f){
 
                     echo '<tr>';
-                      echo '<td>';
-                        echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'"></i>';
+                      echo '<td class="acciones">';
+                        echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'"></i>';
                       echo '</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';                  
@@ -107,8 +109,36 @@
 </div><!-- /.row -->
 </section><!-- /.content -->
 
+
+<style>
+  @media print
+{    
+    /* .no_imprimir, .no_imprimir *
+    {
+        display: none !important;
+    } */
+}
+</style>
+
 <script>
+
+// var table = $('#tbl_inspeccion').DataTable();
+ 
+//  new $.fn.dataTable.Buttons( table, {
+//      buttons: [
+//          'print'
+//      ]
+//  } );
   
+//  table.buttons().container()
+//      .appendTo( $('.acciones', table.table().container() ) );
+  
+  // $('#tbl_inspeccion').DataTable( {
+  //       dom: 'Bfrtip',
+  //       buttons: [
+  //           'print'
+  //       ]
+  //   } );
 
   
   function getEstablecimientos(){
@@ -179,14 +209,13 @@
       }
     });
   }
-
  
   function reset(){
 
     $('#errorE').fadeOut('slow');
     $('#error').fadeOut('slow');
 
-    }
+  }
 
   //Funcion Resfresca
   function ActualizarPagina(){ 
@@ -224,7 +253,7 @@
 
                 var tr = "<tr id='"+data['denunciaid']+"'>";
                 var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-                  var tdnroacta = "<td class='' style='text-align: left'> "+data[i]['denuncianroacta'] +" </td>" ;
+                  var tdnroacta = "<td class='' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
                   var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
                   var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
                 var trCierre = "</tr>";
@@ -242,42 +271,52 @@
 
   });
 
+  // al cargar la pantalla graba el criterio de filtrado
+  $('#criterio').val('todas');
+  
   // busca inspecciones segun distintos criterios 
   $('input:radio[name=accion]').change(function() {
     
     var idInsp = 0;
     
     if (this.value == 'todas') {   
-      $('#inspAsig').hide(300);     
-        getInspecciones('todas', idInsp);
+      $('#inspAsig').hide(300); 
+      $('#criterio').val('Todas');    
+      getInspecciones('todas', idInsp);
     }
-
     if (this.value == 'inspeccion') {   
-      $('#inspAsig').hide(300);     
-        getInspecciones('inspeccion', idInsp);
+      $('#inspAsig').hide(300);
+      $('#criterio').val('Inspeccion');     
+      getInspecciones('inspeccion', idInsp);
     }
     if (this.value == 'verificacion') {
       $('#inspAsig').hide(300);
-        getInspecciones('verificacion', idInsp);      
+      $('#criterio').val('Verificacion');
+      getInspecciones('verificacion', idInsp);      
     }
     if (this.value == 'suspension') {
       $('#inspAsig').hide(300);
-        getInspecciones('suspension', idInsp);                   
+      $('#criterio').val('Suspension');
+      getInspecciones('suspension', idInsp);                   
     }
     if (this.value == 'cierre') {
       $('#inspAsig').hide(300);
-        getInspecciones('cierre', idInsp);                   
+      $('#criterio').val('Cierre');
+      getInspecciones('cierre', idInsp);                   
     }
     if (this.value == 'ampliacion-plazo') {
       $('#inspAsig').hide(300);
-        getInspecciones('ampliacion-plazo', idInsp);                   
+      $('#criterio').val('Ampliación Plazo');
+      getInspecciones('ampliacion-plazo', idInsp);                   
     }
     if (this.value == 'infraccion') {
       $('#inspAsig').hide(300);
-        getInspecciones('infraccion', idInsp);                   
+      $('#criterio').val('Infraccion');
+      getInspecciones('infraccion', idInsp);                   
     }
     if (this.value == 'inspectorAsignado') { 
-      $('#inspAsig').show(300); 
+      $('#inspAsig').show(300);
+      $('#criterio').val('Inspector'); 
       // guarda el tipo de busqueda    
       $('#tipoAccion').val('inspectorAsignado');                          
     }
@@ -290,9 +329,7 @@
     getInspecciones(criterio, idInsp);
   });
 
-
-
- function getInspecciones(criterio, idinspectorAsig){
+  function getInspecciones(criterio, idinspectorAsig){
     
     $.ajax({
       type: 'POST',
@@ -301,7 +338,7 @@
       dataType: 'json',
       url: 'index.php/Inspeccion/getInspeccionesCriterio',
       success: function(data){
-        console.table(data);
+        //console.table(data);
         tabla = $('#tbl_inspeccion').DataTable();
         tabla.clear().draw();
 
@@ -333,166 +370,192 @@
   }
 
   // guarda inspeccion nueva
- function guardarInspeccion(){
-   
-   var inspeccionfechaasigna=$('#fecha').val();
-   var inspeccionfecharecp=$('#fecha').val();
-   
-   var inspectorid=$('#inspe').val();    // id inspector
-   var inspecciondescrip=$("#nota").val(); // detalle inspeccion
-   var estableid=$('#estable').val();   // id establecimiento  
-   
-   var inspeestado="C";
-   // arma array de ids de denuncias
-   var idsTr = $('#tblDenEstab tbody tr');
-   var idsDenuncias = [];
-   
-   $(idsTr).each(function(){       
-     celId = $(this).find('td.denunciaId').html();
-     idsDenuncias.push(celId);    
-   });  
-   
-   console.log('ids de denuncias');
-   console.table(idsDenuncias);
-   
-   var hayError = false;
-  
-   if(inspectorid == '-1' || inspecciondescrip == '' || estableid == '-1'){
-     hayError = true;
-   }
+  function guardarInspeccion(){
+    
+    var inspeccionfechaasigna=$('#fecha').val();
+    var inspeccionfecharecp=$('#fecha').val();
+    
+    var inspectorid=$('#inspe').val();    // id inspector
+    var inspecciondescrip=$("#nota").val(); // detalle inspeccion
+    var estableid=$('#estable').val();   // id establecimiento  
+    
+    var inspeestado="C";
+    // arma array de ids de denuncias
+    var idsTr = $('#tblDenEstab tbody tr');
+    var idsDenuncias = [];
+    
+    $(idsTr).each(function(){       
+      celId = $(this).find('td.denunciaId').html();
+      idsDenuncias.push(celId);    
+    });  
+    
+    //console.log('ids de denuncias');
+    //console.table(idsDenuncias);
+    
+    var hayError = false;
+    
+    if(inspectorid == '-1' || inspecciondescrip == '' || estableid == '-1'){
+      hayError = true;
+    }
 
-   if(hayError == true){
-       $('#error').fadeIn('slow');        
-       return;
-   }else{
-     $('#modalAgregar').modal('hide');
-     $('#error').fadeOut('slow');   
-       WaitingOpen();
-       $.ajax({
-         type: 'POST',
-         data: {"inspeccionfechaasigna":inspeccionfechaasigna,  
-                 "inspeccionfecharecp":inspeccionfecharecp,  
-                 "inspectorid":inspectorid,  
-                 "inspecciondescrip":inspecciondescrip,  
-                 "estableid":estableid,  
-                 "inspeestado":inspeestado,
-                 "idsDenuncias": idsDenuncias
-                 },
-         url: 'index.php/Inspeccion/Guardar_Inspeccion', 
-         success: function(result){
-                 WaitingClose();                
-                 ActualizarPagina();
-         },
-         error: function(result){
-                 WaitingClose();
-                 alert("Error! No se pudo guarda la nueva inspeccion...");
-         }
-       });
-       console.log("Inspeccion Guardada");
-   }    
- }
-
- // autocompletar empleadores   
- autocompEmp();
- function autocompEmp() {  
-   $( "#busEmpleador" ).autocomplete({
-     source: "Inspeccion/getDenominacionSocial",
-     minLength: 1,
-     select: function( event, ui ) {        
-       $("#busEmpleador").val(ui.item.label);
-       $("#empleaid").val(ui.item.id);
-       //alert('calgo');
-       getEstablecimientos();
-     }
-   });
- }
-
- // llena select de establecimientos
- $('#busEmpleador').on("change", function(){
-   var selector = $('#estable');
-   var idEmp = $("#empleaid").val();
-   $.ajax({
-       async: true,
-       global: false,
-       url: "Inspeccion/getEstablecimiento",
-       type: 'POST',
-       dataType : "json",
-       data: {"empleaid" : idEmp },
-       'success': function (result) {
-                   
-                   selector.html('');
-                   if(result!=null){
-                     var opcion  = "<option value='-1'>Seleccione...</option>" ; 
-                     selector.append(opcion); 
-                     for(var i=0; i < result.length ; i++){    
-                       var direccion = result[i]['establecalle'];
-                       var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
-                       selector.append(opcion); 
-                     }
-                     selector.val(idEstablecimiento);
-                   }
-                   else{
-                     selector.append("<option value='-1'>No hay Establecimientos</option>");
-                   }
-               },
-       'error' : function (result){
-                 console.log('Funcion: getEstablecimientos ERROR');
-                 alert('error');
-             }
-   });
- });
-
-$(".fa-print").click(function (e) {
-  $("#tbl_inspeccion").printArea();
-});
-
-/* cargo plugin DataTable (debe ir al final de los script) */
-$("#tbl_inspeccion").DataTable({
-  "aLengthMenu": [ 10, 25, 50, 100 ],
-  "autoWidth": true,
-  "columnDefs": [ {
-                    "targets": [ 0 ], //no busco en acciones
-                    "searchable": false
+    if(hayError == true){
+        $('#error').fadeIn('slow');        
+        return;
+    }else{
+      $('#modalAgregar').modal('hide');
+      $('#error').fadeOut('slow');   
+        WaitingOpen();
+        $.ajax({
+          type: 'POST',
+          data: {"inspeccionfechaasigna":inspeccionfechaasigna,  
+                  "inspeccionfecharecp":inspeccionfecharecp,  
+                  "inspectorid":inspectorid,  
+                  "inspecciondescrip":inspecciondescrip,  
+                  "estableid":estableid,  
+                  "inspeestado":inspeestado,
+                  "idsDenuncias": idsDenuncias
                   },
-                  {
-                    "targets": [ 0 ], //no ordena columna 0
-                    "orderable": false
-                  } ],
-  "info": true,
-  "ordering": true,
-  "order": [[1, "asc"]],
-  "paging": true,
-  "language": {
-            "sProcessing":     "Procesando...",
-            "sLengthMenu":     "Mostrar _MENU_ registros",
-            "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla",
-            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-            "sInfoPostFix":    "",
-            "sSearch":         "Buscar:",
-            "sUrl":            "",
-            "sInfoThousands":  ",",
-            "sLoadingRecords": "Cargando...",
-            "oPaginate": {
-              "sFirst":    "Primero",
-              "sLast":     "Último",
-              "sNext":     "Sig.",
-              "sPrevious": "Ant."
-            },
+          url: 'index.php/Inspeccion/Guardar_Inspeccion', 
+          success: function(result){
+                  WaitingClose();                
+                  ActualizarPagina();
+          },
+          error: function(result){
+                  WaitingClose();
+                  alert("Error! No se pudo guarda la nueva inspeccion...");
+          }
+        });
+        console.log("Inspeccion Guardada");
+    }    
+  }
+
+  // autocompletar empleadores   
+  autocompEmp();
+  function autocompEmp() {  
+    $( "#busEmpleador" ).autocomplete({
+      source: "Inspeccion/getDenominacionSocial",
+      minLength: 1,
+      select: function( event, ui ) {        
+        $("#busEmpleador").val(ui.item.label);
+        $("#empleaid").val(ui.item.id);
+        //alert('calgo');
+        getEstablecimientos();
+      }
+    });
+  }
+
+  // llena select de establecimientos
+  $('#busEmpleador').on("change", function(){
+    var selector = $('#estable');
+    var idEmp = $("#empleaid").val();
+    $.ajax({
+        async: true,
+        global: false,
+        url: "Inspeccion/getEstablecimiento",
+        type: 'POST',
+        dataType : "json",
+        data: {"empleaid" : idEmp },
+        'success': function (result) {
+                    
+                    selector.html('');
+                    if(result!=null){
+                      var opcion  = "<option value='-1'>Seleccione...</option>" ; 
+                      selector.append(opcion); 
+                      for(var i=0; i < result.length ; i++){    
+                        var direccion = result[i]['establecalle'];
+                        var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
+                        selector.append(opcion); 
+                      }
+                      selector.val(idEstablecimiento);
+                    }
+                    else{
+                      selector.append("<option value='-1'>No hay Establecimientos</option>");
+                    }
+                },
+        'error' : function (result){
+                  console.log('Funcion: getEstablecimientos ERROR');
+                  alert('error');
+              }
+    });
+  });
+
+  // imprime listado de inspecciones
+  $(".fa-print").click(function (e) {
+    var critFilt = $('#criterio').val();
+    var fecha = getFecha();
+    var html = "<h4 id='listTitulo'>Listado de Inspecciones al " + fecha + "</h4>";
+    var filt = "<h4 id='critdefiltrado'>Filtrado por: " + critFilt + "</h4>";
+    $(html + filt).prependTo("#tablaImp");    
+    
+    $('.acciones, .dataTables_filter, .dataTables_length, .dataTables_info, .dataTables_paginate paging_full_numbers').addClass('no-print');  
+    $('a[href]').addClass('no-print'); 
+    $("#tablaImp").printArea();
+    
+    $("#listTitulo").remove();
+    $("#critdefiltrado").remove();    
+  });
+
+  function getFecha(){
+    var d = new Date();
+    var month = d.getMonth()+1;
+    var day = d.getDate();
+    var output = ((''+day).length<2 ? '0' : '') + day + '/'+
+                  ((''+month).length<2 ? '0' : '') + month + '/' +
+                  d.getFullYear();
+    return output;
+  }
+
+  /* cargo plugin DataTable (debe ir al final de los script) */
+  $("#tbl_inspeccion").DataTable({
+    "aLengthMenu": [ 10, 25, 50, 100 ],
+    "autoWidth": true,
+    "columnDefs": [ {
+                      "targets": [ 0 ], //no busco en acciones
+                      "searchable": false
+                    },
+                    {
+                      "targets": [ 0 ], //no ordena columna 0
+                      "orderable": false
+                    } ],
+    "info": true,
+    "ordering": true,
+    "order": [[1, "asc"]],
+    "paging": true,
+    "language": {
+              "sProcessing":     "Procesando...",
+              "sLengthMenu":     "Mostrar _MENU_ registros",
+              "sZeroRecords":    "No se encontraron resultados",
+              "sEmptyTable":     "Ningún dato disponible en esta tabla",
+              "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+              "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+              "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+              "sInfoPostFix":    "",
+              "sSearch":         "Buscar:",
+              "sUrl":            "",
+              "sInfoThousands":  ",",
+              "sLoadingRecords": "Cargando...",
+              "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Sig.",
+                "sPrevious": "Ant."
+              },
     "oAria": {
-              "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-              "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-            }
-  },
-  "lengthChange": true,
-  "searching": true,
-  "sPaginationType": "full_numbers",
-  "sScrollX": '100%',
-  "sScrollXInner": "100%",
-  "bScrollCollapse": true,
-});
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+              }
+    },
+    "lengthChange": true,
+    "searching": true,
+    "sPaginationType": "full_numbers",
+    "sScrollX": '100%',
+    "sScrollXInner": "100%",
+    "bScrollCollapse": true//,
+    //"dom": 'B<"clear">lfrtip'//,
+    //"buttons": [
+    //    'print'
+    //]
+  });
 
 
 </script>
@@ -710,7 +773,7 @@ $("#tbl_inspeccion").DataTable({
           <table id="tblDenEstab" class="table table-bordered table-hover">
               <thead>
                 <tr>                
-                  <th>Nro Acta</th>
+                  <th>Nº Denuncia</th>
                   <th>Fecha</th>               
                   <th>Motivo de la Denuncia</th>                 
                 </tr>
