@@ -3,12 +3,14 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Inspeccion extends CI_Controller {
-	function __construct()
-	{
+	function __construct(){
+
 		parent::__construct();
 		$this->load->model('Inspecciones');
 		$this->load->model('Inspectores');
 		$this->load->model('Bonitas');
+		$this->load->model('Overviews');
+		$this->load->model('Tareas');
 	}
 
 	public function index($permission){
@@ -74,6 +76,44 @@ class Inspeccion extends CI_Controller {
 
 	
 	/* FUNCIONES NUEVAS */
+
+	// trae detalle de inspeccion por Id BPM
+	public function getGetDetaInspeccion($permission,$idTarBonita){
+
+		$data['idTarBonita'] = $idTarBonita;
+		$data['permission'] = $permission;
+		$data['comentarios'] = $this->ObtenerComentariosBPM($idTarBonita);
+		$data['timeline'] = $this->ObtenerLineaTiempo($idTarBonita);
+
+		$this->load->view('inspecciones/view_',$data);
+	}
+	
+	// trea comentarios de BPM para mostrar en detalle de inspeccion
+	function ObtenerComentariosBPM($caseId){
+		//$metodo = "POST";
+		$parametros = $this->Bonitas->conexiones();
+		$param = stream_context_create($parametros);
+		return $this->Tareas->ObtenerComentariosBPM($caseId,$param);
+	}
+
+	// trea lineade tiempo de BPM para mostrar en detalle de inspeccion
+	function ObtenerLineaTiempo($caseId){
+		
+		$parametros = $this->Bonitas->LoggerAdmin();
+		$parametros["http"]["method"] = "GET";
+		$param = stream_context_create($parametros);
+		$data['listAct'] = $this->Overviews->ObtenerActividades($caseId,$param);
+		$data['listArch'] = $this->Overviews->ObtenerActividadesArchivadas($caseId,$param);
+		return $data;
+  }
+
+	//trae todos los inspectores
+	public function getInspector(){
+
+		$result = $this->Inspecciones->getInspector();
+		echo json_encode($result);
+	}
+
 	// Guarda inspeccion nueva
 	public function Guardar_Inspeccion(){
 
@@ -143,9 +183,26 @@ class Inspeccion extends CI_Controller {
 	}
 
 	public function getInspeccionesCriterio(){
+		
+		$tipoOaccion = $this->input->post('criterio');
+		$idInspector = $this->input->post('idinspectorAsig');
+		$response = $this->Inspecciones->getInspeccionesCriterio($tipoOaccion, $idInspector);	
+			
+		if($response != null){
+			echo json_encode($response);
+		}else{
+			$response = array();
+			echo json_encode($response);
+		}
+				
+	}
 
-		$response = $this->Inspecciones->getInspeccionesCriterio($this->input->post('criterio'));		
-		echo json_encode($result);		
+	public function listInspPorDenuncia($permission, $idDenuncia){
+	
+		$data['list'] = $this->Inspecciones->listInspPorDenuncia($idDenuncia);
+		$data['inspectores']= $this->Inspectores->Listado_Inspectores();
+		$data['permission'] = $permission;
+		$this->load->view('inspecciones/list_inspdenuncia', $data);
 	}
 
 	

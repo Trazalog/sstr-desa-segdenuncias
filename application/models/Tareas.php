@@ -261,7 +261,7 @@ class Tareas extends CI_Model
 
 			file_get_contents($url, false, $param);
 			$response = $this->parseHeaders( $http_response_header );
-
+			//dump_exit($response);
 			return $response;
 		}catch (Exception $e) {
 			var_dump($e->getMessage());

@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Denuncia extends CI_Controller 
-{
-	function __construct(){
+class Denuncia extends CI_Controller {
+  
+  function __construct(){
 		parent::__construct();
 		$this->load->model('Denuncias');
 	}
-  // llista en pantalla las denuncias de oficio
+  // lista en pantalla las denuncias de oficio
 	public function index($permission){
     $data['permission'] = $permission;
     $data['list'] = $this->Denuncias->denunciasList();    

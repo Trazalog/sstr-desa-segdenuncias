@@ -201,9 +201,9 @@ class Bonitas extends CI_Model
 	function LoggerAdmin(){	
 		//FIXME: SACAR HARDCODEO DE NICK
 		$userdata = $this->session->userdata('user_data');
-		$usrNick= $userdata[0]["usrNick"];
+		//$usrNick= $userdata[0]["usrNick"];
 
-		//$usrNick = 'admin';
+		$usrNick = 'admin';
 		//$usrNick = 'juan.perez';
 		//dump_exit($userdata);
 		// Array de parametros (cabecera HTTP)

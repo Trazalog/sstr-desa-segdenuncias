@@ -24,6 +24,24 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.min.css">
     <!-- DataTables 1.10.7 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.css">
+
+<!--esto agregue -->
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.bootstrap.min.css">
+
+
+<script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.4/js/buttons.bootstrap.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
+
+<!-- <link rel="stylesheet" href="">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css">
+<script src=""></script>
+<script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
+
+<!--hasta aca agregue -->
+
     <!-- Jasny Bootstrap -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/jasny-bootstrap/css/jasny-bootstrap.min.css">
     <!-- Bootstrap datetimepicker -->
@@ -55,8 +73,12 @@
 
     <!-- Jquery UI 1.12.1 -->
     <script src="<?php echo base_url();?>assets/js/jquery-ui.min.js"></script>
+
+    <!-- Imprimir -->
+    <script src="<?php echo base_url();?>assets/js/jquery.PrintArea.js"></script>    
+
     <!-- ChartJS 2.5.0 -->
-    <script src="<?php echo base_url();?>assets/plugin/chartjs/Chart.min.js"></script>
+    <!-- <script src="<?php //echo base_url();?>assets/plugin/chartjs/Chart.min.js"></script> -->
 
     <!-- Jasny Bootstrap -->
     <script src="<?php echo base_url();?>assets/plugin/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
@@ -70,49 +92,49 @@
     <script src="<?php echo base_url();?>assets/plugin/typeahead/typeahead.bundle.min.js"></script>
 
     <!-- iCheck - ->
-    <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/iCheck/square/blue.css">
-    <link rel="stylesheet" href="<?php  echo base_url();?>assets/css/square/green.css">-->
+    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/iCheck/square/blue.css">
+    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/css/square/green.css">-->
     <!-- iCheck - ->
-    <script src="<?php  echo base_url();?>assets/plugin/iCheck/icheck.min.js"></script>-->
+    <script src="<?php  //echo base_url();?>assets/plugin/iCheck/icheck.min.js"></script>-->
 
     <!-- fullcalendar - ->
-    <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/fullcalendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/fullcalendar/fullcalendar.print.css" media="print">
+    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/fullcalendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/fullcalendar/fullcalendar.print.css" media="print">
 
-    <!-- Bootstrap Color Picker - ->
-    <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/colorpicker/bootstrap-colorpicker.min.css">
+    <!- - Bootstrap Color Picker - ->
+    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/colorpicker/bootstrap-colorpicker.min.css">
     -->
 
     <!-- FastClick - ->
-    <script src="<?php  echo base_url();?>assets/plugin/fastclick/fastclick.min.js"></script>
+    <script src="<?php  //echo base_url();?>assets/plugin/fastclick/fastclick.min.js"></script>
 
-    <!-- SlimScroll - ->
-    <script src="<?php  echo base_url();?>assets/plugin/slimScroll/jquery.slimscroll.min.js"></script>
-    <!-- FastClick - ->
-    <script src="<?php  echo base_url();?>assets/plugin/fastclick/fastclick.min.js"></script>
+    <!- - SlimScroll - ->
+    <script src="<?php  //echo base_url();?>assets/plugin/slimScroll/jquery.slimscroll.min.js"></script>
+    <!- - FastClick - ->
+    <script src="<?php  //echo base_url();?>assets/plugin/fastclick/fastclick.min.js"></script>
 
-    <!-- Select2 - ->
-    <link rel="stylesheet" href="<?php  echo base_url();?>assets/plugin/select2/select2.css">
-    <!-- Select2 - ->
-    <script src="<?php  echo base_url();?>assets/plugin/select2/select2.js"></script>
+    <!- - Select2 - ->
+    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/select2/select2.css">
+    <!- - Select2 - ->
+    <script src="<?php  //echo base_url();?>assets/plugin/select2/select2.js"></script>
 
-    <!--
-    <script src="<?php  echo base_url();?>assets/plugin/input-mask/jquery.inputmask.js"></script>
-    <script src="<?php  echo base_url();?>assets/plugin/input-mask/jquery.inputmask.date.extensions.js"></script>
-    <script src="<?php  echo base_url();?>assets/plugin/input-mask/jquery.inputmask.extensions.js"></script>
+    <!- -
+    <script src="<?php  //echo base_url();?>assets/plugin/input-mask/jquery.inputmask.js"></script>
+    <script src="<?php  //echo base_url();?>assets/plugin/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="<?php  //echo base_url();?>assets/plugin/input-mask/jquery.inputmask.extensions.js"></script>
     -->
-    <!--<link rel="stylesheet" href="<?php  echo base_url();?>code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">- ->
+    <!--<link rel="stylesheet" href="<?php  //echo base_url();?>code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">-->
 
-    <script src="<?php  echo base_url();?>assets/plugin/fullcalendar/moment.min.js"></script>
-    <script src="<?php  echo base_url();?>assets/plugin/fullcalendar/fullcalendar.min.js"></script>
+    <!-- <script src="<?php  //echo base_url();?>assets/plugin/fullcalendar/moment.min.js"></script>
+    <script src="<?php  //echo base_url();?>assets/plugin/fullcalendar/fullcalendar.min.js"></script> -->
 
     <!-- <script src="<?php  //echo base_url();?>ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="<?php  //echo base_url();?>ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.js"></script>- ->
+    <script src="<?php  //echo base_url();?>ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.js"></script> -->
 
-    <!-- bootstrap color picker - ->
-    <script src="<?php  echo base_url();?>assets/plugin/colorpicker/bootstrap-colorpicker.min.js"></script>
+    <!-- bootstrap color picker -->
+    <script src="<?php  //echo base_url();?>assets/plugin/colorpicker/bootstrap-colorpicker.min.js"></script>
 
--->
+
 </head>
 
 

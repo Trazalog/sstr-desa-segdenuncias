@@ -1,5 +1,4 @@
 <input type="hidden" id="permission" value="<?php echo $permission;?>">
-
 <section class="content">
 	<div class="row">
 		<div class="col-xs-12">
@@ -24,46 +23,41 @@
 								<th>Razón Social</th>
 								<th>Calle</th>
                 <th>Altura</th>
+                <th>Nº Denuncia</th>
 							</tr>
 						</thead>
 						<tbody>
-              <?php 
-              //if(is_array($list)) {
-                //var_dump($list);
-                //foreach( (array)$list as $e )
-                foreach( $list as $e )
-  							{
-                  //var_dump($e);
+              <?php               
+              //var_dump($list);
+                foreach( $list as $e ){                  
                   $id=$e['denunciaid'];
-                  //var_dump($id);
                   echo '<tr id="'.$id.'" class="'.$id.'" >';
   	              	echo '<td>';
                     if (strpos($permission,'View') !== false) {
                       echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'"></i>';
                     }
-                    if (strpos($permission,'Add') !== false) {
-                      echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" data-toggle="modal" data-target="#modaleditar" ></i>';
+                    // if (strpos($permission,'Add') !== false) {
+                    //   echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" data-toggle="modal" data-target="#modaleditar" ></i>';
+                    // }  	                
+  	                if (strpos($permission,'View') !== false) {
+                      if ($e['inspeccionid'] > 0) {
+                        echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="cursor: pointer; margin-left: 15px;" data-denunciaId="'.$id.'"></i>';
+                      } else {
+                        // echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="margin-left: 15px;" data-denunciaId="'.$id.'" disabled></i>';
+                      }                      
                     }
-  	                if (strpos($permission,'Del') !== false) {
+                    if (strpos($permission,'Del') !== false) {
   	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue btnDelete" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'"></i>';
   	                }
-  	                // if (strpos($permission,'View') !== false) {
-                    //   echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnNote" style="cursor: pointer; margin-left: 15px;" data-denunciaId="'.$id.'"></i>';
-  	                // }
   	                echo '</td>';
   									echo '<td>'.$e['denunciasfecha'].'</td>';
                     echo '<td>'.$e['denunciamotivos'].'</td>';
   									echo '<td>'.$e['emplearazsoc'].'</td>';
   									echo '<td>'.$e['establecalle'].'</td>';
-  									echo '<td>'.$e['establealtura'].'</td>';
-                    
-  									//echo '<td>'.$e['empleaid'].'</td>';
-  									// echo '<td>'.$e['sisliquidescrip'].'</td>';
-  									// echo '<td>'.$e['empleapmasc'].'</td>';
-  									// echo '<td>'.$e['empleapfem'].'</td>';
+                    echo '<td>'.$e['establealtura'].'</td>';
+                    echo '<td >'.($e['inspeccionid'] > 0 ? '<small class="label pull-left bg-green">Inspección</small>' : '<small class="label pull-left bg-yellow">S/Inspección</small>').'</td>';                    
   								echo '</tr>';
   							}
-              //} 
             ?>
 						</tbody>
 					</table>
@@ -73,8 +67,6 @@
 	</div><!-- /.row -->
 </section><!-- /.content -->
 
-
-
 <!-- ver segundo modal -->
 <style type="text/css">
   #notaImgModal {
@@ -82,16 +74,11 @@
   }
 </style>
 
-
 <script>
-
-
-
   
   // autocompletar llena el empleador
-  //$( 
-    autocompEmp();
-    function autocompEmp(){  
+  autocompEmp();
+  function autocompEmp(){  
       $( "#busEmpleador" ).autocomplete({
         source: "index.php/Inspeccion/getDenominacionSocial",
         minLength: 1,
@@ -101,7 +88,7 @@
         }
       });
   }
-  //);
+ 
   // llena select de establecimientos
   $('#busEmpleador').on("change", function(){
     var selector = $('#estable');
@@ -136,6 +123,7 @@
               }
     });
   });
+
   // guarda denuncia nueva
   function guardarDenuncia(){
     var denuncias = $("#denunciaNueva").serializeArray();
@@ -154,6 +142,7 @@
       dataType: 'json'
     });
   }  
+
   // toma id de denuncia para eliminar
   $(".btnDelete").on("click", function(e){
     e.preventDefault();
@@ -161,7 +150,8 @@
     //var id = $(this).parents("tr").attr('id');
     $('#iddenuncia').val(id);
     $('#confirmDelete').modal('show');
-  });  
+  }); 
+
   //elimina denuncia por id
   function borrarDenuncia(){
     var idden = $('#iddenuncia').val();
@@ -191,6 +181,7 @@
     getDenPorIdView(id);
     $('#modalView').modal('show');
   });
+
   // trae denuncia por id para mostrar
   function getDenPorIdView(id){    
     $.ajax({
@@ -214,103 +205,111 @@
       dataType: 'json'
     });
   }
-/* /ver*/
+  /* /ver*/
 
-
-
-/* Editar */
-// toma id de denuncia para editar
-$(".btnEdit").on("click", function(e){
-    e.preventDefault();
-    var idEdit = $(this).data('denunciaid');   
-    //var id = $(this).parents("tr").attr('id');
-    $('#denunciaId').val(idEdit);
-    getDenPorIdEdit(idEdit);
-    $('#modalEditar').modal('show');
+  /* ver inspecciones por denuncia */ // LISTO!
+  $(".btnInsp").on("click", function(e){
+    e.preventDefault();    
+    var idDenuncia = $(this).data('denunciaid'); 
+    //alert(idDenuncia);
+    WaitingOpen();
+    $('#content').empty();
+    $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/listInspPorDenuncia/<?php echo $permission; ?>/" + idDenuncia + "/");
+    WaitingClose();
   });
-  // trae denuncia por id para mostrar
-  function getDenPorIdEdit(idEdit){    
-    $.ajax({
-      type:"POST",
-      url: "index.php/Denuncia/getDenPorId", 
-      data:{id:idEdit},
-      success: function(data){                
-        var calle = data[0]["establecalle"];
-        var altura = data[0]["establealtura"];
-        //var estDireccion = calle + ' '+ altura;
-        $('#busEmpleadorEdit').val(data[0]["emplearazsoc"]);
-        //$('#estableEdit').val(estDireccion);
-        $('#fechaEdit').val(data[0]["denunciasfecha"]);
-        $('#motivosEdit').val(data[0]["denunciamotivos"]);        
-        var empId = data[0]["empleaid"];
-        getEstablecimientos(empId);
-      },          
-      error: function(result){
-          console.log("error en vuelta de datos denuncia...");
-          console.log(result);                 
-      },
-      dataType: 'json'
-    });
-  }
+  /*  / ver inspecciones por denuncia */
 
-  function getEstablecimientos(idEmpleador){
-    var selector = $('#estableEdit');
-    //console.log(id);
-    $.ajax({
-      async: true,
-      global: false,
-      url: "Inspeccion/getEstablecimiento",
-      type: 'POST',
-      dataType : "json",
-      data: {"empleaid" : idEmpleador },
-      'success': function (result) {
-                  selector.html('');
-                  if(result!=null){
-                  var opcion  = "<option value='-1'>Seleccione...</option>" ; 
-                  selector.append(opcion); 
-                    for(var i=0; i < result.length ; i++){    
-                      var direccion = result[i]['establecalle'];
-                      var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
-                      selector.append(opcion);
+  /* Editar */
+  // toma id de denuncia para editar
+  $(".btnEdit").on("click", function(e){
+      e.preventDefault();
+      var idEdit = $(this).data('denunciaid');   
+      //var id = $(this).parents("tr").attr('id');
+      $('#denunciaId').val(idEdit);
+      getDenPorIdEdit(idEdit);
+      $('#modalEditar').modal('show');
+    });
+    // trae denuncia por id para mostrar
+    function getDenPorIdEdit(idEdit){    
+      $.ajax({
+        type:"POST",
+        url: "index.php/Denuncia/getDenPorId", 
+        data:{id:idEdit},
+        success: function(data){                
+          var calle = data[0]["establecalle"];
+          var altura = data[0]["establealtura"];
+          //var estDireccion = calle + ' '+ altura;
+          $('#busEmpleadorEdit').val(data[0]["emplearazsoc"]);
+          //$('#estableEdit').val(estDireccion);
+          $('#fechaEdit').val(data[0]["denunciasfecha"]);
+          $('#motivosEdit').val(data[0]["denunciamotivos"]);        
+          var empId = data[0]["empleaid"];
+          getEstablecimientos(empId);
+        },          
+        error: function(result){
+            console.log("error en vuelta de datos denuncia...");
+            console.log(result);                 
+        },
+        dataType: 'json'
+      });
+    }
+
+    function getEstablecimientos(idEmpleador){
+      var selector = $('#estableEdit');
+      //console.log(id);
+      $.ajax({
+        async: true,
+        global: false,
+        url: "Inspeccion/getEstablecimiento",
+        type: 'POST',
+        dataType : "json",
+        data: {"empleaid" : idEmpleador },
+        'success': function (result) {
+                    selector.html('');
+                    if(result!=null){
+                    var opcion  = "<option value='-1'>Seleccione...</option>" ; 
+                    selector.append(opcion); 
+                      for(var i=0; i < result.length ; i++){    
+                        var direccion = result[i]['establecalle'];
+                        var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
+                        selector.append(opcion);
+                      }
+                      selector.val(idEstablecimiento);
                     }
-                    selector.val(idEstablecimiento);
-                  }
-                  else{
-                    selector.append("<option value='-1'>No hay Establecimientos</option>");
-                  }
-                },
-      'error' : function (result){
-        console.log('Funcion: getEstablecimientos ERROR');
-        //alert('error');
-      },
-    });
-  }
+                    else{
+                      selector.append("<option value='-1'>No hay Establecimientos</option>");
+                    }
+                  },
+        'error' : function (result){
+          console.log('Funcion: getEstablecimientos ERROR');
+          //alert('error');
+        },
+      });
+    }
 
-  //actualiza a denuncia 
-  function updateDenuncia(){
+    //actualiza a denuncia 
+    function updateDenuncia(){
 
-    var denuncias = $("#denuciaEditar").serializeArray();
-    var iddenuncia = $('#denunciaId').val();
-    $.ajax({
-      type:"POST",
-      url: "index.php/Denuncia/updateDenuncia", 
-      data:{denuncias:denuncias,
-            id:iddenuncia},
-      success: function(data){
-        console.log("Guardado con exito...");
-        Refrescar();
-      },          
-      error: function(result){
-          console.log("Error en guardado de Denuncia...");
-          console.log(result);                 
-      },
-      dataType: 'json'
-    });
-  }
-/* / Editar */
-
-  
-  
+      var denuncias = $("#denuciaEditar").serializeArray();
+      var iddenuncia = $('#denunciaId').val();
+      $.ajax({
+        type:"POST",
+        url: "index.php/Denuncia/updateDenuncia", 
+        data:{denuncias:denuncias,
+              id:iddenuncia},
+        success: function(data){
+          console.log("Guardado con exito...");
+          Refrescar();
+        },          
+        error: function(result){
+            console.log("Error en guardado de Denuncia...");
+            console.log(result);                 
+        },
+        dataType: 'json'
+      });
+    }
+  /* / Editar */  
+    
   // recarga la pagina
   function Refrescar(){
     $('#content').empty();
@@ -319,23 +318,19 @@ $(".btnEdit").on("click", function(e){
     WaitingClose();
   }
 
-
+  function resetModal(){
+    $('#busEmpleador').val('');
+    
+  }
 
   // cargo plugin DateTimePicker
   $('#fecha, #fechaEdit').datetimepicker({
     format: 'YYYY-MM-DD H:mm:ss',
     locale: 'es',
   });
-
-</script>
-
-
-
-<script>
   
-  
-   /* cargo plugin DataTable (debe ir al final de los script) */
-   $("#tbl-denuncias").DataTable({
+  /* cargo plugin DataTable (debe ir al final de los script) */
+  $("#tbl-denuncias").DataTable({
     "aLengthMenu": [ 10, 25, 50, 100 ],
     "autoWidth": true,
     "columnDefs": [ {
@@ -556,8 +551,6 @@ $(".btnEdit").on("click", function(e){
 </div>
 </div>
 
-
-
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar">
   <div class="modal-dialog">
@@ -644,7 +637,6 @@ $(".btnEdit").on("click", function(e){
   </div> <!-- / .modal-conten -->
 </div>
 </div>
-
 
 <!-- Modal Confirma Eliminar -->
 <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

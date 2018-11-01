@@ -1,14 +1,13 @@
 <input type="hidden" id="permission" value="<?php echo $permission;?>">
 
 <section class="content">
-	<?php ///cargarCabecera($TareaBPM["caseId"]); ?>
+	<?php cargarCabecera($TareaBPM["caseId"]); ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box">
 
 				<div class="box-body">
 					<div class="row">
-
 
 						<div class="col-sm-12 col-md-12">
 							
@@ -32,20 +31,18 @@
 											<div class="panel-body">
 
 												<?php
-													//echo"id de form: ";
-													//dump_exit($TareaBPM["assigned_id"]);
-													//$TareaBPM["assigned_id"] = 'asignado';
-															//echo "<input type='text' class='hidden' id='estadoTarea' value='$estadoTarea' >";
-														//var_dump($TareaBPM ["assigned_id"]);
-													if ($TareaBPM ["assigned_id"] == "") {
+													
+													echo "<input type='text' class='form-control hidden' id='asignado' value='".$TareaBPM["assigned_id"]."' >";
+
+													//if ($TareaBPM ["assigned_id"] == "") {
 
 															echo "<button class='btn btn-block btn-success' id='btontomar' style='width: 100px; margin-top: 10px ;display: inline-block;' onclick='tomarTarea()'>Tomar tarea</button>";
-													}else{
+												//	}else{
 															echo "&nbsp"; 
 															echo "&nbsp"; 
 															echo "&nbsp";
 															echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
-													}    
+													//}    
 															echo "</br>"; 
 															echo "</br>"; 
 
@@ -61,8 +58,8 @@
 															echo "<input type='text' class='hidden' id='idPedTrabajo' value='$idPedTrabajo' >";
 
 													?>
-												<input type="text" class="form-control hidden" id="asignado" value="<?php echo $TareaBPM['assigned_id'] ?>"
-												>
+												<!-- <input type="text" class="form-control hidden" id="asignado" value="<?php //echo $TareaBPM['assigned_id'] ?>"
+												> -->
 
 												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
 												>	
@@ -94,22 +91,22 @@
 														</div><br>
 
 
-														<div class="form-group ">
+														<!-- <div class="form-group ">
 															<div class="col-sm-6 col-md-6 ">
 																<label for="ot ">Orden de Trabajo:</label>
 																<input type="text " class="form-control " id="ot
                                                                     "
-																 placeholder=" " value="<?php echo $datos[0][ 'id_orden'] ?>" disabled>
+																 placeholder=" " value="<?php //echo $datos[0][ 'id_orden'] ?>" disabled>
 															</div>
 														</div><br>
 
 														<div class="form-group">
 															<div class="col-sm-6 col-md-6">
 																<label for="duracion_std">Duracion Estandar (minutos):</label>
-																<input type="text" class="form-control" id="duracion_std" placeholder="" value="<?php echo $datos[0]['duracion_std']  ?>"
+																<input type="text" class="form-control" id="duracion_std" placeholder="" value="<?php //echo $datos[0]['duracion_std']  ?>"
 																 disabled>
 															</div></br>
-														</div>
+														</div> -->
 
 														<br>
 
@@ -419,7 +416,7 @@
 
 <script>
 
-	// evaluarEstado();
+	evaluarEstado();
 	function evaluarEstado() {
 
 		var asig = $('#asignado').val();
@@ -524,45 +521,10 @@
 		contentType: false,
 		processData: false,
 		success: function (respuesta) {
-				if (respuesta === "exito") {
-				}
-				else if (respuesta === "error") {
-					alert("Los datos no se han podido guardar");
-				}
-				else {
-					//$("#msg-error").show();
-					//$(".list-errors").html(respuesta);
-					//alert("Los datos no se han guardado");
-				}
+			$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
 			}
 		});
 	}	
-
-	// funcion de MTBA
-	function terminarTarea() {
-		var idTarBonita = $('#idTarBonita').val();
-		var id_listarea = $('#id_listarea').val();
-		//alert(idTarBonita);
-		$.ajax({
-			type: 'POST',
-			data: {
-				'idTarBonita': idTarBonita,
-				'id_listarea': id_listarea
-			},
-			url: 'index.php/Tarea/terminarTareaStandarenBPM',
-			success: function (data) {
-				// toma a tarea exitosamente
-				if (data['reponse_code'] == 204) {
-					$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
-				}
-			},
-			error: function (data) {
-				//alert("Noo");
-				console.log(data);
-			},
-			dataType: 'json'
-		});
-	}
 
 	// Boton Hecho generico
 	function estado() {
@@ -609,8 +571,9 @@
 	}
 	// Toma tarea en BPM
 	function tomarTarea() {
+
+		WaitingOpen('Tomando tarea...');
 		var idTarBonita = $('#idTarBonita').val();
-		//alert(idTarBonita);
 		$.ajax({
 			type: 'POST',
 			data: {
@@ -619,11 +582,11 @@
 			url: 'index.php/Tarea/tomarTarea',
 			success: function (data) {
 				console.log(data['reponse_code']);
+				WaitingClose();
 				// toma a tarea exitosamente
 				if (data['reponse_code'] == 200) {
 					habilitar();
 				}
-
 			},
 			error: function (result) {
 				console.log(result);
@@ -633,6 +596,8 @@
 	}
 	// Soltar tarea en BPM
 	function soltarTarea() {
+
+		WaitingOpen('Soltando tarea...');
 		var idTarBonita = $('#idTarBonita').val();
 		//alert(idTarBonita);
 		$.ajax({
@@ -643,6 +608,7 @@
 			url: 'index.php/Tarea/soltarTarea',
 			success: function (data) {
 				console.log(data['reponse_code']);
+				WaitingClose();
 				// toma a tarea exitosamente
 				if (data['reponse_code'] == 200) {
 					deshabilitar();

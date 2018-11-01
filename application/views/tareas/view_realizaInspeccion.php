@@ -1,36 +1,13 @@
 <input type="hidden" id="permission" value="<?php echo $permission;?>">
 
 <section class="content">
-	<?php //cargarCabecera($TareaBPM["caseId"]); ?>
+	<?php cargarCabecera($TareaBPM["caseId"]); ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box">
 
 				<div class="box-body">
 					<div class="row">
-
-						
-						
-						
-						
-						<!-- <div class="col-xs-9">  
-							<table id="tblDenEstab" class="table table-bordered table-hover">
-									<thead>
-										<tr>                
-											<th>Nro Acta</th>
-											<th>Fecha</th>               
-											<th>Motivo de la Denuncia</th>                 
-										</tr>
-									</thead>
-									<tbody>
-										
-									</tbody>
-							</table>
-						</div>	 -->
-
-
-
-
 						<div class="col-sm-12 col-md-12">
 							<div role="tabpanel" class="tab-pane">
 								<div class="form-group">
@@ -52,21 +29,19 @@
 											<div class="panel-body">
 
 												<?php
-													//echo"id de form: ";
-													//dump_exit($TareaBPM["assigned_id"]);
-													//$TareaBPM["assigned_id"] = 'asignado';
-															//echo "<input type='text' class='hidden' id='estadoTarea' value='$estadoTarea' >";
+													
+													echo "<input type='text' class='form-control hidden' id='asignado' value='".$TareaBPM["assigned_id"]."' >";												
 													//if ($estadoTarea == "noasignado") {
 
-													// 		echo "<button class='btn btn-block btn-success' id='btontomar' style='width: 100px; margin-top: 10px ;display: inline-block;' onclick='tomarTarea()'>Tomar tarea</button>";
-													// //}else{
-													// 		echo "&nbsp"; 
-													// 		echo "&nbsp"; 
-													// 		echo "&nbsp";
-													// 		echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
-													// //}    
-													// 		echo "</br>"; 
-													// 		echo "</br>"; 
+															echo "<button class='btn btn-block btn-success' id='btontomar' style='width: 100px; margin-top: 10px ;display: inline-block;' onclick='tomarTarea()'>Tomar tarea</button>";
+													//}else{
+															echo "&nbsp"; 
+															echo "&nbsp"; 
+															echo "&nbsp";
+															echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
+												//	}    
+															echo "</br>"; 
+															echo "</br>"; 
 
 															$userdata = $this->session->userdata('user_data');
 															$usrId = $userdata[0]['usrId'];     // guarda usuario logueado 
@@ -79,9 +54,7 @@
 
 															echo "<input type='text' class='hidden' id='idPedTrabajo' value='$idPedTrabajo' >";
 
-													?>
-												<input type="text" class="form-control hidden" id="asignado" value="<?php echo $TareaBPM['assigned_id'] ?>"
-												>
+													?>												
 
 												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
 												>
@@ -158,7 +131,7 @@
 														<h4>Tipo de Acta</h4>
 														<div class="btn-group" data-toggle="buttons">
 															<label class="btn btn-primary">
-																<input type="radio" name="tipoActa" id="tipoActa" autocomplete="off" value="inspeccion"> Inspección 
+																<input type="radio" name="tipoActa" id="inspeccion" autocomplete="off" value="inspeccion"> Inspección 
 															</label>
 															<label class="btn btn-primary">
 																<input type="radio" name="tipoActa" id="verificacion" autocomplete="off" value="verificacion"> Verificación
@@ -173,7 +146,7 @@
 														<div class="form-group">
 															<label for="filePdf">Subir Acta</label>
 															<div class="fileinput fileinput-new" data-provides="fileinput">
-																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf"/></span>
+																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf" /></span>
 																<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
 															</div>
 															<a id="adjunto" target="_blank">Ver Archivo Adjunto</a>
@@ -209,21 +182,6 @@
 													</div>
 												</div>		
 													<br><br>
-
-													<!-- <div class="form-group">
-														<div class="col-sm-6 col-md-4">
-															<label for="fechaProrroga">Fecha de Prórroga</label>
-															<input type="date" name="fechaProrroga" class="form-control" id="fechaProrroga" value="<?php echo date('Y-m-d') ?>">
-														</div>		
-													</div> -->
-													<!-- <div class="form-group">
-                            <label for="filePdf">Subir Acta</label>
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                              <span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf"/></span>
-                              <span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
-                            </div>
-														<a id="adjunto" target="_blank">Ver Archivo Adjunto</a>
-                          </div> -->
 
 													<!-- Datos a guardar		 -->
                           <input type="text" name="case_id" class="form-control hidden" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
@@ -477,19 +435,19 @@
 
 $('#filePdf').on('change', function() {
         $('#adjunto').attr("href",URL.createObjectURL(this.files[0]));              
-    });
+});
 
-	// evaluarEstado();
-	// function evaluarEstado() {
+	evaluarEstado();
+	function evaluarEstado() {
 
-	// 	var asig = $('#asignado').val();
-	// 	// si esta tomada la tarea
-	// 	if (asig != "") {
-	// 		habilitar();
-	// 	} else {
-	// 		deshabilitar();
-	// 	}
-	// }
+		var asig = $('#asignado').val();
+		// si esta tomada la tarea
+		if (asig != "") {
+			habilitar();
+		} else {
+			deshabilitar();
+		}
+	}
 
 	function habilitar() {
 		// habilito btn y textarea       
@@ -549,50 +507,45 @@ $('#filePdf').on('change', function() {
  
 	// termina la tarea en BPM y guarda los datos en  BD	
 	function tareaTerminada(){
-	//	alert('algo');
-		var formData = new FormData($("#formInspeccion")[0]);
-		/* Ajax de Grabado en BD */
-		$.ajax({
-		url: 'index.php/Tarea/cerrarTarea',
-		type: 'POST',
-		data: formData,
-		cache: false,
-		contentType: false,
-		processData: false,
-		success: function (respuesta) {
-				
-					$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
-			
-				
-			}
-		});
-	}	
+		
+		var errorInsp = true;
+		
+		if( $("input[name='tipoActa']:radio").is(':checked')	 ){
+			alert('chequeado tipo acta');
+			errorInsp = false;
+		}else{
+			alert('Por favor seleccione un tipo de Acta...');
+		}
 
-	// funcion de MTBA
-	function terminarTarea() {
-		var idTarBonita = $('#idTarBonita').val();
-		var id_listarea = $('#id_listarea').val();
-		//alert(idTarBonita);
-		$.ajax({
-			type: 'POST',
-			data: {
-				'idTarBonita': idTarBonita,
-				'id_listarea': id_listarea
-			},
-			url: 'index.php/Tarea/terminarTareaStandarenBPM',
-			success: function (data) {
-				// toma a tarea exitosamente
-				if (data['reponse_code'] == 204) {
-					$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
-				}
-			},
-			error: function (data) {
-				//alert("Noo");
-				console.log(data);
-			},
-			dataType: 'json'
-		});
-	}
+		if ( $("input[name='accion']:radio").is(':checked') ) {
+			alert('chequeado accion');
+			errorInsp = false;
+		} else {
+			alert('Por favor seleccione una acción...');
+		}
+
+		if ($('#filePdf').val() == '') {
+			alert('Por favor suba el acta en formato PDF...');
+		} else {
+			errorInsp = false;
+		}
+
+		if(!errorInsp){
+			var formData = new FormData($("#formInspeccion")[0]);
+			/* Ajax de Grabado en BD */
+			$.ajax({
+				url: 'index.php/Tarea/cerrarTarea',
+				type: 'POST',
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function (respuesta) {						
+							$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+					}
+			});
+		}				
+	}	
 
 	// Boton Hecho generico
 	function estado() {
@@ -639,8 +592,9 @@ $('#filePdf').on('change', function() {
 	}
 	// Toma tarea en BPM
 	function tomarTarea() {
+
+		WaitingOpen('Tomando tarea...');
 		var idTarBonita = $('#idTarBonita').val();
-		//alert(idTarBonita);
 		$.ajax({
 			type: 'POST',
 			data: {
@@ -650,7 +604,8 @@ $('#filePdf').on('change', function() {
 			success: function (data) {
 				console.log(data['reponse_code']);
 				// toma a tarea exitosamente
-				if (data['reponse_code'] == 200) {
+				if (data['reponse_code'] == 200) {					
+					WaitingClose();
 					habilitar();
 				}
 
@@ -663,8 +618,8 @@ $('#filePdf').on('change', function() {
 	}
 	// Soltar tarea en BPM
 	function soltarTarea() {
-		var idTarBonita = $('#idTarBonita').val();
-		//alert(idTarBonita);
+		WaitingOpen('Soltando tarea...');
+		var idTarBonita = $('#idTarBonita').val();		
 		$.ajax({
 			type: 'POST',
 			data: {
@@ -675,7 +630,8 @@ $('#filePdf').on('change', function() {
 				console.log(data['reponse_code']);
 				// toma a tarea exitosamente
 				if (data['reponse_code'] == 200) {
-					deshabilitar();
+					WaitingClose();				
+					deshabilitar();			
 				}
 			},
 			error: function (result) {
@@ -695,91 +651,91 @@ $('#filePdf').on('change', function() {
 	// evento de cierre de modal guarda parcialmente los datos
 	// $('#modalForm').on('hidden.bs.modal', function (e) {
 
-	// 	$('#error').fadeOut('slow');
-	// 	// toma  el valor de todos los input file 
-	// 	var imgs = $('input.archivo');
+		// 	$('#error').fadeOut('slow');
+		// 	// toma  el valor de todos los input file 
+		// 	var imgs = $('input.archivo');
 
-	// 	var formData = new FormData($("#genericForm")[0]);
+		// 	var formData = new FormData($("#genericForm")[0]);
 
-	// 	/** subidad y resubida de imagenes **/
-	// 	// Tomo los inputs auxiliares cargados
-	// 	var aux = $('input.auxiliar');
+		// 	/** subidad y resubida de imagenes **/
+		// 	// Tomo los inputs auxiliares cargados
+		// 	var aux = $('input.auxiliar');
 
-	// 	var auxArray = [];
-	// 	aux.each(function () {
-	// 		auxArray.push($(this).val());
-	// 	});
-	// 	//console.table(aux);
-	// 	for (var i = 0; i < imgs.length; i++) {
+		// 	var auxArray = [];
+		// 	aux.each(function () {
+		// 		auxArray.push($(this).val());
+		// 	});
+		// 	//console.table(aux);
+		// 	for (var i = 0; i < imgs.length; i++) {
 
-	// 		var inpValor = $(imgs[i]).val();
-	// 		var idValor = $(imgs[i]).attr('name');
-	// 		//console.log("idValor: "+idValor);
-	// 		// si tiene algun valor (antes de subir img)
-	// 		if (inpValor != "") {
-	// 			//al subir primera img
-	// 			formData.append(idValor, inpValor);
-	// 		} else {
-	// 			// sino sube img guarda la del auxiliar         
-	// 			//inpValor = auxArray[i]; //valor del input auxiliar
-	// 			//console.table(inpValor);
-	// 			//formData.append(idValor, inpValor);
-	// 		}
-	// 	}
+		// 		var inpValor = $(imgs[i]).val();
+		// 		var idValor = $(imgs[i]).attr('name');
+		// 		//console.log("idValor: "+idValor);
+		// 		// si tiene algun valor (antes de subir img)
+		// 		if (inpValor != "") {
+		// 			//al subir primera img
+		// 			formData.append(idValor, inpValor);
+		// 		} else {
+		// 			// sino sube img guarda la del auxiliar         
+		// 			//inpValor = auxArray[i]; //valor del input auxiliar
+		// 			//console.table(inpValor);
+		// 			//formData.append(idValor, inpValor);
+		// 		}
+		// 	}
 
-	// 	/* text tipo check */
-	// 	var check = $('input.check');
-	// 	//console.log("aux");
-	// 	//console.table(aux);
-	// 	var checkArray = [];
-	// 	// check.each(function() {
-	// 	//     checkArray.push($(this).val());
-	// 	// });
-	// 	//console.log('array de chech: ');
-	// 	//console.table(checkArray);
+		// 	/* text tipo check */
+		// 	var check = $('input.check');
+		// 	//console.log("aux");
+		// 	//console.table(aux);
+		// 	var checkArray = [];
+		// 	// check.each(function() {
+		// 	//     checkArray.push($(this).val());
+		// 	// });
+		// 	//console.log('array de chech: ');
+		// 	//console.table(checkArray);
 
-	// 	for (var i = 0; i < check.length; i++) {
-	// 		//var chekValor = $(check[i]).val();
-	// 		var idCheckValor = $(check[i]).attr('name');
-	// 		console.log('valor: ');
-	// 		console.log(idCheckValor);
-	// 		if ($(check[i]).is(':checked')) {
-	// 			chekValor = 'tilde';
-	// 		} else {
-	// 			chekValor = 'notilde';
-	// 		}
-	// 		formData.append(idCheckValor, chekValor);
-	// 	}
-	// 	// console.log('array de chech: ');
-	// 	// console.table(check);
+		// 	for (var i = 0; i < check.length; i++) {
+		// 		//var chekValor = $(check[i]).val();
+		// 		var idCheckValor = $(check[i]).attr('name');
+		// 		console.log('valor: ');
+		// 		console.log(idCheckValor);
+		// 		if ($(check[i]).is(':checked')) {
+		// 			chekValor = 'tilde';
+		// 		} else {
+		// 			chekValor = 'notilde';
+		// 		}
+		// 		formData.append(idCheckValor, chekValor);
+		// 	}
+		// 	// console.log('array de chech: ');
+		// 	// console.table(check);
 
-	// 	/* Ajax de Grabado en BD */
-	// 	$.ajax({
-	// 		url: 'index.php/Tarea/guardarForm',
-	// 		type: 'POST',
-	// 		data: formData,
-	// 		cache: false,
-	// 		contentType: false,
-	// 		processData: false,
+		// 	/* Ajax de Grabado en BD */
+		// 	$.ajax({
+		// 		url: 'index.php/Tarea/guardarForm',
+		// 		type: 'POST',
+		// 		data: formData,
+		// 		cache: false,
+		// 		contentType: false,
+		// 		processData: false,
 
-	// 		success: function (respuesta) {
+		// 		success: function (respuesta) {
 
 
-	// 			if (respuesta === "exito") {
+		// 			if (respuesta === "exito") {
 
-	// 			}
-	// 			else if (respuesta === "error") {
-	// 				alert("Los datos no se han podido guardar");
-	// 			}
-	// 			else {
-	// 				//$("#msg-error").show();
-	// 				//$(".list-errors").html(respuesta);
-	// 				//alert("Los datos no se han guardado");
-	// 			}
-	// 		}
-	// 	});
+		// 			}
+		// 			else if (respuesta === "error") {
+		// 				alert("Los datos no se han podido guardar");
+		// 			}
+		// 			else {
+		// 				//$("#msg-error").show();
+		// 				//$(".list-errors").html(respuesta);
+		// 				//alert("Los datos no se han guardado");
+		// 			}
+		// 		}
+		// 	});
 
-	// });
+		// });
 
 	// trae valores validos para llenar form asoc.  
 	function getformulario(event) {
@@ -960,44 +916,44 @@ $('#filePdf').on('change', function() {
 
 
 	// CABECERA
-	// carga denuncias por establecimiento en modal agregar
-	cargarCabecera();
-	function cargarCabecera(){
-    
-    //var idEstab = $('#estable option:selected').val();
-		var bpm_Id = $('#caseId').val();
-		$('.insp').append(bpm_Id);
-		var tbl = $('#tblDenEstab');
-    
-    $.ajax({
-      data: { bpm_Id : bpm_Id },
-      dataType: 'json',
-      type: 'POST',
-      url: 'index.php/Tarea/getDenPorBpmId',
-      success: function(data){             
-              $('#tblDenEstab tbody tr').remove();
-              var trow = ""; 
-              for (var i=0; i< data.length; i++) {                  
+		// carga denuncias por establecimiento en modal agregar
+		// cargarCabecera();
+		// function cargarCabecera(){
+			
+		//   //var idEstab = $('#estable option:selected').val();
+		// 	var bpm_Id = $('#caseId').val();
+		// 	$('.insp').append(bpm_Id);
+		// 	var tbl = $('#tblDenEstab');
+			
+		//   $.ajax({
+		//     data: { bpm_Id : bpm_Id },
+		//     dataType: 'json',
+		//     type: 'POST',
+		//     url: 'index.php/Tarea/getDenPorBpmId',
+		//     success: function(data){             
+		//             $('#tblDenEstab tbody tr').remove();
+		//             var trow = ""; 
+		//             for (var i=0; i< data.length; i++) {                  
 
-                var tr = "<tr id='"+data['denunciaid']+"'>";
-                var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-                  var tipo = "<td class='' style='text-align: left'> "+data[i]['denunciatipo'] +" </td>" ;
-                  var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
-                  var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
-                var trCierre = "</tr>";
-              
-                trow = tr + tdDenunciaId + tipo + tdfecha + tdmotivos;
-                // Agrego a tabla
-                $(tbl).append(trow);                                  
-              }             
-             
-      },
-      error: function(result){
-        console.error("Error cargando denuncias por estabelcimiento");
-      },
-    });
+		//               var tr = "<tr id='"+data['denunciaid']+"'>";
+		//               var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
+		//                 var tipo = "<td class='' style='text-align: left'> "+data[i]['denunciatipo'] +" </td>" ;
+		//                 var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
+		//                 var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
+		//               var trCierre = "</tr>";
+								
+		//               trow = tr + tdDenunciaId + tipo + tdfecha + tdmotivos;
+		//               // Agrego a tabla
+		//               $(tbl).append(trow);                                  
+		//             }             
+							
+		//     },
+		//     error: function(result){
+		//       console.error("Error cargando denuncias por estabelcimiento");
+		//     },
+		//   });
 
-  }
+		// }
 
 
 

@@ -13,7 +13,7 @@
 
         </div><!-- /.box-header -->
         <div class="box-body">
-          <table id="sector" class="table table-hover">
+          <table id="sector" class="table table-bordered table-hover">
             <thead>
               <tr>
                 <th width="10%"> </th>
@@ -22,12 +22,12 @@
                 <th>Detalle</th>
                 <!-- <th>Descripcion:</th> -->
                 <th>Fecha</th>
-                <!-- <th>Fecha Vto.:</th>
-                <th>Estado:</th>
-                <th>Prioridad:</th> -->
+                <th style="display:none">Fecha Vto.:</th>
+                <th style="display:none">Estado:</th>
+                <th style="display:none">Prioridad:</th>
 
                 <th style="display:none">id tarea bonit</th>
-                <th style="display:none">Estado:</th>
+                <th>Estado:</th>
               </tr>
             </thead>
             <tbody>
@@ -157,7 +157,7 @@
   });
 
 
-  // Carga para cargar notif strandar
+  // Carga notif strandar
 
   function verTarea(idTarBonita){
 
@@ -253,31 +253,57 @@
 
 
 
-  // Datatable
-  $(function () {
+ 
 
-      $('#sector').DataTable({
-          "paging": true,
-          "lengthChange": true,
-          "searching": true,
-          "ordering": true,
-          "info": true,
-          "autoWidth": true,
-          "language": {
-                "lengthMenu": "Ver _MENU_ filas por página",
-                "zeroRecords": "No hay registros",
-                "info": "Mostrando pagina _PAGE_ de _PAGES_",
-                "infoEmpty": "No hay registros disponibles",
-                "infoFiltered": "(filtrando de un total de _MAX_ registros)",
-                "sSearch": "Buscar:  ",
-                "oPaginate": {
-                    "sNext": "Sig.",
-                    "sPrevious": "Ant."
-                  }
-          }
-      });
+  //$('#sector').DataTable();
+
+
+$("#sector").DataTable({
+    "aLengthMenu": [ 10, 25, 50, 100 ],
+    "autoWidth": true,
+    "columnDefs": [ {
+      "targets": [ 0 ], //no busco en acciones
+      "searchable": false
+    },
+    {
+      "targets": [ 0 ], //no ordena columna 0
+      "orderable": false
+    } ],
+    "info": true,
+    "ordering": true,
+    "order": [[1, "asc"]],
+    "paging": true,
+    "language": {
+      "sProcessing":     "Procesando...",
+      "sLengthMenu":     "Mostrar _MENU_ registros",
+      "sZeroRecords":    "No se encontraron resultados",
+      "sEmptyTable":     "Ningún dato disponible en esta tabla",
+      "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+      "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+      "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+      "sInfoPostFix":    "",
+      "sSearch":         "Buscar:",
+      "sUrl":            "",
+      "sInfoThousands":  ",",
+      "sLoadingRecords": "Cargando...",
+      "oPaginate": {
+        "sFirst":    "Primero",
+        "sLast":     "Último",
+        "sNext":     "Sig.",
+        "sPrevious": "Ant."
+      },
+      "oAria": {
+        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+      }
+    },
+    "lengthChange": true,
+    "searching": true,
+    "sPaginationType": "full_numbers",
+    "sScrollX": '100%',
+    "sScrollXInner": "100%",
+    "bScrollCollapse": true,
   });
-
 
 </script>
 
