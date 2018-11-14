@@ -79,14 +79,14 @@
   // autocompletar llena el empleador
   autocompEmp();
   function autocompEmp(){  
-      $( "#busEmpleador" ).autocomplete({
-        source: "index.php/Inspeccion/getDenominacionSocial",
-        minLength: 1,
-        select: function( event, ui ) {        
-          $( "#busEmpleador" ).val(ui.item.value);
-          $("#empleaid").val(ui.item.id);
-        }
-      });
+    $( "#busEmpleador" ).autocomplete({
+      source: "index.php/Denuncia/getDenominacionSocial",
+      minLength: 1,
+      select: function( event, ui ) {        
+        $( "#busEmpleador" ).val(ui.item.value);
+        $("#empleaid").val(ui.item.id);
+      }
+    });
   }
  
   // llena select de establecimientos
@@ -96,7 +96,7 @@
     $.ajax({
         async: true,
         global: false,
-        url: "Inspeccion/getEstablecimiento",
+        url: "Denuncia/getEstablecimiento",
         type: 'POST',
         dataType : "json",
         data: {"empleaid" : idEmp },
