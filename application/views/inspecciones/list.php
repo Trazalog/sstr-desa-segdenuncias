@@ -576,70 +576,70 @@
     // });
     //
 
-  // $('#Guardar').click(function (e) { 
+    // $('#Guardar').click(function (e) { 
 
-    //  var id=id_;
-    //  var inspeccionfechaasigna=$('#fechaE').val();
-    //  var inspeccionfecharecp=$('#fechaE').val();
-    //  var inspectorid=$('#inspeE').val();
-    //  var inspecciondescrip=$('#notaE').val();
-    //  var estableid=$('#estableE').val();
-    //  var inspeestado="C";
-    //  var hayError = false;
-    //  if(inspeccionfechaasigna == '' || inspeccionfecharecp == '' || inspectorid == '-1' || inspecciondescrip == '' || estableid == '-1')
-    //  {
-    //   hayError = true;
-    //   }
-    //   if(hayError == true){
-    //     $('#errorE').fadeIn('slow');
-    //     return;
-    //   }
-    //   $('#errorE').fadeOut('slow');
-    //   WaitingOpen('Guardando cambios');
-    //   $.ajax({
-    //   type: 'POST',
-    //   dataType : "json",
-    //   data: {"inspeccionid":id,"inspeccionfechaasigna":inspeccionfechaasigna,  "inspeccionfecharecp":inspeccionfecharecp,  "inspectorid":inspectorid,  "inspecciondescrip":inspecciondescrip,  "estableid":estableid,  "inspeestado":inspeestado },
-    //   url: 'index.php/Inspeccion/Modificar_Inspeccion', 
-    //   success: function(result){
-    //     WaitingClose();
-    //     $('#modalEditar').modal('hide');
-    //     ActualizarPagina();
-    //     },
-    //     error: function(result){
-    //       WaitingClose();
-    //       alert("OPERACIÓN FALLIDA");
-    //       console.log(result);
-    //     }
+      //  var id=id_;
+      //  var inspeccionfechaasigna=$('#fechaE').val();
+      //  var inspeccionfecharecp=$('#fechaE').val();
+      //  var inspectorid=$('#inspeE').val();
+      //  var inspecciondescrip=$('#notaE').val();
+      //  var estableid=$('#estableE').val();
+      //  var inspeestado="C";
+      //  var hayError = false;
+      //  if(inspeccionfechaasigna == '' || inspeccionfecharecp == '' || inspectorid == '-1' || inspecciondescrip == '' || estableid == '-1')
+      //  {
+      //   hayError = true;
+      //   }
+      //   if(hayError == true){
+      //     $('#errorE').fadeIn('slow');
+      //     return;
+      //   }
+      //   $('#errorE').fadeOut('slow');
+      //   WaitingOpen('Guardando cambios');
+      //   $.ajax({
+      //   type: 'POST',
+      //   dataType : "json",
+      //   data: {"inspeccionid":id,"inspeccionfechaasigna":inspeccionfechaasigna,  "inspeccionfecharecp":inspeccionfecharecp,  "inspectorid":inspectorid,  "inspecciondescrip":inspecciondescrip,  "estableid":estableid,  "inspeestado":inspeestado },
+      //   url: 'index.php/Inspeccion/Modificar_Inspeccion', 
+      //   success: function(result){
+      //     WaitingClose();
+      //     $('#modalEditar').modal('hide');
+      //     ActualizarPagina();
+      //     },
+      //     error: function(result){
+      //       WaitingClose();
+      //       alert("OPERACIÓN FALLIDA");
+      //       console.log(result);
+      //     }
 
-    //   });
-    // });
-
-
-  // $(".fa-times-circle").click(function (e) { 
-
-    //   id_ = $(this).parents('tr').find('td').eq(1).html();
-    //   $('#modalEliminar').modal('show');
-      
-    // });
+      //   });
+      // });
 
 
-  // function eliminarInspeccion(){
-    //   WaitingOpen();
-    //   $.ajax({
-    //     type: 'POST',
-    //     data: { "inspeccionid": id_},
-    //     url: 'index.php/Inspeccion/Eliminar_Inspeccion', 
-    //     success: function(data){
-    //       WaitingClose();
-    //       ActualizarPagina();                
-    //     },
+    // $(".fa-times-circle").click(function (e) { 
 
-    //     error: function(result){
-    //       WaitingClose();
-    //       alert("OPERACION FALLIDA");
-    //     }
-    //   });}
+      //   id_ = $(this).parents('tr').find('td').eq(1).html();
+      //   $('#modalEliminar').modal('show');
+        
+      // });
+
+
+    // function eliminarInspeccion(){
+      //   WaitingOpen();
+      //   $.ajax({
+      //     type: 'POST',
+      //     data: { "inspeccionid": id_},
+      //     url: 'index.php/Inspeccion/Eliminar_Inspeccion', 
+      //     success: function(data){
+      //       WaitingClose();
+      //       ActualizarPagina();                
+      //     },
+
+      //     error: function(result){
+      //       WaitingClose();
+      //       alert("OPERACION FALLIDA");
+      //     }
+      //   });}
 
 
 </script>

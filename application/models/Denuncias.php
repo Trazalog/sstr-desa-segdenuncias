@@ -42,6 +42,41 @@ class Denuncias extends CI_Model
 				return array();
 		}
 	}
+	// trae empleadores activos
+	function getDenominacionSocial(){
+
+		$this->db->select('tbl_empleadores.empleaid,tbl_empleadores.emplearazsoc');
+		$this->db->from('tbl_empleadores');
+		$this->db->where('tbl_empleadores.empleaestado','AC');
+		$query = $this->db->get();				
+		$i=0;
+		foreach ($query->result() as $row){
+			$empleadores[$i]['label'] = $row->emplearazsoc;
+			$empleadores[$i]['id'] = $row->empleaid;
+			$i++;
+		}
+
+		return $empleadores;
+	}
+
+
+	// trae establecimientos por estado AC
+	function getEstablecimientos($id){
+
+		$this->db->select('tbl_establecimiento.estableid,concat(establecalle," " 
+			,establealtura,"-",localidad) as establecalle');
+		$this->db->from('jobs24_segdenuncias.tbl_establecimiento');
+		$this->db->join('localidades',"id=dptoid");
+		$this->db->where('empleaid',$id);
+		$this->db->where('estableestado','AC');
+		$query=$this->db->get();
+		if ($query->num_rows()!=0){
+			return $query->result_array();
+		}else{
+			return array();
+		}	    
+
+	}
 	
 	// guarda denuncia nueva de oficio
 	function setDenunciaOficio($data){      
