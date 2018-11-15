@@ -29,6 +29,16 @@
 														<div class="container">
 															<ul class="timeline">
 																<?php
+
+																	$userdata = $this->session->userdata('user_data');
+																	$usrId = $userdata[0]['usrId'];     // guarda usuario logueado 
+																	$usrName =  $userdata[0]['usrName'];
+																	$usrLastName = $userdata[0]["usrLastName"];
+
+																	echo "<input type='text' class='hidden' id='usrName' value='$usrName' >";
+																	echo "<input type='text' class='hidden' id='usrLastName' value='$usrLastName' >";
+
+
 																	echo '<h2 style="margin-left:50px;">Actividades Pendientes</h2>';
 																	foreach ($timeline['listAct'] as $f) {       
 																	echo '<li>
@@ -254,8 +264,8 @@
 
 
 
-/* ver inspecciones por denuncia */ // LISTO!
-$("#btnInsp").on("click", function(e){
+	/* ver inspecciones por denuncia */ // LISTO!
+	$("#btnInsp").on("click", function(e){
     e.preventDefault();    
     var idDenuncia = $('#idDenuncia').val(); 
     //alert(idDenuncia);
