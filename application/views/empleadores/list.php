@@ -50,7 +50,8 @@
                       echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
                     }
   	                if (strpos($permission,'Del') !== false) {
-  	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue btnDelete" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa fa-times text-light-blue btnBorrado" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
+                      
   	                }
   	                if (strpos($permission,'View') !== false) {
                       echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnNote" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
@@ -334,25 +335,50 @@
     WaitingClose();
   });
   /* Elimino empleador */
-  $(".btnDelete").on("click", function(e){
-    e.preventDefault();
+  //$(".btnDelete").on("click", function(e){
+   // e.preventDefault();
     //$('#confirmDelete').modal('show');
-    var idEmpleador = $(this).data("idempleador");
-    console.info(idEmpleador);
-    WaitingOpen('Eliminando Empleador');
-    $.ajax({
-      data: { id_empleador : idEmpleador },
-      dataType: 'json',
-      type: 'POST',
-      url: 'index.php/Empleador/deleteEmpleadorPorId',
-      success: function(result){
-        Refrescar();
-      },
-      error: function(result){
-        console.error("Error eliminando Empleador");
-        WaitingClose();
-      },
-    });
+   // var idEmpleador = $(this).data("idempleador");
+   // console.info(idEmpleador);
+    //WaitingOpen('Eliminando Empleador');
+    // $.ajax({
+    //   data: { id_empleador : idEmpleador },
+    //   dataType: 'json',
+    //   type: 'POST',
+    //   url: 'index.php/Empleador/deleteEmpleadorPorId',
+    //   success: function(result){
+    //     Refrescar();
+    //   },
+    //   error: function(result){
+    //     console.error("Error eliminando Empleador");
+    //     WaitingClose();
+    //   },
+    // });
+  //});
+
+  $(".btnBorrado").on("click", function(e){
+    e.preventDefault();   
+
+    if(confirm('Desea realmente eliminar este Empleador?')){
+
+      var idEmpleador = $(this).data("idempleador");
+      WaitingOpen('Eliminando Empleador');
+      $.ajax({
+          data: { id_empleador : idEmpleador },
+          dataType: 'json',
+          type: 'POST',
+          url: 'index.php/Empleador/deleteEmpleadorPorId',
+          success: function(result){
+            Refrescar();
+          },
+          error: function(result){
+            console.error("Error eliminando Empleador");
+            WaitingClose();
+          },
+      });
+    }else{
+      console.log('nnnnoooooo');
+    }   
   });
   /* Ver empleador */
   $(".btnView").on("click", function(e){
@@ -1516,8 +1542,390 @@
   </div>
 </div>
 
+<!-- Modal Eliminar-->
+<div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form method="POST" id="frmArchivo" accept-charset="utf-8">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel"><span id="modalAction"></span> ELIMINAAAAARRRRR</h4>
+        </div>
+        <div class="modal-body" id="modalBodyUsr">
+
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="alert alert-danger alert-dismissable" id="error" style="display: none">
+                    <h4><i class="icon fa fa-warning"></i> Error!</h4>
+                    Revise que todos los campos obligatorios esten seleccionados
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+                  
+              <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Información Personal</a></li>
+                  <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Libros</a></li>
+                  <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Observaciones</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                    <div class="row">
+                      <div class="col-xs-12 col-md-4">
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="tipoEmpleador" value="L" checked> Locales
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4">
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="tipoEmpleador" value="C"> Centralización
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4 form-inline">
+                        <div class="form-group">
+                          <label for="fecha">Fecha *</label>
+                          <input type='text' class="form-control" id="fecha" value="">
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+
+                    <div class="row">
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                          <label for="nro-inscripcion">Nº Inscripción</label>
+                          <input type="text" class="form-control" id="nro-inscripcion" value="">
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                          <label for="expediente">Expediente</label>
+                          <input type="text" class="form-control" id="expediente" value="">
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                          <label for="cuit">CUIT</label>
+                          <input type="text" class="form-control" id="cuit" value="">
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="form-group">
+                          <label for="razon-social">Razón Social</label>
+                          <input type="text" class="form-control" id="razon-social" value="">
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="form-group">
+                          <label for="domicilio-legal">Domicilio Legal</label>
+                          <input type="text" class="form-control" id="domicilio-legal" value="">
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                      <div class="panel panel-default">
+                        <div class="panel-heading heading-estableciemientos" role="tab" id="headingOne">
+                          <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="btn-block">
+                              Establecimientos <i class="fa fa-angle-right"></i>
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="calle">Calle</label>
+                                  <input type="text" class="form-control" id="calle" value="">
+                                </div>
+                              </div><!-- /.row -->
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="altura">Altura</label>
+                                  <input type="text" class="form-control" id="altura" value="">
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="piso">Piso</label>
+                                  <input type="text" class="form-control" id="piso" value="">
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="dpto">Dpto</label>
+                                  <input type="text" class="form-control" id="dpto" value="">
+                                </div>
+                              </div>
+
+                              <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                  <label for="provincias">Provincia</label>
+                                  <select class="form-control" id="provincias">
+                                    <option value='-1'>Seleccione la provincia...</option>
+                                    <?php foreach ($provincias as $provincia) {
+                                      # code...
+                                      echo "<option value=".$provincia['id'].">".$provincia['provincia']."</option>";
+                                    }
+                                    ?>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-md-6">
+                                <div class="form-group">
+                                  <label for="departamentos">Departamento</label>
+                                  <select class="form-control" id="departamentos" disabled="disabled">
+                                    <!-- -->
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="latitud">Latitud</label>
+                                  <input type="text" class="form-control" id="latitud" value="">
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="longitud">Longitud</label>
+                                  <input type="text" class="form-control" id="longitud" value="">
+                                </div>
+                              </div>
+
+                              <div class="col-xs-12 col-md-3 col-md-offset-3">
+                                <div class="form-group">
+                                  <br>
+                                  <button type="button" class="btn btn-primary pull-right disabled" id="add-establecimiento">Agregar Establecimiento</button>
+                                </div>
+                              </div>
+                            </div><!-- /.row -->
+                            <hr>
+                            <table id="tbl-establecimiento" class="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Acción</th>
+                                  <th>Calle</th>
+                                  <th>Altura</th>
+                                  <th>Piso</th>
+                                  <th>Depto</th>
+                                  <th>Provincia</th>
+                                  <th>Departamento</th>
+                                  <th>Latitud</th>
+                                  <th>Longitud</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <!-- -->
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div><!-- /.panel -->
+
+                      <div class="panel panel-default">
+                        <div class="panel-heading heading-actividad" role="tab" id="headingTwo">
+                          <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" class="btn-block">
+                              Actividad <i class="fa fa-angle-right"></i>
+                            </a>
+                          </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                          <div class="panel-body">
+                            <div class="row">
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="actividad">Actividad</label>
+                                  <select class="form-control" id="actividad">
+                                    <option value='-1'>Seleccione la actividad...</option>
+                                    <?php foreach ($actividad as $act) {
+                                      # code...
+                                      echo "<option value=".$act['actividadid']." title=".$act['descripciongeneral'].">".$act['descripcion']."</option>";
+                                    }
+                                    ?>
+                                  </select>
+                                </div>
+                              </div><!-- /.row -->
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="rubro">Rubro</label>
+                                  <input type="text" class="form-control" id="rubro" value="">
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <label for="convenio">Convenio</label>
+                                  <input type="text" class="form-control" id="convenio" value="">
+                                </div>
+                              </div>
+                              <div class="col-xs-12 col-md-3">
+                                <div class="form-group">
+                                  <br>
+                                  <button type="button" class="btn btn-primary pull-right disabled" id="add-actividad">Agregar Actividad</button>
+                                </div>
+                              </div>
+                            </div><!-- /.row -->
+                            <hr>
+                            <table id="tbl-actividad" class="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Acción</th>
+                                  <th>Actividad</th>
+                                  <th>Rubro</th>
+                                  <th>Convenio Colectivo Ley</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <!-- -->
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div><!-- /.panel -->
+                    </div>
+
+                    <div class="row">
+                      <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                          <label for="liquidacion">Sistema de Liquidación</label>
+                          <select class="form-control" id="liquidacion">
+                            <option value='-1'>Seleccione el sistema de liquidación...</option>
+                            <?php foreach ($liquidacion as $liquida) {
+                              # code...
+                              echo "<option value=".$liquida['sisliquiid'].">".$liquida['descripcion']."</option>";
+                            }
+                            ?>
+                          </select>
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+
+                    <div class="row">
+                      <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                          <label for="personal-masculino">Personal Masculino</label>
+                          <input type="text" class="form-control" id="personal-masculino" value="">
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                          <label for="personal-femenino">Personal Femenino</label>
+                          <input type="text" class="form-control" id="personal-femenino" value="">
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+                  </div>
+                  <!-- /.tab-pane -->
+                  <div class="tab-pane" id="tab_2">
+                    <div class="row">
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                          <label for="tomo">Tomo</label>
+                          <input type="text" class="form-control" placeholder="" id="tomo" value="">
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                          <label for="fecha-tomo">Fecha de entrega</label>
+                          <input type="date" class="form-control" id="fecha-tomo" value="<?php echo date("Y-m-d") ?>">
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                          <br>
+                          <button type="button" class="btn btn-primary pull-right" id="add-libro">Agregar Libro</button>
+                        </div>
+                      </div>
+                    </div><!-- /.row -->
+                    <hr>
+                    <table id="tbl-libros" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Acción</th>
+                          <th>Tomo</th>
+                          <th>Fecha de Entrega</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- -->
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.tab-pane -->
+                  <div class="tab-pane" id="tab_3">
+                     <table id="tbl-nota" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Acción</th>
+                          <th>Id Nota</th>
+                          <th>Fecha</th>
+                          <th>Observación</th>
+                          <th>Imagen</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- -->
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div>
+
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnSave">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!--Modal mostrar nota al 100% -->
+  <div class="modal" id="notaImgModal" tabindex="-1" role="dialog" aria-labelledby="notaImgModal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close btnUploadCancel" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="notaImgModal-title">Nota</h4>
+        </div>
+        <div class="modal-body">
+
+          <img src="" class="imagepreview" style="width: 100%;" >
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btnUploadCancel" aria-label="Close">Cerrar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div>
+</div>
+
+
+
 <!-- Modal Confirma Eliminar -->
-<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -1538,4 +1946,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

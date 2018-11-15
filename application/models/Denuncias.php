@@ -65,7 +65,7 @@ class Denuncias extends CI_Model
 
 		$this->db->select('tbl_establecimiento.estableid,concat(establecalle," " 
 			,establealtura,"-",localidad) as establecalle');
-		$this->db->from('jobs24_segdenuncias.tbl_establecimiento');
+		$this->db->from('tbl_establecimiento');
 		$this->db->join('localidades',"id=dptoid");
 		$this->db->where('empleaid',$id);
 		$this->db->where('estableestado','AC');

@@ -358,6 +358,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" id="btnVolver">Volver al listado</button>
           <button type="button" class="btn btn-primary" id="btnSave">Guardar</button>
+          <button type="button" class="btn btn-primary" id="prueba">PRUEBA</button>
         </div><!-- box-footer -->
       </div><!-- /.box -->
     </div><!-- /.col -->
@@ -365,6 +366,18 @@
 </section><!-- /.content -->
 
 <script>
+
+                      
+
+  $("#prueba").on("click", function(e){
+    e.preventDefault();
+    // validacion simple https://oscargascon.es/validacion-simple-de-formularios-con-jquery/
+    var namePattern = "^[a-z A-Z]{4,30}$";
+    var respuesta = $("#nro-inscripcion").val().match(namePattern) ? true : false;
+    $("#nro-inscripcion").val("");
+    alert(respuesta);
+  });
+
   /* formato de cuit */
   $('#cuit').inputmask({
     mask: '99-99999999-9'
@@ -729,8 +742,19 @@
 		}
 		if ( empleainscrip == '') {
 			$("#nro-inscripcion").parent().addClass("has-error");
-			hay_error = true;
+			hay_error = true;      
 		}
+    
+    // validado que ingresen soloo numeros en la inscripción
+    //https://oscargascon.es/validacion-simple-de-formularios-con-jquery/
+    var namePattern = "^[0-9]{1,30}$";
+    var respuesta = $("#nro-inscripcion").val().match(namePattern) ? true : false;
+    if (!respuesta) {
+      hay_error = true;
+      $("#nro-inscripcion").val("");
+      $("#nro-inscripcion").attr("placeholder", "Ingrese solo números");
+    }       
+
 		if ( empleaexp == '') {
 			$("#expediente").parent().addClass("has-error");
 			hay_error = true;
