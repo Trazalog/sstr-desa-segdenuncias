@@ -130,7 +130,7 @@ class Inspeccion extends CI_Controller {
 		// Lanza proceso de inspeccion (retorna case_id)
 		$result = $this->lanzarProcesoBPM($inspectorid);
 		$caseId = json_decode($result, true)['caseId'];
-		var_dump($result);
+
 		$data = array(
 			'inspeccionfechaasigna' => $fecha_actual,
 			'inspeccionfecharecp' => $fecha_actual,

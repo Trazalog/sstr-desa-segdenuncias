@@ -358,7 +358,6 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" id="btnVolver">Volver al listado</button>
           <button type="button" class="btn btn-primary" id="btnSave">Guardar</button>
-          <button type="button" class="btn btn-primary" id="prueba">PRUEBA</button>
         </div><!-- box-footer -->
       </div><!-- /.box -->
     </div><!-- /.col -->
@@ -366,17 +365,6 @@
 </section><!-- /.content -->
 
 <script>
-
-                      
-
-  $("#prueba").on("click", function(e){
-    e.preventDefault();
-    // validacion simple https://oscargascon.es/validacion-simple-de-formularios-con-jquery/
-    var namePattern = "^[a-z A-Z]{4,30}$";
-    var respuesta = $("#nro-inscripcion").val().match(namePattern) ? true : false;
-    $("#nro-inscripcion").val("");
-    alert(respuesta);
-  });
 
   /* formato de cuit */
   $('#cuit').inputmask({

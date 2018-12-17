@@ -174,7 +174,6 @@
       },
     });
   }
-
   // trae todos los inspectores
   getInspector();
   function getInspector(){
@@ -208,8 +207,7 @@
                 //alert('error');
       }
     });
-  }
- 
+  } 
   function reset(){
 
     $('#errorE').fadeOut('slow');
@@ -373,24 +371,18 @@
   function guardarInspeccion(){
     
     var inspeccionfechaasigna=$('#fecha').val();
-    var inspeccionfecharecp=$('#fecha').val();
-    
+    var inspeccionfecharecp=$('#fecha').val();    
     var inspectorid=$('#inspe').val();    // id inspector
     var inspecciondescrip=$("#nota").val(); // detalle inspeccion
-    var estableid=$('#estable').val();   // id establecimiento  
-    
+    var estableid=$('#estable').val();   // id establecimiento      
     var inspeestado="C";
     // arma array de ids de denuncias
     var idsTr = $('#tblDenEstab tbody tr');
-    var idsDenuncias = [];
-    
+    var idsDenuncias = [];    
     $(idsTr).each(function(){       
       celId = $(this).find('td.denunciaId').html();
       idsDenuncias.push(celId);    
     });  
-    
-    //console.log('ids de denuncias');
-    //console.table(idsDenuncias);
     
     var hayError = false;
     
@@ -403,7 +395,7 @@
         return;
     }else{
       $('#modalAgregar').modal('hide');
-      $('#error').fadeOut('slow');   
+      //$('#error').fadeOut('slow');   
         WaitingOpen();
         $.ajax({
           type: 'POST',
@@ -559,91 +551,6 @@
 
 
 </script>
-<script>
-   // $(".fa-pencil").click(function (e) { 
-    //   id_=$(this).parents('tr').find('td').eq(1).html();
-    //   var idInspector=$(this).parents('tr').find('td').eq(7).html();
-    //   $('select#inspeE').val(idInspector);
-    //   var nombreEmplador = $(this).parents('tr').find('td').eq(4).html();
-    //   $(".busEmpleadorE").val(nombreEmplador);
-    //   var idEmpleador=$(this).parents('tr').find('td').eq(3).html();
-    //   var idEstablecimiento=$(this).parents('tr').find('td').eq(5).html();
-    //   getEstablecimientos(idEmpleador,idEstablecimiento,$('#estableE'));
-    //   var detalle=$(this).parents('tr').find('td').eq(10).html();
-    //   $('textarea#notaE').val(detalle);
-    //   $('#modalEditar').modal('show');
-
-    // });
-    //
-
-    // $('#Guardar').click(function (e) { 
-
-      //  var id=id_;
-      //  var inspeccionfechaasigna=$('#fechaE').val();
-      //  var inspeccionfecharecp=$('#fechaE').val();
-      //  var inspectorid=$('#inspeE').val();
-      //  var inspecciondescrip=$('#notaE').val();
-      //  var estableid=$('#estableE').val();
-      //  var inspeestado="C";
-      //  var hayError = false;
-      //  if(inspeccionfechaasigna == '' || inspeccionfecharecp == '' || inspectorid == '-1' || inspecciondescrip == '' || estableid == '-1')
-      //  {
-      //   hayError = true;
-      //   }
-      //   if(hayError == true){
-      //     $('#errorE').fadeIn('slow');
-      //     return;
-      //   }
-      //   $('#errorE').fadeOut('slow');
-      //   WaitingOpen('Guardando cambios');
-      //   $.ajax({
-      //   type: 'POST',
-      //   dataType : "json",
-      //   data: {"inspeccionid":id,"inspeccionfechaasigna":inspeccionfechaasigna,  "inspeccionfecharecp":inspeccionfecharecp,  "inspectorid":inspectorid,  "inspecciondescrip":inspecciondescrip,  "estableid":estableid,  "inspeestado":inspeestado },
-      //   url: 'index.php/Inspeccion/Modificar_Inspeccion', 
-      //   success: function(result){
-      //     WaitingClose();
-      //     $('#modalEditar').modal('hide');
-      //     ActualizarPagina();
-      //     },
-      //     error: function(result){
-      //       WaitingClose();
-      //       alert("OPERACIÓN FALLIDA");
-      //       console.log(result);
-      //     }
-
-      //   });
-      // });
-
-
-    // $(".fa-times-circle").click(function (e) { 
-
-      //   id_ = $(this).parents('tr').find('td').eq(1).html();
-      //   $('#modalEliminar').modal('show');
-        
-      // });
-
-
-    // function eliminarInspeccion(){
-      //   WaitingOpen();
-      //   $.ajax({
-      //     type: 'POST',
-      //     data: { "inspeccionid": id_},
-      //     url: 'index.php/Inspeccion/Eliminar_Inspeccion', 
-      //     success: function(data){
-      //       WaitingClose();
-      //       ActualizarPagina();                
-      //     },
-
-      //     error: function(result){
-      //       WaitingClose();
-      //       alert("OPERACION FALLIDA");
-      //     }
-      //   });}
-
-
-</script>
-
 
 <!-- Modal Ver -->
 <div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

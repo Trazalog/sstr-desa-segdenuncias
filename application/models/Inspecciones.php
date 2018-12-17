@@ -5,7 +5,7 @@ class Inspecciones extends CI_Model
 	{
 		parent::__construct();
 	}
-
+	// Devuelve inspecciones en estado Curso 
 	function Listado_Inspecciones(){
 
 		$this->db->select('*,concat(C.establecalle," - ",C.establealtura," - ",E.localidad) as direccionCompleta');
@@ -24,26 +24,26 @@ class Inspecciones extends CI_Model
 				return array();
 			}
 	}
-
-
+	// Devuelve establecimientos por ID de empleadores Activos
 	function getEstablecimientos($id){
 
-		$this->db->select('tbl_establecimiento.estableid,concat(establecalle," " 
-			,establealtura,"-",localidad) as establecalle');
-		$this->db->from('jobs24_segdenuncias.tbl_establecimiento');
-		$this->db->join('localidades',"id=dptoid");
+		$this->db->select('tbl_establecimiento.estableid,
+											concat(establecalle," ",establealtura,"-",localidad) as establecalle');
+		$this->db->from('tbl_establecimiento');
+		$this->db->join('localidades',"localidades.id = tbl_establecimiento.dptoid");
 		$this->db->where('empleaid',$id);
+		$this->db->where('tbl_establecimiento.estableestado', 'AC');
 		$query=$this->db->get();
 		if ($query->num_rows()!=0){
 			return $query->result_array();
-		}	    
-
+		}	   
 	}
-
+	// Devuelve empleadores Activos
 	function getDenominacionSocial(){
 
 		$this->db->select('tbl_empleadores.empleaid,tbl_empleadores.emplearazsoc');
 		$this->db->from('tbl_empleadores');
+		$this->db->where('tbl_empleadores.empleaestado', 'AC');
 		$query = $this->db->get();				
 		$i=0;
 		foreach ($query->result() as $row){
@@ -51,10 +51,9 @@ class Inspecciones extends CI_Model
 			$empleadores[$i]['id'] = $row->empleaid;
 			$i++;
 		}
-
 		return $empleadores;
 	}
-
+	// Devuelve inspecciones por ID
 	function Obtener_Inspecciones($id){
 		$this->db->where('inspeccionid', $id);
 		$query=$this->db->get('tbl_inspecciones');
