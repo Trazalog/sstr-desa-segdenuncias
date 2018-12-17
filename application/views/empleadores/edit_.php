@@ -1001,7 +1001,7 @@
   // Levanto Modal Editar Actividad
   $(document).on("click", ".btnEditActividad", function(e){
     e.preventDefault();
-    var detaactivid       = $(this).data("idactividad");
+    var detaactivid       = c
     var actividadid       = $(this).data("actividadid");
     var empleaid          = '<?php echo $idEmpleador ?>';
     var descripcion       = $(this).closest("tr > td:first-child").next().text();

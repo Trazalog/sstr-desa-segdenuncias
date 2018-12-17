@@ -315,7 +315,7 @@
     $('#content').empty();
     $("#content").load( '<?php echo base_url() ?>index.php/Denuncia/index/<?php echo $permission ?>' );
     //$('#modalAgregar').modal('hide');
-    WaitingClose();
+    //WaitingClose();
   }
 
   function resetModal(){
