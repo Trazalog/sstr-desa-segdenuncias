@@ -85,12 +85,12 @@
       select: function( event, ui ) {        
         $( "#busEmpleador" ).val(ui.item.value);
         $("#empleaid").val(ui.item.id);
+        getEstabecimiento();
       }
     });
   }
- 
   // llena select de establecimientos
-  $('#busEmpleador').on("change", function(){
+  function getEstabecimiento(){
     var selector = $('#estable');
     var idEmp = $("#empleaid").val();
     $.ajax({
@@ -111,7 +111,7 @@
                         var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
                         selector.append(opcion); 
                       }
-                      selector.val(idEstablecimiento);
+                      //selector.val(idEstablecimiento);
                     }
                     else{
                       selector.append("<option value='-1'>No hay Establecimientos</option>");
@@ -122,7 +122,7 @@
                   alert('error');
               }
     });
-  });
+  }    
 
   // guarda denuncia nueva
   function guardarDenuncia(){
@@ -256,7 +256,7 @@
 
     function getEstablecimientos(idEmpleador){
       var selector = $('#estableEdit');
-      //console.log(id);
+      
       $.ajax({
         async: true,
         global: false,
@@ -274,7 +274,7 @@
                         var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
                         selector.append(opcion);
                       }
-                      selector.val(idEstablecimiento);
+                      //selector.val(idEstablecimiento);
                     }
                     else{
                       selector.append("<option value='-1'>No hay Establecimientos</option>");
@@ -656,7 +656,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <a class="btn btn-danger" id="btnConfirmDelete" onclick="borrarDenuncia()">Eliminar</a>
+        <a class="btn btn-danger" id="btnConfirmDelete" data-dismiss="modal" onclick="borrarDenuncia()">Eliminar</a>
       </div>
     </div>
   </div>
