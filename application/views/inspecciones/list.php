@@ -141,39 +141,7 @@
   //   } );
 
   
-  function getEstablecimientos(){
-    var selector = $('#estable');
-    var idEmpleador = $("#empleaid").val();
-    
-    $.ajax({
-      async: true,
-      global: false,
-      url: "Inspeccion/getEstablecimiento",
-      type: 'POST',
-      dataType : "json",
-      data: {"empleaid" : idEmpleador },
-      'success': function (result) {
-                selector.html('');
-                if(result!=null){
-                var opcion  = "<option value='-1'>Seleccione...</option>" ; 
-                selector.append(opcion); 
-                  for(var i=0; i < result.length ; i++){    
-                    var direccion = result[i]['establecalle'];
-                    var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
-                    selector.append(opcion); 
-                  }
-                  selector.val(idEstablecimiento);
-                }
-                else{
-                  selector.append("<option value='-1'>No hay Establecimientos</option>");
-                }
-      },
-      'error' : function (result){
-                console.log('Funcion: getEstablecimientos ERROR');
-                alert('error');
-      },
-    });
-  }
+  
   // trae todos los inspectores
   getInspector();
   function getInspector(){
@@ -435,41 +403,74 @@
       }
     });
   }
+  function getEstablecimientos(){
+    var selector = $('#estable');
+    var idEmpleador = $("#empleaid").val();
+    
+    $.ajax({
+      async: true,
+      global: false,
+      url: "Inspeccion/getEstablecimiento",
+      type: 'POST',
+      dataType : "json",
+      data: {"empleaid" : idEmpleador },
+      'success': function (result) {
+                selector.html('');
+                if(result!=null){
+                var opcion  = "<option value='-1'>Seleccione...</option>" ; 
+                selector.append(opcion); 
+                  for(var i=0; i < result.length ; i++){    
+                    var direccion = result[i]['establecalle'];
+                    var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
+                    selector.append(opcion); 
+                  }
+                  selector.val(idEstablecimiento);
+                }
+                else{
+                  selector.append("<option value='-1'>No hay Establecimientos</option>");
+                }
+      },
+      'error' : function (result){
+                console.log('Funcion: getEstablecimientos ERROR');
+                alert('error');
+      },
+    });
+  }
 
   // llena select de establecimientos
-  $('#busEmpleador').on("change", function(){
-    var selector = $('#estable');
-    var idEmp = $("#empleaid").val();
-    $.ajax({
-        async: true,
-        global: false,
-        url: "Inspeccion/getEstablecimiento",
-        type: 'POST',
-        dataType : "json",
-        data: {"empleaid" : idEmp },
-        'success': function (result) {
-                    
-                    selector.html('');
-                    if(result!=null){
-                      var opcion  = "<option value='-1'>Seleccione...</option>" ; 
-                      selector.append(opcion); 
-                      for(var i=0; i < result.length ; i++){    
-                        var direccion = result[i]['establecalle'];
-                        var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
-                        selector.append(opcion); 
-                      }
-                      selector.val(idEstablecimiento);
-                    }
-                    else{
-                      selector.append("<option value='-1'>No hay Establecimientos</option>");
-                    }
-                },
-        'error' : function (result){
-                  console.log('Funcion: getEstablecimientos ERROR');
-                  alert('error');
-              }
-    });
-  });
+    // $('#busEmpleador').on("change", function(){
+    //   var selector = $('#estable');
+    //   var idEmp = $("#empleaid").val();
+    //   $.ajax({
+    //       async: true,
+    //       global: false,
+    //       url: "Inspeccion/getEstablecimiento",
+    //       type: 'POST',
+    //       dataType : "json",
+    //       data: {"empleaid" : idEmp },
+    //       'success': function (result) {
+                      
+    //                   selector.html('');
+    //                   if(result!=null){
+    //                     var opcion  = "<option value='-1'>Seleccione...</option>" ; 
+    //                     selector.append(opcion); 
+    //                     for(var i=0; i < result.length ; i++){    
+    //                       var direccion = result[i]['establecalle'];
+    //                       var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
+    //                       selector.append(opcion); 
+    //                     }
+    //                     selector.val(idEstablecimiento);
+    //                   }
+    //                   else{
+    //                     selector.append("<option value='-1'>No hay Establecimientos</option>");
+    //                   }
+    //               },
+    //       'error' : function (result){
+    //                 console.log('Funcion: getEstablecimientos ERROR');
+    //                 alert('error');
+    //             }
+    //   });
+    // });
 
   // imprime listado de inspecciones
   $(".fa-print").click(function (e) {
