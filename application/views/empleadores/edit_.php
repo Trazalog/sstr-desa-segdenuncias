@@ -1238,6 +1238,7 @@
   // Agregar Libro
   $(document).on("click", "#add-libro", function(e){
     e.preventDefault();
+    e.stopImmediatePropagation();
     WaitingOpen('Agregando Libro');
 
     var empleadorid = '<?php echo $idEmpleador ?>';

@@ -301,6 +301,7 @@ class Empleadores extends CI_Model
             $dato['detaactivrubro'] = $comp[1];
             $dato['detaactivconvenio'] = $comp[2];
             $dato['empleaid'] = $idEmpleador;
+            $dato['detaactivestado'] = 'AC';
             
             $response = $this->db->insert('tbl_detaactiv', $dato);
         }   
