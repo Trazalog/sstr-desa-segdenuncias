@@ -125,35 +125,36 @@ class Inspeccion extends CI_Controller {
 		$idsDenuncias = $this->input->post('idsDenuncias');
 		// convierte a formato datetime para guardar en BD
 		$date = date_create($inspeccionfechaasigna);
-		$fecha_actual = date_format($date, 'Y-m-d H:i:s');	
-
+		$fecha_actual = date_format($date, 'Y-m-d H:i:s');
 		// Lanza proceso de inspeccion (retorna case_id)
 		$result = $this->lanzarProcesoBPM($inspectorid);
 		$caseId = json_decode($result, true)['caseId'];
-
-		$data = array(
-			'inspeccionfechaasigna' => $fecha_actual,
-			'inspeccionfecharecp' => $fecha_actual,
-			'inspectorid' => $inspectorid,
-			'inspecciondescrip' => $inspecciondescrip,
-			'estableid' => $estableid,
-			'inspeestado' =>"C",
-			'bpm_id' =>$caseId
-		);
-
-		$idInsercion = $this->Inspecciones->Guardar_Inspecciones($data);
 		
-		if($idInsercion > 0){
-			$datosInspDenun = $this->armarBatch($idInsercion,$idsDenuncias);
-			$response = $this->Inspecciones->setInsDenIds($datosInspDenun);
-
-			if($response){
+		// si lanza proceso exitosamente		
+		if ($caseId) {		
+			
+			$data = array(
+				'inspeccionfechaasigna' => $fecha_actual,
+				'inspeccionfecharecp' => $fecha_actual,
+				'inspectorid' => $inspectorid,
+				'inspecciondescrip' => $inspecciondescrip,
+				'estableid' => $estableid,
+				'inspeestado' =>"C",
+				'bpm_id' =>$caseId
+			);	
+			$idInsercion = $this->Inspecciones->Guardar_Inspecciones($data);			
+			if($idInsercion > 0){
+				$datosInspDenun = $this->armarBatch($idInsercion,$idsDenuncias);
+				$response = $this->Inspecciones->setInsDenIds($datosInspDenun);
 				echo json_encode($response);
-			}
-		}else{
+			}else{
+				$response = false;
+				echo json_encode($response);
+			}	
+		} else{
 			$response = false;
 			echo json_encode($response);
-		}		
+		}				
 	}
 
 	// arma batch de relacion denuncias/inspecciones
@@ -179,6 +180,7 @@ class Inspeccion extends CI_Controller {
 		$parametros["http"]["content"] = json_encode($idInspector);
 		$param = stream_context_create($parametros);
 		$result = $this->Inspecciones->lanzarProcesoBPM($param);
+		//dump($result, 'Result:');
 		return $result;		
 	}
 
