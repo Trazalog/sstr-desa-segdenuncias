@@ -364,7 +364,7 @@
     }else{
       $('#modalAgregar').modal('hide');
       //$('#error').fadeOut('slow');   
-        WaitingOpen();
+        //WaitingOpen();
         $.ajax({
           type: 'POST',
           data: {"inspeccionfechaasigna":inspeccionfechaasigna,  
@@ -375,17 +375,21 @@
                   "inspeestado":inspeestado,
                   "idsDenuncias": idsDenuncias
                   },
+          dataType: 'json',
           url: 'index.php/Inspeccion/Guardar_Inspeccion', 
           success: function(result){
-                  WaitingClose();                
-                  ActualizarPagina();
+                  WaitingClose();   
+                  if (result) {
+                    ActualizarPagina();
+                  } else {
+                    alert("Error! No se pudo guarda la nueva inspeccion...");
+                  }
           },
           error: function(result){
                   WaitingClose();
                   alert("Error! No se pudo guarda la nueva inspeccion...");
           }
-        });
-        console.log("Inspeccion Guardada");
+        });        
     }    
   }
 
