@@ -124,9 +124,7 @@ class Import extends CI_Controller{
 		// si existen nuevas denuncias se arman y se guardan temporalmente
 		if (isset($nuevaDenuncia)) {
 			// arma las denuncias para grabar en BD temporalmente
-			$denListas = $this->armarDenunciasNuevas($nuevaDenuncia);		
-			
-			
+			$denListas = $this->armarDenunciasNuevas($nuevaDenuncia);				
 			
 			// borra las denuncias que pudieran estar guardadas anteriormente
 			$delete = $this->Imports->deleteDenuncias();			

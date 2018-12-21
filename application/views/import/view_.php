@@ -126,8 +126,11 @@
 								var datos = JSON.parse(data);								
 								// si todos los CUIT estan inscriptos dibuja tabla
 								//if (datos['noCuit'][0] == null) { 								
-									tabla = $('#tabladetalle').DataTable();
-									tabla.clear().draw();									
+								tabla = $('#tabladetalle').DataTable();
+								tabla.clear().draw();		
+															
+								if(datos['respGuardado'] != 'sin denuncias'){
+
 									for(i = 0; i < datos['denTemporales'].length; i++) {		
 										var idEstab = datos['denTemporales'][i]['estableid'];
 										var dom =	datos['denTemporales'][i]['establecalle'] + ' '+datos['denTemporales'][i]['establealtura'];
@@ -144,14 +147,12 @@
 									}	
 									llenaSelect();
 									cambioSelect();
-									
-									// si hay cuit no registrados los muestra
-									if (datos['noCuit'][0] != null){
-										infoCuit(datos);
-										//cambioSelect();
-									}
-									
-														
+								}			
+								// si hay cuit no registrados los muestra
+								if (datos['noCuit'][0] != null){
+									infoCuit(datos);
+									//cambioSelect();
+								}							
 						},
 						//si ha ocurrido un error
 						error: function(){
