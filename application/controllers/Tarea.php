@@ -265,7 +265,7 @@ class Tarea extends CI_Controller {
 		$dataImag = array("upload_data" => $this->upload->data());
 		$nom = $dataImag['upload_data']['file_name'];
 
-		$data['adjunto'] = "assets/imgformularios/".$nom;
+		$data['adjunto'] = "assets/inspecciones/".$nom;
 		$data['tipoActa'] = $tipoActa;
 		$data['accion'] = $accion;
 		$data['fechaProrroga'] = $fechaProrroga; 
@@ -508,6 +508,7 @@ class Tarea extends CI_Controller {
 			//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
 			$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
 			$caseId = $data['TareaBPM']["caseId"];
+			dump($caseId, 'case id:');
 			//$caseId =75;
 			// trae id pedido de trabajo desde trj_pedido_trabajo
 			//$pedTrab = $this->Tareas->getIdPedTrabajo($caseId);
@@ -532,76 +533,20 @@ class Tarea extends CI_Controller {
 
 
 			switch ($data['TareaBPM']['displayName']) {
-
-				// case 'Evaluación del estado de cuenta del cliente':
-				// 	$this->load->view('tareas/view_1', $data);
-				// 	break;
-				// case 'Entender si seguir esperando':
-				// 	$this->load->view('tareas/view_2', $data);
-				// 	break;
-				// case 'Análisis financiero y emisión de reportes':
-				// 	$this->load->view('tareas/view_3', $data);
-				// 	break;
-				// case 'Solicita ok del cliente para iniciar diagnostico':
-				// 	// $this->load->model('AceptacionTrabajos');
-				// 	// $data['presupuesto'] = $this->AceptacionTrabajos->ObtenerPresupuesto($pedTrab[0]['petr_id']);
-				// 	// $this->load->view('tareas/view_4', $data);
-				// 	break;
-				// case 'Evalua y envia presupuesto al cliente':
-				// 	//$this->load->view('tareas/view_6', $data);
-				// 	$this->load->model('AceptacionTrabajos');
-				// 	$data['presupuesto'] = $this->AceptacionTrabajos->ObtenerPresupuesto($pedTrab[0]['petr_id']);
-				// 	$this->load->view('tareas/view_4', $data);
-				// 	break;
-				// case 'Planificar Diagnóstico':					//con comentarios listos				
-				// 	$this->load->view('tareas/view_planificacion', $data);
-				// 	break;
-				// case 'Asignar personal a Planificación':		//con comentarios listo
-				// 	$data['idOT'] = $this->Tareas->getIdOrdenTrabajoPorCaseId($caseId);
-				// 	$this->load->view('tareas/view_asigPersPlanif', $data);
-				// 	break;
-				// case 'Revisión Diagnóstico':
-				// 	$this->load->model('Preinformes');
-				// 	$data['formularios'] = $this->Preinformes->ObtenerIdFormulariosCompletados($data['idPedTrabajo']);
-				// 	$this->load->view('tareas/view_8', $data);
-				// 	break;
-				// case 'Cotización de trabajo Industrial':
-				// 	$this->load->model('Preinformes');
-				// 	$data['formularios'] = array(2500);
-				// 	//$data['list'] = $this->Notapedidos->notaPedidosxId($datos[0][ 'id_orden']);
-				// 	$data['list'] = $this->Notapedidos->notaPedidosxId($data['codInterno']);
-				// 	$this->load->view('tareas/view_9', $data);
-				// 	break;
-				// case 'Confección de Presupuesto Industrial':
-				// 	$data['cotizacion'] = $this->Tareas->ObtenerCotizacion($data['idPedTrabajo']);
-				// 	$this->load->view('tareas/view_10', $data);
-				// 	break;
-				// case 'Revisión Diagnóstico por el Coordinador':
-				// 	$idForm = 2500;
-				// 	$data['idForm'] = $idForm;
-				// 	$this->Tareas->setFormInicial($idTarBonita,$idForm,$data['idPedTrabajo']);
-				// 	$data['form']   = $this->Tareas->get_form($idTarBonita,$idForm);
-        //             //dump_exit($data['form']);
-				// 	$data['list']   = $this->Tareas->tareasPorSector($caseId);
-        //             $this->load->view('tareas/view-revision-diagnostico-coordinador', $data);
-				//             break;
 				
 				case 'Reasignar Inspector a Inspección':					
-				//var_dump($data);	
-				$this->load->view('tareas/view_reasignarInspector', $data);
-					break;
+							//var_dump($data);	
+							$this->load->view('tareas/view_reasignarInspector', $data);
+							break;
 
 				case 'Realiza Inspección':
-				//var_dump($data);
-				$this->load->view('tareas/view_realizaInspeccion', $data);
-				break;
-				
+							//var_dump($data);
+							$this->load->view('tareas/view_realizaInspeccion', $data);
+							break;	
 
-				// default:				
-				// $this->load->view('tareas/view_', $data);
-				// //echo "<pre>";
-				// var_dump($data['datos']);
-				// break;
+				default:				
+							$this->load->view('tareas/view_', $data);				
+							break;
 			}
 	}
 

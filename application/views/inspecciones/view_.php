@@ -1,5 +1,6 @@
 <input type="hidden" id="permission" value="<?php echo $permission;?>">
 <section class="content">
+	<h3>Detalle de Inspeccion</h3>
 	<?php cargarCabecera($idTarBonita); ?>
 	<input id="idTarBonita" class="hidden" value="<?php echo $idTarBonita;?>">
 	<div class="row">
