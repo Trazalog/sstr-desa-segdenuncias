@@ -721,7 +721,7 @@
         </div><br><br>
 
         <div class="col-xs-6">
-          <label style="margin-top: 9px;">Detalle de la inspección:</label>
+          <label style="margin-top: 9px;">Detalle de la inspección<strong style="color: #dd4b39">*</strong>:</label>
         </div><br><br>
         <div class="col-xs-9">
           <textarea placeholder="Agregar detalle" class="form-control" rows="3" id="nota" value=""></textarea>
