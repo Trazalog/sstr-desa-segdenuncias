@@ -511,14 +511,14 @@ $('#filePdf').on('change', function() {
 		var errorInsp = true;
 		
 		if( $("input[name='tipoActa']:radio").is(':checked')	 ){
-			alert('chequeado tipo acta');
+			//alert('chequeado tipo acta');
 			errorInsp = false;
 		}else{
 			alert('Por favor seleccione un tipo de Acta...');
 		}
 
 		if ( $("input[name='accion']:radio").is(':checked') ) {
-			alert('chequeado accion');
+			//alert('chequeado accion');
 			errorInsp = false;
 		} else {
 			alert('Por favor seleccione una acción...');
@@ -540,9 +540,19 @@ $('#filePdf').on('change', function() {
 				cache: false,
 				contentType: false,
 				processData: false,
-				success: function (respuesta) {						
-							$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+				success: function (data) {	
+
+					console.table(data);
+					// toma a tarea exitosamente
+					if (data['reponse_code']['reponse_code'] == 204) {								
+						$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+					}else{
+						alert('Error en BPM. La tarea no ha podido ser completada...');
 					}
+				},
+				error:function(data){
+					console.table(data);
+				}
 			});
 		}				
 	}	
@@ -647,95 +657,6 @@ $('#filePdf').on('change', function() {
 	$('#formulario').click(function () {
 		click = 1;
 	});
-
-	// evento de cierre de modal guarda parcialmente los datos
-	// $('#modalForm').on('hidden.bs.modal', function (e) {
-
-		// 	$('#error').fadeOut('slow');
-		// 	// toma  el valor de todos los input file 
-		// 	var imgs = $('input.archivo');
-
-		// 	var formData = new FormData($("#genericForm")[0]);
-
-		// 	/** subidad y resubida de imagenes **/
-		// 	// Tomo los inputs auxiliares cargados
-		// 	var aux = $('input.auxiliar');
-
-		// 	var auxArray = [];
-		// 	aux.each(function () {
-		// 		auxArray.push($(this).val());
-		// 	});
-		// 	//console.table(aux);
-		// 	for (var i = 0; i < imgs.length; i++) {
-
-		// 		var inpValor = $(imgs[i]).val();
-		// 		var idValor = $(imgs[i]).attr('name');
-		// 		//console.log("idValor: "+idValor);
-		// 		// si tiene algun valor (antes de subir img)
-		// 		if (inpValor != "") {
-		// 			//al subir primera img
-		// 			formData.append(idValor, inpValor);
-		// 		} else {
-		// 			// sino sube img guarda la del auxiliar         
-		// 			//inpValor = auxArray[i]; //valor del input auxiliar
-		// 			//console.table(inpValor);
-		// 			//formData.append(idValor, inpValor);
-		// 		}
-		// 	}
-
-		// 	/* text tipo check */
-		// 	var check = $('input.check');
-		// 	//console.log("aux");
-		// 	//console.table(aux);
-		// 	var checkArray = [];
-		// 	// check.each(function() {
-		// 	//     checkArray.push($(this).val());
-		// 	// });
-		// 	//console.log('array de chech: ');
-		// 	//console.table(checkArray);
-
-		// 	for (var i = 0; i < check.length; i++) {
-		// 		//var chekValor = $(check[i]).val();
-		// 		var idCheckValor = $(check[i]).attr('name');
-		// 		console.log('valor: ');
-		// 		console.log(idCheckValor);
-		// 		if ($(check[i]).is(':checked')) {
-		// 			chekValor = 'tilde';
-		// 		} else {
-		// 			chekValor = 'notilde';
-		// 		}
-		// 		formData.append(idCheckValor, chekValor);
-		// 	}
-		// 	// console.log('array de chech: ');
-		// 	// console.table(check);
-
-		// 	/* Ajax de Grabado en BD */
-		// 	$.ajax({
-		// 		url: 'index.php/Tarea/guardarForm',
-		// 		type: 'POST',
-		// 		data: formData,
-		// 		cache: false,
-		// 		contentType: false,
-		// 		processData: false,
-
-		// 		success: function (respuesta) {
-
-
-		// 			if (respuesta === "exito") {
-
-		// 			}
-		// 			else if (respuesta === "error") {
-		// 				alert("Los datos no se han podido guardar");
-		// 			}
-		// 			else {
-		// 				//$("#msg-error").show();
-		// 				//$(".list-errors").html(respuesta);
-		// 				//alert("Los datos no se han guardado");
-		// 			}
-		// 		}
-		// 	});
-
-		// });
 
 	// trae valores validos para llenar form asoc.  
 	function getformulario(event) {
@@ -912,54 +833,7 @@ $('#filePdf').on('change', function() {
 		autoclose: true
 	});
 
-
-
-
-	// CABECERA
-		// carga denuncias por establecimiento en modal agregar
-		// cargarCabecera();
-		// function cargarCabecera(){
-			
-		//   //var idEstab = $('#estable option:selected').val();
-		// 	var bpm_Id = $('#caseId').val();
-		// 	$('.insp').append(bpm_Id);
-		// 	var tbl = $('#tblDenEstab');
-			
-		//   $.ajax({
-		//     data: { bpm_Id : bpm_Id },
-		//     dataType: 'json',
-		//     type: 'POST',
-		//     url: 'index.php/Tarea/getDenPorBpmId',
-		//     success: function(data){             
-		//             $('#tblDenEstab tbody tr').remove();
-		//             var trow = ""; 
-		//             for (var i=0; i< data.length; i++) {                  
-
-		//               var tr = "<tr id='"+data['denunciaid']+"'>";
-		//               var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-		//                 var tipo = "<td class='' style='text-align: left'> "+data[i]['denunciatipo'] +" </td>" ;
-		//                 var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
-		//                 var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
-		//               var trCierre = "</tr>";
-								
-		//               trow = tr + tdDenunciaId + tipo + tdfecha + tdmotivos;
-		//               // Agrego a tabla
-		//               $(tbl).append(trow);                                  
-		//             }             
-							
-		//     },
-		//     error: function(result){
-		//       console.error("Error cargando denuncias por estabelcimiento");
-		//     },
-		//   });
-
-		// }
-
-
-
 </script>
-
-
 
 <div class="modal fade bs-example-modal-lg" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
 	<div class="modal-dialog modal-lg" role="document">
