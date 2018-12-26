@@ -24,7 +24,6 @@ if(!function_exists('cargarCabecera')){
 			$ci->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
 			$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
 			$query = $ci->db->get();
-
 			if($query->num_rows() > 0){
 					$result = $query->row_array();
 			}
@@ -37,10 +36,7 @@ if(!function_exists('cargarCabecera')){
 			if ($queryInspecciones->num_rows()!=0){ 
 				$resultInspecciones = $queryInspecciones->result_array(); 
 			} 
-			//dump($resultInspecciones[0]['inspeccionid'],'inspeccion numero:');
-
-			
-			
+						
 			// consulta para Denuncia 
 			$ci->db->select('tbl_denuncias.*');
 			$ci->db->from('tbl_denuncias');
@@ -51,9 +47,6 @@ if(!function_exists('cargarCabecera')){
 			if ($queryDenuncias->num_rows()!=0){ 
 				$resultDenuncias = $queryDenuncias->result_array(); 
 			} 
-
-
-			//var_dump($resultDenuncias);
 
 			echo '<div id="collapseDivCli" class="box box-default collapsed-box box-solid">
 					<div class="box-header with-border">
@@ -143,64 +136,54 @@ if(!function_exists('cargarCabecera')){
 			</div>
 
 			<div class="box-body">
-				<div class="row">
-				
+				<div class="row">				
 
-				<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-								<label style="margin-top: 7px;">Tipo Acta: </label>
-								<input type="text" id="domicilio" class="form-control" value="'.$resultInspecciones[0]['tipoacta'].'" disabled/>
-						</div>
-				</div>
+					<div class="col-xs-12 col-sm-4">
+							<div class="form-group">
+									<label style="margin-top: 7px;">Tipo Acta: </label>
+									<input type="text" id="domicilio" class="form-control" value="'.$resultInspecciones[0]['tipoacta'].'" disabled/>
+							</div>
+					</div>
 
-				<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-								<label style="margin-top: 7px;">Acción: </label>
-								<input type="text" id="domicilio" class="form-control" value="'.$resultInspecciones[0]['accion'].'" disabled/>
-						</div>
-				</div>				
+					<div class="col-xs-12 col-sm-4">
+							<div class="form-group">
+									<label style="margin-top: 7px;">Acción: </label>
+									<input type="text" id="domicilio" class="form-control" value="'.$resultInspecciones[0]['accion'].'" disabled/>
+							</div>
+					</div>				
 
-				<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-								<label style="margin-top: 7px;">Estado: </label>
-								<input type="text" id="cuit" class="form-control" value="'.$resultInspecciones[0]['inspeestado'].'" disabled/>
-						</div>
-				</div>
+					<div class="col-xs-12 col-sm-4">
+							<div class="form-group">
+									<label style="margin-top: 7px;">Estado: </label>
+									<input type="text" id="cuit" class="form-control" value="'.$resultInspecciones[0]['inspeestado'].'" disabled/>
+							</div>
+					</div>
 
-				<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-								<label style="margin-top: 7px;">Fecha: </label>
-								<input type="text" id="razon" class="form-control" value="'.$resultInspecciones[0]['inspeccionfechaasigna'].'" disabled/>
-						</div>
-				</div>
+					<div class="col-xs-12 col-sm-4">
+							<div class="form-group">
+									<label style="margin-top: 7px;">Fecha: </label>
+									<input type="text" id="razon" class="form-control" value="'.$resultInspecciones[0]['inspeccionfechaasigna'].'" disabled/>
+							</div>
+					</div>
 
-				<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-								<label style="margin-top: 7px;">Fecha Prórroga: </label>
-								<input type="text" id="cuit" class="form-control" value="'.$resultInspecciones[0]['fechaProrroga'].'" disabled/>
-						</div>
-				</div>
+					<div class="col-xs-12 col-sm-4">
+							<div class="form-group">
+									<label style="margin-top: 7px;">Fecha Prórroga: </label>
+									<input type="text" id="cuit" class="form-control" value="'.$resultInspecciones[0]['fechaProrroga'].'" disabled/>
+							</div>
+					</div>
 
-				<div class="col-xs-12 col-sm-4">
+					<div class="col-xs-12 col-sm-4">
 						<div class="form-group">
-								<label style="margin-top: 7px;">ver adjunto: </label>
+								<label style="margin-top: 7px;">Ver adjunto: </label>
 								<a class="form-control" href="'.base_url().$resultInspecciones[0]['adjunto'].'" id="adjunto" target="_blank">Ver Archivo Adjunto</a>
-
 						</div>
-				</div>
-
-
-				<div class="col-sm-12 col-md-12">
-					<label for="detalle">Detalle</label>
-					<textarea class="form-control" id="detalle" rows="3" disabled> '.$resultInspecciones[0]['inspecciondescrip'].' </textarea>
-				</div>
-
-
-
-
-
-
-
+					</div>  
+					
+					<div class="col-sm-12 col-md-12">
+						<label for="detalle">Detalle</label>
+						<textarea class="form-control" id="detalle" rows="3" disabled> '.$resultInspecciones[0]['inspecciondescrip'].' </textarea>
+					</div>
 
 					<div class="col-xs-12 col-md-12">
 							<table class="table table-bordered table-hover" id="" width= 100%>

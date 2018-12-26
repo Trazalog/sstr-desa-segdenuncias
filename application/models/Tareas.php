@@ -171,10 +171,11 @@ class Tareas extends CI_Model
 
 	// cerrar tarea SST
 	function cerrarTarea($idTarBonita,$param){
-		
+		///API/bpm/userTask/:userTaskId/execution
 		$method = '/execution';
 		$resource = 'API/bpm/userTask/';
 		$url = BONITA_URL.$resource.$idTarBonita.$method;
+		//dump_exit($url);
 		file_get_contents($url, false, $param);
 		$response = $this->parseHeaders( $http_response_header );
 		return $response;

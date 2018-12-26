@@ -228,36 +228,34 @@ class Tarea extends CI_Controller {
 	/* funciones nuevas SST */
 
 	public function cerrarTarea(){	
-		// $datoss = $this->input->post();
-		// var_dump($datoss);
+		// TODO: ARREGLAR ESTE CIERRE EL PROBLEMA ESTA EN EL CONTRACT RESPONDE 404 EL ERROR
 		$tipoActa = $this->input->post('tipoActa');
 		$accion = $this->input->post('accion');
 		$fechaProrroga = $this->input->post('fechaProrroga'); 
 		$idTarBonita = $this->input->post('id');
 		$idCaseBonita = $this->input->post('case_id');
 		$contract = array (
-			"tipoActa"	=>	$tipoActa,
-			"accion" => $accion,
-			"fechaProrroga" => $fechaProrroga."T00:00"
-		);		
+				"tipoActa"	=>	$tipoActa,
+				"accion" => $accion,
+				"fechaProrroga" => $fechaProrroga."T00:00"
+			);
+			
 	 	// trae la cabecera
-	 	$parametros = $this->Bonitas->conexiones();
-	 	// Cambio el metodo de la cabecera a "PUT"
+	 	$parametros = $this->Bonitas->conexiones();	 
 		$parametros["http"]["method"] = "POST";
 		$parametros["http"]["content"] = json_encode($contract);
 	 	// Variable tipo resource referencia a un recurso externo.
 	 	$param = stream_context_create($parametros);
-		$response = $this->Tareas->cerrarTarea($idTarBonita,$param);
-		//var_dump() 
+		$response['reponse_code'] = $this->Tareas->cerrarTarea($idTarBonita,$param);
+		
 		//actualiza la tbl:inspecciones
-		//FIXME: VER SI SUBE ARCHIVO O NO. CONFIGURAR RESPUESTA
 		$config = [
-		'upload_path' => './assets/inspecciones/',
-		'allowed_types' => 'pdf'
+			'upload_path' => './assets/inspecciones/',
+			'allowed_types' => 'pdf'
 		];
 		$this->load->library("upload",$config);
 		if($this->upload->do_upload('filePdf')){
-			//echo "subio ok";
+			$response['response_uploadPdf'] = true;
 		}else{
 			$this->upload->display_errors('<p>', '</p>');
 			//echo "error en subida de archivo...";
@@ -270,9 +268,10 @@ class Tarea extends CI_Controller {
 		$data['accion'] = $accion;
 		$data['fechaProrroga'] = $fechaProrroga; 
 
-		$resp = $this->Tareas->setDatosInspeccion($data,$idCaseBonita);	
-// FIXME: ARREGLAR A VUELTA CON CONDICIONALESDE INSERCION DE TABLA Y RESPUESTA BPM
-	 	echo json_encode(true);
+		$response['response_inspeccion'] = $this->Tareas->setDatosInspeccion($data,$idCaseBonita);	
+		// FIXME: ARREGLAR A VUELTA CON CONDICIONALESDE INSERCION DE TABLA Y RESPUESTA BPM
+		//dump($response,'respuesta: ');
+	 	echo json_encode($response);
 	}
 
 	public function reasignarInspector(){
@@ -426,128 +425,112 @@ class Tarea extends CI_Controller {
 	// trae datos para llenar notificaion estandar y formulario asociado
 	public function detaTarea($permission,$idTarBonita){
 
-			//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
-			$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
+		//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
+		$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
 
-			// Trae id_listarea desde BPM sino '0' si la tarea es solo de BPM(no form asociado)
-			$id_listarea = $this->getIdTareaTraJobs($idTarBonita);
+		// Trae id_listarea desde BPM sino '0' si la tarea es solo de BPM(no form asociado)
+		$id_listarea = $this->getIdTareaTraJobs($idTarBonita);
 
-			$idOT = $this->Tareas->getIdOtPorIdBPM($idTarBonita);
+		$idOT = $this->Tareas->getIdOtPorIdBPM($idTarBonita);
 
-			// trae id de pedido trabajo por caseId para guardar en form inicial
-			$caseId = $data['TareaBPM']["caseId"];
-			$ptr_id = $this->Tareas->getPtrIdPorCaseId($caseId);
-			//var_dump($ptr_id);
-			//dump_exit($ptr_id);
-			//si trae id_listarea (TJobs)
-			if($id_listarea != 0){
-				// trae id de form asociado a tarea std (las tareas de BPM se cargaran para asociar a form).
+		// trae id de pedido trabajo por caseId para guardar en form inicial
+		$caseId = $data['TareaBPM']["caseId"];
+		$ptr_id = $this->Tareas->getPtrIdPorCaseId($caseId);
+		
+		//si trae id_listarea (TJobs)
+		if($id_listarea != 0){
+			// trae id de form asociado a tarea std (las tareas de BPM se cargaran para asociar a form).
 
-				$data['id_listarea'] = $id_listarea;
+			$data['id_listarea'] = $id_listarea;
 
-				$idTareaStd = $this->Tareas->getTarea_idListarea($id_listarea);
-				$idForm = $this->Tareas->getIdFormPorIdTareaSTD($idTareaStd); // si es 0 no hay form asociado
+			$idTareaStd = $this->Tareas->getTarea_idListarea($id_listarea);
+			$idForm = $this->Tareas->getIdFormPorIdTareaSTD($idTareaStd); // si es 0 no hay form asociado
 
-				// si hay id de formulario
-				if($idForm != 0){
-					// confirma si hay form guardado de esa listarea
-					if ($this->Tareas->getEstadoForm($idTarBonita)) {
-						//echo "hay form guardado";
-					}
-					else{
-						//echo "no hay form guradado";
-						// guarda form inicial vacio
-						$this->Tareas->setFormInicial($idTarBonita,$idForm,$ptr_id);
-					}
+			// si hay id de formulario
+			if($idForm != 0){
+				// confirma si hay form guardado de esa listarea
+				if ($this->Tareas->getEstadoForm($idTarBonita)) {
+					//echo "hay form guardado";
 				}
-
-				// si hay formulario
-				if($idForm != 0){
-					$data['idForm']	= $idForm;
-					// carga datos del formulario para modal
-					$data['form'] = $this->Tareas->get_form($idTarBonita,$idForm);
-				}else{
-					$data['idForm'] = 0;
+				else{
+					//echo "no hay form guradado";
+					// guarda form inicial vacio
+					$this->Tareas->setFormInicial($idTarBonita,$idForm,$ptr_id);
 				}
+			}
 
-			//solo tarea BPM con o sin formulario
+			// si hay formulario
+			if($idForm != 0){
+				$data['idForm']	= $idForm;
+				// carga datos del formulario para modal
+				$data['form'] = $this->Tareas->get_form($idTarBonita,$idForm);
 			}else{
+				$data['idForm'] = 0;
+			}
 
-					$nomtarea = $data['TareaBPM']["displayName"];
-					$id = $this->Tareas->getidFormTareaBPM($nomtarea);
+		//solo tarea BPM con o sin formulario
+		}else{
 
-					if($id){
-						$idForm = $id[0]['form_asoc'];
+				$nomtarea = $data['TareaBPM']["displayName"];
+				$id = $this->Tareas->getidFormTareaBPM($nomtarea);
 
-						// si hay id de formulario
-						if($idForm != 0){
-							// confirma si hay form guardado de esa listarea
-							if ($this->Tareas->getEstadoForm($idTarBonita)) {
-								//echo "hay form guardado";
-							}
-							else{
+				if($id){
+					$idForm = $id[0]['form_asoc'];
 
-								$this->Tareas->setFormInicial($idTarBonita,$idForm,$ptr_id);
-							}
+					// si hay id de formulario
+					if($idForm != 0){
+						// confirma si hay form guardado de esa listarea
+						if ($this->Tareas->getEstadoForm($idTarBonita)) {
+							//echo "hay form guardado";
 						}
+						else{
 
-						$data['idForm'] = $id[0]['form_asoc'];
-						$data['form'] = $this->Tareas->get_form($idTarBonita,$idForm);
-
-					}else{
-
-						$data['idForm'] = 0;
-						$idForm=0;
+							$this->Tareas->setFormInicial($idTarBonita,$idForm,$ptr_id);
+						}
 					}
 
-			}
-				// si es 0 no hay form asociado
-			//dump_exit($idForm);
-			$data['permission'] = $permission;
-			$data['idOT'] = $idOT;
-			//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
-			$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
-			$caseId = $data['TareaBPM']["caseId"];
-			dump($caseId, 'case id:');
-			//$caseId =75;
-			// trae id pedido de trabajo desde trj_pedido_trabajo
-			//$pedTrab = $this->Tareas->getIdPedTrabajo($caseId);
-			//var_dump($pedTrab[0]['petr_id']);
+					$data['idForm'] = $id[0]['form_asoc'];
+					$data['form'] = $this->Tareas->get_form($idTarBonita,$idForm);
+
+				}else{
+
+					$data['idForm'] = 0;
+					$idForm=0;
+				}
+
+		}
+			// si es 0 no hay form asociado
+		//dump_exit($idForm);
+		$data['permission'] = $permission;
+		$data['idOT'] = $idOT;
+		//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
+		$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
+		$caseId = $data['TareaBPM']["caseId"];			
+
+		// trae datos de inspeccion por case_id
+		$data['datos'] = $this->Tareas->detaInspecciones($caseId);
 	
+		$data['idTarBonita'] = $idTarBonita;
 
-			//$data['idPedTrabajo'] = $datInspecciones[0]['petr_id'];
-			//$data['codInterno'] = $datInspecciones[0]['cod_interno'];
+		//FLEIVA COMENTARIOS
+		$data['comentarios'] = $this->ObtenerComentariosBPM($caseId);
+		$data['timeline'] = $this->ObtenerLineaTiempo($caseId);
 
-			//$data['datos'] = $this->Tareas->detaTareas($id_listarea);
 
-			// trae datos de inspeccion por case_id
-			$data['datos'] = $this->Tareas->detaInspecciones($caseId);
+		switch ($data['TareaBPM']['displayName']) {
 			
-			//dump_exit($data['datos']);
+			case 'Reasignar Inspector a Inspección':
+						$this->load->view('tareas/view_reasignarInspector', $data);
+						break;
 
-			$data['idTarBonita'] = $idTarBonita;
+			case 'Realiza Inspección':
+						$this->load->view('tareas/view_realizaInspeccion', $data);
+						break;	
 
-			//FLEIVA COMENTARIOS
-		 	$data['comentarios'] = $this->ObtenerComentariosBPM($caseId);
-			$data['timeline'] = $this->ObtenerLineaTiempo($caseId);
-
-
-			switch ($data['TareaBPM']['displayName']) {
-				
-				case 'Reasignar Inspector a Inspección':					
-							//var_dump($data);	
-							$this->load->view('tareas/view_reasignarInspector', $data);
-							break;
-
-				case 'Realiza Inspección':
-							//var_dump($data);
-							$this->load->view('tareas/view_realizaInspeccion', $data);
-							break;	
-
-				default:				
-							$this->load->view('tareas/view_', $data);				
-							break;
-			}
+			default:				
+						$this->load->view('tareas/view_', $data);				
+						break;
+		}
 	}
 
 	public function getDenPorBpmId(){
