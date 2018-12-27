@@ -544,8 +544,8 @@
     </div> <!--/ .modal-body -->
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" onclick="reset()" data-dismiss="modal">Cancelar</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarDenuncia()">Guardar</button>
+      <button type="button" class="btn btn-default" onclick="reset()" data-dismiss="modal">Cerrar</button>
+      <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarDenuncia()">Guardar</button> -->
     </div>
   </div> <!-- / .modal-conten -->
 </div>
