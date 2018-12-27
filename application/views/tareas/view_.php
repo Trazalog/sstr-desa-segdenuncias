@@ -73,6 +73,7 @@
 																<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
 																<!-- id de task en bonita -->
 																<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
+																
 															</div>
 														</div>
 
@@ -132,8 +133,8 @@
                           <input type="text" name="case_id" class="form-control hidden" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
 													<input type="text" name="id" class="form-control hidden" id="id" value="<?php echo $TareaBPM["id"] ?>">
                           <input type="text" name="estableid" class="form-control hidden" id="estableid" value="<?php echo $datos[0]['estableid'] ?>">                          
-                          <!-- <input type="text" name="inspectorid" class="form-control" id="inspectorid" value="<?php //echo $datos[0]['inspectorid'] ?>">
-                          <textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php //echo $TareaBPM['displayDescription']?></textarea>	 -->
+                          <input type="text" name="tipoTarea" class="form-control" id="inspectorid" value="estandar">
+                          <!-- <textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php //echo $TareaBPM['displayDescription']?></textarea>	 -->
 
 												</form>
 
@@ -379,7 +380,7 @@
 <script>
 
 $('#filePdf').on('change', function() {
-        $('#adjunto').attr("href",URL.createObjectURL(this.files[0]));              
+  $('#adjunto').attr("href",URL.createObjectURL(this.files[0]));              
 });
 
 	evaluarEstado();
@@ -453,43 +454,19 @@ $('#filePdf').on('change', function() {
 	// termina la tarea en BPM y guarda los datos en  BD	
 	function tareaTerminada(){
 		
-		var errorInsp = true;
-		
-		if( $("input[name='tipoActa']:radio").is(':checked')	 ){
-			alert('chequeado tipo acta');
-			errorInsp = false;
-		}else{
-			alert('Por favor seleccione un tipo de Acta...');
-		}
-
-		if ( $("input[name='accion']:radio").is(':checked') ) {
-			alert('chequeado accion');
-			errorInsp = false;
-		} else {
-			alert('Por favor seleccione una acción...');
-		}
-
-		if ($('#filePdf').val() == '') {
-			alert('Por favor suba el acta en formato PDF...');
-		} else {
-			errorInsp = false;
-		}
-
-		if(!errorInsp){
-			var formData = new FormData($("#formInspeccion")[0]);
-			/* Ajax de Grabado en BD */
-			$.ajax({
-				url: 'index.php/Tarea/cerrarTarea',
-				type: 'POST',
-				data: formData,
-				cache: false,
-				contentType: false,
-				processData: false,
-				success: function (respuesta) {						
-							$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
-					}
-			});
-		}				
+		var formData = new FormData($("#formInspeccion")[0]);
+		/* Ajax de Grabado en BD */
+		$.ajax({
+			url: 'index.php/Tarea/cerrarTarea',
+			type: 'POST',
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (respuesta) {						
+						$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+				}
+		});					
 	}	
 
 	// Boton Hecho generico
@@ -856,50 +833,6 @@ $('#filePdf').on('change', function() {
 	$('.fecha').datepicker({
 		autoclose: true
 	});
-
-
-
-
-	// CABECERA
-		// carga denuncias por establecimiento en modal agregar
-		// cargarCabecera();
-		// function cargarCabecera(){
-			
-		//   //var idEstab = $('#estable option:selected').val();
-		// 	var bpm_Id = $('#caseId').val();
-		// 	$('.insp').append(bpm_Id);
-		// 	var tbl = $('#tblDenEstab');
-			
-		//   $.ajax({
-		//     data: { bpm_Id : bpm_Id },
-		//     dataType: 'json',
-		//     type: 'POST',
-		//     url: 'index.php/Tarea/getDenPorBpmId',
-		//     success: function(data){             
-		//             $('#tblDenEstab tbody tr').remove();
-		//             var trow = ""; 
-		//             for (var i=0; i< data.length; i++) {                  
-
-		//               var tr = "<tr id='"+data['denunciaid']+"'>";
-		//               var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-		//                 var tipo = "<td class='' style='text-align: left'> "+data[i]['denunciatipo'] +" </td>" ;
-		//                 var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
-		//                 var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
-		//               var trCierre = "</tr>";
-								
-		//               trow = tr + tdDenunciaId + tipo + tdfecha + tdmotivos;
-		//               // Agrego a tabla
-		//               $(tbl).append(trow);                                  
-		//             }             
-							
-		//     },
-		//     error: function(result){
-		//       console.error("Error cargando denuncias por estabelcimiento");
-		//     },
-		//   });
-
-		// }
-
 
 
 </script>

@@ -149,7 +149,7 @@
 																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf" /></span>
 																<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
 															</div>
-															<a id="adjunto" target="_blank">Ver Archivo Adjunto</a>
+															<a id="adjunto" href="" target="_blank">Ver Archivo Adjunto</a>
 														</div>
 													</div>	
 												</div>	<!-- /.col-sm-12 col-md-12 -->
@@ -434,7 +434,7 @@
 <script>
 
 $('#filePdf').on('change', function() {
-        $('#adjunto').attr("href",URL.createObjectURL(this.files[0]));              
+  $('#adjunto').attr("href",URL.createObjectURL(this.files[0])); 	            
 });
 
 	evaluarEstado();
@@ -512,9 +512,10 @@ $('#filePdf').on('change', function() {
 		
 		if( $("input[name='tipoActa']:radio").is(':checked')	 ){
 			//alert('chequeado tipo acta');
-			errorInsp = false;
+			errorInsp = false;			
 		}else{
 			alert('Por favor seleccione un tipo de Acta...');
+			return;
 		}
 
 		if ( $("input[name='accion']:radio").is(':checked') ) {
@@ -522,15 +523,17 @@ $('#filePdf').on('change', function() {
 			errorInsp = false;
 		} else {
 			alert('Por favor seleccione una acción...');
+			return;
 		}
 
 		if ($('#filePdf').val() == '') {
 			alert('Por favor suba el acta en formato PDF...');
+			return;
 		} else {
 			errorInsp = false;
 		}
 
-		if(!errorInsp){
+		if(errorInsp == false){
 			var formData = new FormData($("#formInspeccion")[0]);
 			/* Ajax de Grabado en BD */
 			$.ajax({
@@ -541,10 +544,9 @@ $('#filePdf').on('change', function() {
 				contentType: false,
 				processData: false,
 				success: function (data) {	
-
-					console.table(data);
+					var repuesta = JSON.parse(data);					
 					// toma a tarea exitosamente
-					if (data['reponse_code']['reponse_code'] == 204) {								
+					if (repuesta['reponse_code'] == 204) {								
 						$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
 					}else{
 						alert('Error en BPM. La tarea no ha podido ser completada...');
