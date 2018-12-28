@@ -41,9 +41,7 @@
                     // }  	                
   	                if (strpos($permission,'View') !== false) {
                       if ($e['inspeccionid'] > 0) {
-                        echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="cursor: pointer; margin-left: 15px;" data-denunciaId="'.$id.'"></i>';
-                      } else {
-                        // echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="margin-left: 15px;" data-denunciaId="'.$id.'" disabled></i>';
+                        echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="cursor: pointer; margin-left: 15px;" data-denunciaId="'.$id.'" title="Ver inspecciones por Denuncia"></i>';
                       }                      
                     }
                     if (strpos($permission,'Del') !== false) {
@@ -211,7 +209,7 @@
   $(".btnInsp").on("click", function(e){
     e.preventDefault();    
     var idDenuncia = $(this).data('denunciaid'); 
-    //alert(idDenuncia);
+    alert(idDenuncia);
     WaitingOpen();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/listInspPorDenuncia/<?php echo $permission; ?>/" + idDenuncia + "/");

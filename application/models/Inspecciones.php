@@ -190,8 +190,7 @@ class Inspecciones extends CI_Model
 
 	// devuelve listado de inspecciones por id de denuncia
 	function listInspPorDenuncia($idDenuncia){
-		//FIXME: SACAR HARDCODE JEJE
-		$idDenuncia = 55;
+	
 		$this->db->select('*,concat(tbl_establecimiento.establecalle," - ",tbl_establecimiento.establealtura," - ",localidades.localidad) as direccionCompleta');
 		$this->db->from('tbl_inspecciones');
 		$this->db->join('tbl_inspectores', 'tbl_inspecciones.inspectorid = tbl_inspectores.inspectorid');

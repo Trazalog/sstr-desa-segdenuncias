@@ -8,31 +8,10 @@ class Denuncias extends CI_Model
 	// lista en pantalla denuncia nueva de oficio
 	function denunciasList(){
 		
-		$this->db->select('tbl_denuncias.denunciaid,
-											tbl_denuncias.denunciasfecha,
-											tbl_denuncias.denunciariesgo,
-											tbl_denuncias.denunciaprograma,
-											tbl_denuncias.denunciafechaverif,
-											tbl_denuncias.denunciainclucion,
-											tbl_denuncias.denuncianroobra,
-											tbl_denuncias.denuncianroacta,
-											tbl_denuncias.denunciamotivos,
-											tbl_denuncias.estableid,
-											tbl_denuncias.denunciaestado,
-											tbl_denuncias.denunciatipo,
-											tbl_denuncias.denunciacuit,
-											tbl_establecimiento.establecalle,
-											tbl_establecimiento.establealtura,
-											provincias.provincia,
-											localidades.localidad,
-											trg_inspecciondenuncia.inspeccionid,
-											tbl_empleadores.emplearazsoc');
+		$this->db->select('tbl_denuncias.*,trg_inspecciondenuncia.inspeccionid');
 		$this->db->from('tbl_denuncias');
-		$this->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid', 'left');
-		$this->db->join('tbl_establecimiento', 'tbl_denuncias.estableid = tbl_establecimiento.estableid');
-		$this->db->join('provincias', 'provincias.id = tbl_establecimiento.provid');
-		$this->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
-		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
+		$this->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid', 'left');	
+		$this->db->group_by('denunciaid');
 		
 		$result = $this->db->get();
 		if($result->num_rows()>0){
@@ -58,8 +37,6 @@ class Denuncias extends CI_Model
 
 		return $empleadores;
 	}
-
-
 	// trae establecimientos por estado AC
 	function getEstablecimientos($id){
 
@@ -76,8 +53,7 @@ class Denuncias extends CI_Model
 			return array();
 		}	    
 
-	}
-	
+	}	
 	// guarda denuncia nueva de oficio
 	function setDenunciaOficio($data){      
 		$response = $this->db->insert('tbl_denuncias', $data);
