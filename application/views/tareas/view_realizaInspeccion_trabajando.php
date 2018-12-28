@@ -155,7 +155,7 @@
 												</div>	<!-- /.col-sm-12 col-md-12 -->
 													
 													
-													<!-- Acciones     -->
+												<!-- Acciones     -->
 												<div class="col-sm-12 col-md-12">
 													<div class="col-sm-6 col-md-6">		
 														<h4>Acciones</h4>                          
@@ -430,13 +430,11 @@
 	}
 </style>
 
-
 <script>
 
-$('#filePdf').on('change', function() {
-  $('#adjunto').attr("href",URL.createObjectURL(this.files[0])); 	            
-});
-
+	$('#filePdf').on('change', function() {
+		$('#adjunto').attr("href",URL.createObjectURL(this.files[0])); 	            
+	});
 	evaluarEstado();
 	function evaluarEstado() {
 
@@ -448,7 +446,6 @@ $('#filePdf').on('change', function() {
 			deshabilitar();
 		}
 	}
-
 	function habilitar() {
 		// habilito btn y textarea       
 		$("#btonsoltr").show();
@@ -470,7 +467,6 @@ $('#filePdf').on('change', function() {
 		$("#comentario").hide();
 		$("#formulario").hide();
 	}
-
 	// Volver al atras
 	$('#cerrar').click(function cargarVista() {
 		WaitingOpen();
@@ -504,7 +500,6 @@ $('#filePdf').on('change', function() {
 			}
 		});
 	});
- 
 	// termina la tarea en BPM y guarda los datos en  BD	
 	function tareaTerminada(){
 		
@@ -558,50 +553,6 @@ $('#filePdf').on('change', function() {
 			});
 		}				
 	}	
-
-	// Boton Hecho generico
-	function estado() {
-		var idTarBonita = $('#idTarBonita').val();
-		$.ajax({
-			type: 'POST',
-			data: {
-				'idTarBonita': idTarBonita,
-			},
-			url: 'index.php/Tarea/estadoCuenta',
-			success: function (result) {
-				console.log(result);
-				alert("SII");
-			},
-			error: function (result) {
-				alert("Noo");
-				console.log(result);
-			},
-			dataType: 'json'
-		});
-	}
-	//Funcion COMENTARIOS
-	function guardarComentario() {
-		console.log("Guardar Comentarios...");
-		var id = <?php echo json_encode($TareaBPM['caseId']);?>;
-		var nombUsr = $('#usrName').val();
-		var apellUsr = $('#usrLastName').val();;
-
-		var comentario = $('#comentario').val();
-		$.ajax({
-			type: 'POST',
-			data: { 'processInstanceId': id, 'content': comentario },
-			url: 'index.php/Tarea/GuardarComentario',
-			success: function (result) {
-				console.log("Submit");
-				var lista = $('#listaComentarios');
-				lista.prepend(' <hr/><li><h4>' + nombUsr + ' ' + apellUsr + '<small style="float: right">Hace un momento</small></h4><p>' + comentario + '</p></li>');
-				$('#comentario').val('');
-			},
-			error: function (result) {
-				console.log("Error");
-			}
-		});
-	}
 	// Toma tarea en BPM
 	function tomarTarea() {
 
@@ -651,189 +602,36 @@ $('#filePdf').on('change', function() {
 			},
 			dataType: 'json'
 		});
-	}
-
-	/** Formulario **/
-
-	var click = 0;
-	$('#formulario').click(function () {
-		click = 1;
-	});
-
-	// trae valores validos para llenar form asoc.  
-	function getformulario(event) {
-
-		// trae valor de imagenes y llena inputs.
-		getImgValor();
-
-		// llena form una sola vez al primer click
-		if (click == 0) {
-			var estadoTarea = $('#estadoTarea').val();
-			// toma id de form asociado a listarea en TJS
-			var idForm = $('#idform').val();
-			console.log('id de form: ');
-			console.log(idForm);
-
-			// guarda el id form asoc a tarea std en modal para guardar
-			$('#idformulario').val(idForm);
-
-			idForm = idForm;
-			// trae valores validos para llenar componentes de form asoc.
-			$.ajax({
-				type: 'POST',
-				data: { idForm: idForm },
-				url: 'index.php/Tarea/getValValido',
-				success: function (data) {
-					//console.log('valores de componentes: ');
-					//console.table(data);                   
-
-					llenaComp(data);
-				},
-				error: function (result) {
-
-					console.log(result);
-				},
-				dataType: 'json'
-			});
-		}
-	}
-
-	// llena los componentes de form asoc con valores validos
-	function llenaComp(data) {
-
-		var id_listarea = $('#tbl_listarea').val();
-		$('#id_listarea').val(id_listarea);
-
-
-		$.each(data, function (index) {
-			//$( "#" + i ).append(  );
-			var idSelect = data[index]['idValor'];
-			//console.log('idvalor: '+ data[index]['idValor'] + '-- valor: ' + data[index]['VALOR']);
-			var i = 0;
-			var valor = "";
-			var valorSig = "";
-
-			$('#' + idSelect).append($('<option />',
-				{ value: data[index]['VALOR'], text: data[index]['VALOR'] }));
-
-			valor = data[index]['idValor'];
-			valorSig = data[index]['idValor'];
-		});
-	}
-
-	//Trae valor de las imagenes
-	function getImgValor() {
-		var valores;
-		// guarda el id form asoc a tarea std en modal para guardar
-		idForm = $('#idform').val();
-		idPedTrabajo = $('#idPedTrabajo').val();
-		// trae valores validos para llenar componentes input files.
-		$.ajax({
-			type: 'POST',
-			data: {
-				idForm: idForm,
-				idPedTrabajo: idPedTrabajo
-			},
-			url: 'index.php/Tarea/getImgValor',
-			success: function (data) {
-				console.table(data);
-				valores = data;
-				llenarInputFile(valores);
-			},
-			error: function (result) {
-
-				console.log(result);
-			},
-			dataType: 'json'
-		});
-	}
-
-	// carga inputs auxiliares con url de imagen desde BD
-	function llenarInputFile(data) {
-
-		var id_listarea = $('inptut.archivo').val();
-		var base_url = "http://35.239.41.196/mtba-desa-procprod-desarrollo/";
-		var imagen = "";
-		$.each(data, function (index) {
-			var id = data[index]['valoid'];
-			var valor = data[index]['valor'];
-			//carga el valor que viene de DB
-			//$("."+data[index]['valoid']).val(valor);
-			imagen = base_url + valor;
-			$("a." + data[index]['valoid']).attr("href", imagen);
-
-			console.log("valor id: ");
-			console.log(data[index]['valoid']);
-			console.log("  imagen: ");
-			console.log(valor);
-
-			console.log(" url imagen: ");
-			console.log(imagen);
-			//$("#"+data[index]['valoid']).val(valor);
-		});
-
-
-
-		// var id_listarea = $('inptut.archivo').val();
-
-		// $.each(data,function( index ) {
-
-		//   var id = data[index]['valoid'];
-		//   var valor = data[index]['valor'];
-		//   //carga el valor que viene de DB
-		//   $("."+data[index]['valoid']).val(valor);
-		//      console.log("valor id: ");
-		//      console.log(data[index]['valoid']);
-		//      console.log("  imagen: ");
-		//      console.log(valor);
-		//      //$("#"+data[index]['valoid']).val(valor);
-		// });
-	}
-
-	// Validacion de campos obligatorios y vacios
-	function validarFormGuardado() {
-
-		var id_listarea = $('#id_listarea').val();
-
-		var oblig = $('.requerido');
-		//console.log("oblig");
-		//console.table(oblig);
-		var obligArrayIds = [];
-		oblig.each(function () {
-			obligArrayIds.push($(this).attr('name'));
-		});
-		//console.log('obligatorios: ');
-		//console.log(obligArray),
-		$.ajax({
-			type: 'POST',
-			data: {
-				obligArrayIds: obligArrayIds,
-				id_listarea: id_listarea
-			},
-			url: 'index.php/Tarea/validarFormGuardado',
-			success: function (data) {
-				console.log('por sucess: ');
-				console.log(data);
-				if (data == false) {
-					$('#error').fadeIn('slow');
-				}
-				else {
-					$('#error').fadeOut('slow');
-				}
-
-			},
-			error: function (result) {
-				console.log('por error: ');
-				console.log(data);
-				console.log(result);
-			},
-			dataType: 'json'
-		});
-	}
+	}	
 
 	$('.fecha').datepicker({
 		autoclose: true
 	});
+
+	//Funcion COMENTARIOS
+	function guardarComentario() {
+		console.log("Guardar Comentarios...");
+		var id = <?php echo json_encode($TareaBPM['caseId']);?>;
+		var nombUsr = $('#usrName').val();
+		var apellUsr = $('#usrLastName').val();;
+
+		var comentario = $('#comentario').val();
+		$.ajax({
+			type: 'POST',
+			data: { 'processInstanceId': id, 'content': comentario },
+			url: 'index.php/Tarea/GuardarComentario',
+			success: function (result) {
+				console.log("Submit");
+				var lista = $('#listaComentarios');
+				lista.prepend(' <hr/><li><h4>' + nombUsr + ' ' + apellUsr + '<small style="float: right">Hace un momento</small></h4><p>' + comentario + '</p></li>');
+				$('#comentario').val('');
+			},
+			error: function (result) {
+				console.log("Error");
+			}
+		});
+	}
+	
 
 </script>
 
