@@ -59,60 +59,46 @@
 												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
 												>
 
-												<form>
+											
 													<div class="panel panel-default">
-														<h4 class="panel-heading">INFORMACION:</h4>
-
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="tarea">Tarea</label>
-																<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
-																 disabled><!-- id de listarea -->
-																<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
-																<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
-																<!-- id de task en bonita -->
-																<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
-																
-															</div>
+														
+														<div class="panel-heading">
+															<h3 class="panel-title">Información:</h3>															
 														</div>
 
+														<div class="panel-body">
 
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="fecha">Fecha de Creación</label>
-																<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
-																 disabled>
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="tarea">Tarea</label>
+																	<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
+																	disabled><!-- id de listarea -->
+																	<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
+																	<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
+																	<!-- id de task en bonita -->
+																	<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
+																	
+																</div>
 															</div>
-														</div><br>
 
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="fecha">Fecha de Creación</label>
+																	<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
+																	disabled>
+																</div>
+															</div><br>													
 
-														<!-- <div class="form-group ">
-															<div class="col-sm-6 col-md-6 ">
-																<label for="ot ">Orden de Trabajo:</label>
-																<input type="text " class="form-control " id="ot
-                                                                    "
-																 placeholder=" " value="<?php echo $datos[0][ 'id_orden'] ?>" disabled>
+															<div class="form-group">
+																<div class="col-sm-12 col-md-12">
+																	<label for="detalle">Detalle</label>
+																	<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
+																</div>
 															</div>
-														</div><br>
 
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="duracion_std">Duracion Estandar (minutos):</label>
-																<input type="text" class="form-control" id="duracion_std" placeholder="" value="<?php echo $datos[0]['duracion_std']  ?>"
-																 disabled>
-															</div></br>
 														</div>
-
-														<br> -->
-
-														<div class="form-group">
-															<div class="col-sm-12 col-md-12">
-																<label for="detalle">Detalle</label>
-																<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
-															</div>
-														</div></br> </br> </br> </br> </br>
-													</div>
+														
+													</div> <!--	/panel panel-default-->
 
 													<div class="form-group">
 														<div class="col-sm-12 col-md-12">
@@ -120,7 +106,7 @@
 															<?php if($idForm != 0){echo '<button type="button" id="formulario" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="getformulario()">Completar Formulario</button>';}?>
 														</div>
 													</div>
-												</form>
+											
 												
 												<br><br>
                               
@@ -133,7 +119,7 @@
                           <input type="text" name="case_id" class="form-control hidden" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
 													<input type="text" name="id" class="form-control hidden" id="id" value="<?php echo $TareaBPM["id"] ?>">
                           <input type="text" name="estableid" class="form-control hidden" id="estableid" value="<?php echo $datos[0]['estableid'] ?>">                          
-                          <input type="text" name="tipoTarea" class="form-control" id="inspectorid" value="estandar">
+                          <input type="text" name="tipoTarea" class="form-control hidden" id="tipoTarea" value="estandar">
                           <!-- <textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php //echo $TareaBPM['displayDescription']?></textarea>	 -->
 
 												</form>
