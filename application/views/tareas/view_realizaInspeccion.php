@@ -413,7 +413,7 @@
 	$('#filePdf').on('change', function() {
 		$('#adjunto').attr("href",URL.createObjectURL(this.files[0])); 	            
 	});
-	//evaluarEstado();
+	evaluarEstado();
 	function evaluarEstado() {
 
 		var asig = $('#asignado').val();

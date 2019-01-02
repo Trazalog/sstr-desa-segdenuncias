@@ -29,7 +29,7 @@ if(!function_exists('cargarCabecera')){
 				}
 
 			// consulta para Inspecciones			
-			$ci->db->select('trg_actas.*,tbl_inspecciones.bpm_id');
+			$ci->db->select('trg_actas.*,tbl_inspecciones.*');
 			$ci->db->from('trg_actas');
 			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_actas.inspeccionid');			
 			$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
@@ -37,9 +37,7 @@ if(!function_exists('cargarCabecera')){
 			if ($queryInspecciones->num_rows()!=0){ 
 				$resultInspecciones = $queryInspecciones->result_array(); 
 			} 
-				
-			//dump($resultInspecciones, 'inspecciones');
-
+			
 			//consulta para Denuncia 
 				$ci->db->select('tbl_denuncias.*');
 				$ci->db->from('tbl_denuncias');

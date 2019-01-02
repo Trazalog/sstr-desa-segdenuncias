@@ -34,7 +34,7 @@
                   echo '<tr id="'.$id.'" class="'.$id.'" >';
   	              	echo '<td>';
                     if (strpos($permission,'View') !== false) {
-                      echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" title="Ver detalle"></i>';
                     }
                     // if (strpos($permission,'Add') !== false) {
                     //   echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" data-toggle="modal" data-target="#modaleditar" ></i>';
@@ -45,7 +45,7 @@
                       }                      
                     }
                     if (strpos($permission,'Del') !== false) {
-  	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue btnDelete" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'"></i>';
+  	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue btnDelete" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" title="Eliminar"></i>';
   	                }
   	                echo '</td>';
   									echo '<td>'.$e['denunciasfecha'].'</td>';
@@ -209,7 +209,6 @@
   $(".btnInsp").on("click", function(e){
     e.preventDefault();    
     var idDenuncia = $(this).data('denunciaid'); 
-    alert(idDenuncia);
     WaitingOpen();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/listInspPorDenuncia/<?php echo $permission; ?>/" + idDenuncia + "/");
