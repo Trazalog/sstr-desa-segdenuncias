@@ -4,49 +4,53 @@ if(!function_exists('cargarCabecera')){
     
 		function cargarCabecera($caseId){
 			// consulta para empleador y establecimiento
-			$ci =& get_instance();			
-			//load databse library
-			$ci->load->database();			
-			//get data from database	
-			$ci->db->select('tbl_empleadores.*,
-										tbl_establecimiento.establecalle,
-										tbl_establecimiento.establealtura,
-										tbl_establecimiento.dptoid,
-										tbl_establecimiento.provid,
-										tbl_inspecciones.bpm_id,
-										tbl_establecimiento.establelongitud,
-										provincias.provincia,
-										localidades.localidad');
-			$ci->db->from('tbl_establecimiento');
-			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
-			$ci->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
-			$ci->db->join('provincias', 'provincias.id = tbl_establecimiento.provid');
-			$ci->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
-			$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
-			$query = $ci->db->get();
-			if($query->num_rows() > 0){
-					$result = $query->row_array();
-			}
+				$ci =& get_instance();			
+				//load databse library
+				$ci->load->database();			
+				//get data from database	
+				$ci->db->select('tbl_empleadores.*,
+											tbl_establecimiento.establecalle,
+											tbl_establecimiento.establealtura,
+											tbl_establecimiento.dptoid,
+											tbl_establecimiento.provid,
+											tbl_inspecciones.bpm_id,
+											tbl_establecimiento.establelongitud,
+											provincias.provincia,
+											localidades.localidad');
+				$ci->db->from('tbl_establecimiento');
+				$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
+				$ci->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
+				$ci->db->join('provincias', 'provincias.id = tbl_establecimiento.provid');
+				$ci->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
+				$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
+				$query = $ci->db->get();
+				if($query->num_rows() > 0){
+						$result = $query->row_array();
+				}
 
-			// consulta para Inspecciones
-			$ci->db->select('tbl_inspecciones.*');
-			$ci->db->from('tbl_inspecciones');
+			// consulta para Inspecciones			
+			$ci->db->select('trg_actas.*,tbl_inspecciones.bpm_id');
+			$ci->db->from('trg_actas');
+			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_actas.inspeccionid');			
 			$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
 			$queryInspecciones = $ci->db->get();
 			if ($queryInspecciones->num_rows()!=0){ 
 				$resultInspecciones = $queryInspecciones->result_array(); 
 			} 
-						
-			// consulta para Denuncia 
-			$ci->db->select('tbl_denuncias.*');
-			$ci->db->from('tbl_denuncias');
-			$ci->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid');
-			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
-			$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
-			$queryDenuncias = $ci->db->get();
-			if ($queryDenuncias->num_rows()!=0){ 
-				$resultDenuncias = $queryDenuncias->result_array(); 
-			} 
+				
+			//dump($resultInspecciones, 'inspecciones');
+
+			//consulta para Denuncia 
+				$ci->db->select('tbl_denuncias.*');
+				$ci->db->from('tbl_denuncias');
+				$ci->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid');
+				$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
+				$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
+				
+				$queryDenuncias = $ci->db->get();
+				if ($queryDenuncias->num_rows()!=0){ 
+					$resultDenuncias = $queryDenuncias->result_array(); 
+				} 
 
 			echo '<div id="collapseDivCli" class="box box-default collapsed-box box-solid">
 					<div class="box-header with-border">
@@ -120,110 +124,82 @@ if(!function_exists('cargarCabecera')){
 				';
 
 
-
+			//Inspeccion	
 			echo '<div id="collapseDiv" class="box box-default collapsed-box box-solid">
-			<div class="box-header with-border">
-					<h3 id="pedidoInfo" class="box-title">Inspeccion Nº: '.$resultInspecciones[0]['inspeccionid'].'</h3> 
+				<div class="box-header with-border">
+						<h3 id="pedidoInfo" class="box-title">Inspeccion Nº: '.$resultInspecciones[0]['inspeccionid'].'</h3> 
 
-					<input type="text" id="idDenuncia" class="form-control hidden" value="'.$resultInspecciones[0]['inspeccionid'].'" disabled/>
+						<input type="text" id="idDenuncia" class="form-control hidden" value="'.$resultInspecciones[0]['inspeccionid'].'" disabled/>
 
-					<div class="box-tools pull-right">
-							<button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" >
-									<i class="fa fa-plus"></i>
-							</button>
-					</div>
-					<!-- /.box-tools -->
-			</div>
-
-			<div class="box-body">
-				<div class="row">				
-
-					<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-									<label style="margin-top: 7px;">Tipo Acta: </label>
-									<input type="text" id="domicilio" class="form-control" value="'.$resultInspecciones[0]['tipoacta'].'" disabled/>
-							</div>
-					</div>
-
-					<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-									<label style="margin-top: 7px;">Acción: </label>
-									<input type="text" id="domicilio" class="form-control" value="'.$resultInspecciones[0]['accion'].'" disabled/>
-							</div>
-					</div>				
-
-					<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-									<label style="margin-top: 7px;">Estado: </label>
-									<input type="text" id="cuit" class="form-control" value="'.$resultInspecciones[0]['inspeestado'].'" disabled/>
-							</div>
-					</div>
-
-					<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-									<label style="margin-top: 7px;">Fecha: </label>
-									<input type="text" id="razon" class="form-control" value="'.$resultInspecciones[0]['inspeccionfechaasigna'].'" disabled/>
-							</div>
-					</div>
-
-					<div class="col-xs-12 col-sm-4">
-							<div class="form-group">
-									<label style="margin-top: 7px;">Fecha Prórroga: </label>
-									<input type="text" id="cuit" class="form-control" value="'.$resultInspecciones[0]['fechaProrroga'].'" disabled/>
-							</div>
-					</div>
-
-					<div class="col-xs-12 col-sm-4">
-						<div class="form-group">
-								<label style="margin-top: 7px;">Ver adjunto: </label>
-								<a class="form-control" href="'.base_url().$resultInspecciones[0]['adjunto'].'" id="adjunto" target="_blank">Ver Archivo Adjunto</a>
+						<div class="box-tools pull-right">
+								<button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" >
+										<i class="fa fa-plus"></i>
+								</button>
 						</div>
-					</div>  
-					
-					<div class="col-sm-12 col-md-12">
-						<label for="detalle">Detalle</label>
-						<textarea class="form-control" id="detalle" rows="3" disabled> '.$resultInspecciones[0]['inspecciondescrip'].' </textarea>
-					</div>
+						<!-- /.box-tools -->
+				</div>
 
-					<div class="col-xs-12 col-md-12">
+				<div class="box-body">
+					<div class="row">			
+
+						<div class="col-md-4 ">
+								<div class="form-group">
+										<label style="margin-top: 7px;">Fecha: </label>
+										<input type="text" id="razon" class="form-control" value="'.$resultInspecciones[0]['inspeccionfechaasigna'].'" disabled/>
+								</div>
+						</div>
+						<div class="clearfix"></div>
+
+						<div class="col-md-8 ">
+							<label for="detalle">Detalle</label>
+							<textarea class="form-control" id="detalle" rows="3" disabled> '.$resultInspecciones[0]['inspecciondescrip'].' </textarea>
+						</div>
+
+
+						<div class="col-xs-12 col-md-12">
+						<h4>Actas</h4>
+						<table class="table table-bordered table-hover" id="" width= 100%>
+							<tr>
+								<th>Tipo Acta</th>
+								<th>Acción</th>
+								<th >Fecha Prórroga</th>	
+								<th>Adjunto</th>			
+							</tr>';
+							foreach ($resultInspecciones as $insp) {					
+								echo '<tr>';					
+								echo '<td style="text-align: left" width="10%">'.$insp['tipoActa'].'</td>';	
+								echo '<td style="text-align: left" width="10%">'.$insp['accion'].'</td>';						
+								echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
+							//	echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
+								echo '<td style="text-align: left" width="10%"><a href="'.base_url().$insp['acta'].'" id="adjunto" target="_blank" > Ver Acta </a></td>';
+								
+								echo '</tr>';						
+							}
+						echo '</table> 
+						</div>
+
+						<div class="col-xs-12 col-md-12">
+							<h4>Denuncias</h4>
 							<table class="table table-bordered table-hover" id="" width= 100%>
 								<tr>
-									<th >Fecha Acta</th>
 									<th>Nº Denuncia</th>
-									<th>Motivos</th>
-								<!--	<th>Dom. Establecimiento</th>
-									<th>Tipo Denuncia</th>
-									<th>Tipo Tipo Acta</th>
-									<th>Prórroga</th>
-									<th>Estado Inspeccion</th> -->
-									
+									<th >Fecha Acta</th>						
+									<th>Motivos</th>			
 								</tr>';
-
-								foreach ($resultDenuncias as $f) {
-									//dump_exit($f);
-									echo '<tr>';
-									
-									echo '<td style="text-align: left" width="10%">'.$f['denunciasfecha'].'</td>';
-									echo '<td style="text-align: left" width="10%">'.$f['denunciaid'].'</td>';
+								foreach ($resultDenuncias as $f) {					
+									echo '<tr>';					
+									echo '<td style="text-align: left" width="10%">'.$f['denunciaid'].'</td>';	
+									echo '<td style="text-align: left" width="10%">'.$f['denunciasfecha'].'</td>';						
 									echo '<td style="text-align: left" width="10%">'.$f['denunciamotivos'].'</td>';
-									
-									// echo '<td style="text-align: left" width="10%">'.$f['establecalle'].' '.$f['establealtura'].'</td>';
-									// echo '<td style="text-align: left" width="10%">'.$f['denunciatipo'].'</td>';
-									// echo '<td style="text-align: left" width="10%">'.$f['accion'].'</td>';
-									// echo '<td style="text-align: left" width="10%">'.$f['fechaProrroga'].'</td>';
-									// //echo '<td style="text-align: left" width="10%">'.$f['inspeestado'].'</td>';
-									// echo '<td style="text-align: left" width="10%">'.($f['inspeestado'] == 'C'? 'Curso': 'otro').'</td>';							
-
-									echo '</tr>';
-									
+									echo '</tr>';						
 								}
-
 							echo '</table> 
 
-					</div>
-				</div>				
-			</div> <!-- /.box-body -->
-		</div>		';		
+						</div>	
+
+					</div>	<!-- /.row -->				
+				</div> <!-- /.box-body -->
+			</div>		';		
 		
 			}
 } 

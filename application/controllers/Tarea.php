@@ -124,38 +124,44 @@ class Tarea extends CI_Controller {
 		$tipoActa = $this->input->post('tipoActa');
 		$accion = $this->input->post('accion');
 		$fechaProrroga = $this->input->post('fechaProrroga');		
-		$tipoTarea =  $this->input->post('tipoTarea');		
+		$tipoTarea =  $this->input->post('tipoTarea');	
+		$idTarBonita = $this->input->post('id');
+		$idCaseBonita = $this->input->post('case_id');	 		
+		
+		//cierra el proceso
 		$contract = array (				
 			"tipoActa"	=>	$tipoActa,
 			"accion" => $accion,
 			"fechaProrroga" => $fechaProrroga."T00:00"
-		);		
-		$idTarBonita = $this->input->post('id');
-		$idCaseBonita = $this->input->post('case_id');	
-	 	// trae la cabecera
+		);	
 	 	$parametros = $this->Bonitas->conexiones();	 
 		$parametros["http"]["method"] = "POST";
-		$parametros["http"]["content"] = json_encode($contract);
-	 	// Variable tipo resource referencia a un recurso externo.
+		$parametros["http"]["content"] = json_encode($contract);	 	
 	 	$param = stream_context_create($parametros);
 		$response = $this->Tareas->cerrarTarea($idTarBonita,$param);	
-		//actualiza la tbl:inspecciones
-		$config = [
-			'upload_path' => './assets/inspecciones/',
-			'allowed_types' => 'pdf'
-		];
-		$this->load->library("upload",$config);
-		if($this->upload->do_upload('filePdf')){
-		}else{
-			$this->upload->display_errors('<p>', '</p>');
-		}
-		$dataImag = array("upload_data" => $this->upload->data());
-		$nom = $dataImag['upload_data']['file_name'];
-		$data['adjunto'] = "assets/inspecciones/".$nom;
-		$data['tipoActa'] = $tipoActa;
-		$data['accion'] = $accion;
-		$data['fechaProrroga'] = $fechaProrroga; 
-		$this->Tareas->setDatosInspeccion($data,$idCaseBonita);			
+		//dump($response,' response : ');
+		// TODO: PONER CONDICIONAL DE CIERRE DE TAREA EN BPM
+			//actualiza la tbl actas
+			$config = [
+				'upload_path' => './assets/inspecciones/',
+				'allowed_types' => 'pdf'
+			];
+			$this->load->library("upload",$config);
+			if($this->upload->do_upload('filePdf')){
+			}else{
+				$this->upload->display_errors('<p>', '</p>');
+			}
+			$dataImag = array("upload_data" => $this->upload->data());
+			$nom = $dataImag['upload_data']['file_name'];
+			
+			$idInspeccion = $this->Tareas->getIdInspPoridCase($idCaseBonita);
+			
+			$data['acta'] = "assets/inspecciones/".$nom;
+			$data['tipoActa'] = $tipoActa;
+			$data['accion'] = $accion;
+			$data['fechaProrroga'] = $fechaProrroga; 
+			$data['inspeccionid'] = $idInspeccion; 
+			$this->Tareas->setDatosInspeccion($data, $idInspeccion);			
 	 	echo json_encode($response);
 	}
 	public function reasignarInspector(){
@@ -184,6 +190,25 @@ class Tarea extends CI_Controller {
 		$idTarBonita = $this->input->post('idTarBonita');
 		$response = $this->Tareas->getIdOtPorIdBPM($idTarBonita);
 		//dump_exit($response);
+		echo json_encode($response);
+	}
+	// Usr Toma tarea en BPM (Vistas tareas comunes)
+	public function tomarTarea(){
+		$userdata = $this->session->userdata('user_data');
+    $usrId = $userdata[0]['usrId'];     // guarda usuario logueado
+		//dump_exit($usrId);
+		$idTarBonita = $this->input->post('idTarBonita');
+		$estado = array (
+ 		  "assigned_id"	=>	$usrId
+ 		);
+ 		// trae la cabecera
+ 		$parametros = $this->Bonitas->conexiones();
+ 		// Cambio el metodo de la cabecera a "PUT"
+ 		$parametros["http"]["method"] = "PUT";
+ 		$parametros["http"]["content"] = json_encode($estado);
+		// Variable tipo resource referencia a un recurso externo.
+		$param = stream_context_create($parametros);
+		$response = $this->Tareas->tomarTarea($idTarBonita,$param);
 		echo json_encode($response);
 	}
 	// Usr Toma tarea en BPM   CAMBIAR EL USR POR USR LOGUEADO !!!!!!!
