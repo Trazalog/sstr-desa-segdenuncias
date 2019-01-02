@@ -112,12 +112,12 @@
 
 <style>
   @media print
-{    
-    /* .no_imprimir, .no_imprimir *
-    {
-        display: none !important;
-    } */
-}
+  {    
+      /* .no_imprimir, .no_imprimir *
+      {
+          display: none !important;
+      } */
+  }
 </style>
 
 <script>
