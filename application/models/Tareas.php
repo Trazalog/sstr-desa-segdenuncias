@@ -104,10 +104,19 @@ class Tareas extends CI_Model
 		$response = $this->parseHeaders( $http_response_header );
 		return $response;
 	}	
-
-	function setDatosInspeccion($data,$idCaseBonita){
-		$this->db->where('bpm_id', $idCaseBonita);	//
-		$response = $this->db->update('tbl_inspecciones', $data);
+	// devuelve id de isnpeccion por id case
+	function getIdInspPoridCase($idCaseBonita){
+		$this->db->select('tbl_inspecciones.inspeccionid');
+		$this->db->from('tbl_inspecciones');
+		$this->db->where('tbl_inspecciones.bpm_id', $idCaseBonita);
+		$query = $this->db->get();
+		$response = $query->row('inspeccionid');
+		return $response;
+	}
+	// guarda eel acta de inspeccion
+	function setDatosInspeccion($data){
+		
+		$response = $this->db->insert("trg_actas",$data);	
 		return $response;
 	}
 

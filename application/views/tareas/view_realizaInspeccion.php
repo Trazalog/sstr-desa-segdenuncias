@@ -78,14 +78,14 @@
 																	<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
 																</div>
 															</div>
-	
+															<div class="clearfix"></div>
 															<div class="form-group">
 																<div class="col-sm-6 col-md-6">
 																	<label for="fecha">Fecha de Creación</label>
 																	<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
 																	 disabled>
 																</div>
-															</div><br>
+															</div>
 	
 															<div class="form-group">
 																<div class="col-sm-12 col-md-12">
@@ -413,7 +413,7 @@
 	$('#filePdf').on('change', function() {
 		$('#adjunto').attr("href",URL.createObjectURL(this.files[0])); 	            
 	});
-	evaluarEstado();
+	//evaluarEstado();
 	function evaluarEstado() {
 
 		var asig = $('#asignado').val();
