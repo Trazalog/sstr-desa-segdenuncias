@@ -139,9 +139,10 @@ class Tarea extends CI_Controller {
 		$parametros["http"]["content"] = json_encode($contract);	 	
 	 	$param = stream_context_create($parametros);
 		$response = $this->Tareas->cerrarTarea($idTarBonita,$param);	
-		//dump($response,' response : ');
-		// TODO: PONER CONDICIONAL DE CIERRE DE TAREA EN BPM
-			//actualiza la tbl actas
+		//dump($response["reponse_code"],' response : ');
+		if ($response["reponse_code"] == 200) {
+
+			//sube pdf
 			$config = [
 				'upload_path' => './assets/inspecciones/',
 				'allowed_types' => 'pdf'
@@ -155,14 +156,20 @@ class Tarea extends CI_Controller {
 			$nom = $dataImag['upload_data']['file_name'];
 			
 			$idInspeccion = $this->Tareas->getIdInspPoridCase($idCaseBonita);
-			
+
+			// graba en trg_actas
 			$data['acta'] = "assets/inspecciones/".$nom;
 			$data['tipoActa'] = $tipoActa;
 			$data['accion'] = $accion;
 			$data['fechaProrroga'] = $fechaProrroga; 
 			$data['inspeccionid'] = $idInspeccion; 
-			$this->Tareas->setDatosInspeccion($data, $idInspeccion);			
-	 	echo json_encode($response);
+			$this->Tareas->setDatosInspeccion($data, $idInspeccion);	
+			// actualiza en tb_inspecciones
+			$datos['tipoActa'] = $tipoActa;
+			$datos['accion'] = $accion;		
+			$this->Tareas->actualizaInspeccion($idInspeccion,$datos);
+		}
+		echo json_encode($response);
 	}
 	public function reasignarInspector(){
 
