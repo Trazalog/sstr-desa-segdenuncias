@@ -217,14 +217,25 @@
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>");
   }
   // muestra detalle de inspeccion en vista estandrar
-  $('.btnView').on("click", function(){
+  // $('.btnView').on("click", function(){
+  //   var idTarBonita = $(this).data("bpmid");
+  //   alert(idTarBonita);
+  //   WaitingOpen();
+  //   $('#content').empty();
+  //   $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/");
+  //   WaitingClose();
+  // });
+  verDetalle();  
+  function verDetalle(){
+    $('.btnView').on("click", function(){
     var idTarBonita = $(this).data("bpmid");
-    alert(idTarBonita);
+    //alert(idTarBonita);
     WaitingOpen();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/");
     WaitingClose();
   });
+  }
 
   /*  Bloque busqueda */
     // carga denuncias por establecimiento en modal agregar
@@ -253,7 +264,8 @@
                   trow = tr + tdDenunciaId + tdnroacta + tdfecha + tdmotivos;
                   // Agrego a tabla
                   $(tbl).append(trow);                                  
-                }             
+                }   
+                verDetalle();          
               
         },
         error: function(result){
@@ -352,6 +364,7 @@
             ] );
             $('#tbl_inspeccion').DataTable().draw();        
           }
+          verDetalle();
         },
         error: function(result){
           //alert(result);

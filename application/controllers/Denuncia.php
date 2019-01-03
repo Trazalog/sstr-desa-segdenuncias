@@ -11,6 +11,7 @@ class Denuncia extends CI_Controller {
 	public function index($permission){
     $data['permission'] = $permission;
     $data['list'] = $this->Denuncias->denunciasList();    
+    //dump($data['list'], 'listado');
     $this->load->view('denuncias/list', $data);
   }
   // trae empleadores activos

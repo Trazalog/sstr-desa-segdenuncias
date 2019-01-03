@@ -8,9 +8,15 @@ class Denuncias extends CI_Model
 	// lista en pantalla denuncia nueva de oficio
 	function denunciasList(){
 		
-		$this->db->select('tbl_denuncias.*,trg_inspecciondenuncia.inspeccionid');
+		$this->db->select('tbl_denuncias.*,
+		trg_inspecciondenuncia.inspeccionid,
+		tbl_establecimiento.establecalle,
+		tbl_establecimiento.establealtura,
+		tbl_empleadores.emplearazsoc');
 		$this->db->from('tbl_denuncias');
 		$this->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid', 'left');	
+		$this->db->join('tbl_establecimiento', 'tbl_denuncias.estableid = tbl_establecimiento.estableid');
+		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
 		$this->db->group_by('denunciaid');
 		
 		$result = $this->db->get();

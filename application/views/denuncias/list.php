@@ -12,7 +12,8 @@
 						echo '<div class="form-group">';
 						echo '<button class="btn btn-primary" id="btnAdd" data-toggle="modal" data-target="#modalAgregar">Agregar</button>';
 						echo '</div>';
-					}
+          }
+          
 					?>
 					<table id="tbl-denuncias" class="table table-bordered table-hover">
 						<thead>
@@ -442,7 +443,7 @@
         </div><br><br>
 
         <div class="col-xs-6">
-          <label style="margin-top: 9px;">Detalle de la Denuncia:</label>
+          <label style="margin-top: 9px;">Detalle de la Denuncia<strong style="color: #dd4b39">*</strong>:</label>
         </div><br><br>
         <div class="col-xs-9">
           <textarea placeholder="Agregar detalle" class="form-control" name="denunciamotivos" rows="3" id="nota" value=""></textarea>
@@ -530,7 +531,7 @@
         </div><br><br>
 
         <div class="col-xs-6">
-          <label style="margin-top: 9px;">Detalle de la Denuncia:</label>
+          <label style="margin-top: 9px;">Detalle de la Denuncia<strong style="color: #dd4b39">*</strong>:</label>
         </div><br><br>
         <div class="col-xs-9">
           <textarea placeholder="" class="form-control" name="denunciamotivos" rows="3" id="motivosVer" value="" disabled></textarea>

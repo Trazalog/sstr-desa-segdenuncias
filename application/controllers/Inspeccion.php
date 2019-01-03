@@ -89,7 +89,7 @@ class Inspeccion extends CI_Controller {
 	}	
 	// trea comentarios de BPM para mostrar en detalle de inspeccion
 	function ObtenerComentariosBPM($caseId){
-		//$metodo = "POST";
+	
 		$parametros = $this->Bonitas->conexiones();
 		$param = stream_context_create($parametros);
 		return $this->Tareas->ObtenerComentariosBPM($caseId,$param);

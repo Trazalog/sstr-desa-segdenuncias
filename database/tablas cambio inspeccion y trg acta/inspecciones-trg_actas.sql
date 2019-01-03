@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-01-2019 a las 13:04:20
+-- Tiempo de generación: 03-01-2019 a las 12:15:08
 -- Versión del servidor: 10.1.16-MariaDB
 -- Versión de PHP: 5.6.24
 
@@ -34,7 +34,9 @@ CREATE TABLE `tbl_inspecciones` (
   `inspecciondescrip` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
   `estableid` int(11) DEFAULT NULL,
   `inspeestado` varchar(4) COLLATE utf8_spanish_ci NOT NULL,
-  `bpm_id` int(11) DEFAULT NULL
+  `bpm_id` int(11) DEFAULT NULL,
+  `tipoActa` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `accion` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -78,12 +80,12 @@ ALTER TABLE `trg_actas`
 -- AUTO_INCREMENT de la tabla `tbl_inspecciones`
 --
 ALTER TABLE `tbl_inspecciones`
-  MODIFY `inspeccionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `inspeccionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `trg_actas`
 --
 ALTER TABLE `trg_actas`
-  MODIFY `actaid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `actaid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Restricciones para tablas volcadas
 --

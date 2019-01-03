@@ -140,7 +140,7 @@ class Tarea extends CI_Controller {
 	 	$param = stream_context_create($parametros);
 		$response = $this->Tareas->cerrarTarea($idTarBonita,$param);	
 		//dump($response["reponse_code"],' response : ');
-		if ($response["reponse_code"] == 200) {
+		if ($response["reponse_code"] == 204) {
 
 			//sube pdf
 			$config = [
