@@ -87,7 +87,7 @@
 
                     echo '<tr>';
                       echo '<td class="acciones">';
-                        echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'"></i>';
+                        echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Ver detalle"></i>';
                       echo '</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';                  
@@ -219,7 +219,7 @@
   // muestra detalle de inspeccion en vista estandrar
   $('.btnView').on("click", function(){
     var idTarBonita = $(this).data("bpmid");
-    //alert(idTarBonita);
+    alert(idTarBonita);
     WaitingOpen();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/");
@@ -271,7 +271,7 @@
       
       if (this.value == 'todas') {   
         $('#inspAsig').hide(300); 
-        $('#criterio').val('Todas');    
+        $('#criterio').val('todas');    
         getInspecciones('todas', idInsp);
       }
       if (this.value == 'inspeccion') {   
@@ -339,9 +339,11 @@
             var emplearazsoc = data[i]['emplearazsoc'];
             var direccion = data[i]['direccion'];
             var inspectornombre = data[i]['inspectornombre'];
+            var bpm_id = data[i]['bpm_id'];
             //agrego valores a la tabla
             $('#tbl_inspeccion').DataTable().row.add( [
-              '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-idempleador="1"></i>',
+              
+              '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'+ bpm_id +'" title="Ver detalle"></i>',
               inspeccionid,
               inspeccionfechaasigna,
               emplearazsoc,

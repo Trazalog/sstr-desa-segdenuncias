@@ -99,7 +99,6 @@ class Tareas extends CI_Model
 		$method = '/execution';
 		$resource = 'API/bpm/userTask/';
 		$url = BONITA_URL.$resource.$idTarBonita.$method;
-		//dump_exit($url);
 		file_get_contents($url, false, $param);
 		$response = $this->parseHeaders( $http_response_header );
 		return $response;
@@ -118,6 +117,12 @@ class Tareas extends CI_Model
 		
 		$response = $this->db->insert("trg_actas",$data);	
 		return $response;
+	}
+	// actualiza en tbl_inspecciones
+	function actualizaInspeccion($idInspeccion,$datos){
+		$this->db->where('inspeccionid', $idInspeccion);
+		$query=$this->db->update('tbl_inspecciones',$datos);
+		return $query;
 	}
 
 	function getDenPorBpmId($bpm_Id){	

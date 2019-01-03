@@ -149,23 +149,23 @@ class Inspecciones extends CI_Model
 	}
 
 	// devuelve inspecciones por tipo acta o accion
-	function getInspeccionesCriterio($data,$idInspector){					
-
+	function getInspeccionesCriterio($data,$idInspector){		
+	
 		$this->db->select('tbl_inspecciones.*,
-											concat(tbl_establecimiento.establecalle, " ",tbl_establecimiento.establealtura) as direccion,											
+											concat(tbl_establecimiento.establecalle, " ",tbl_establecimiento.establealtura) as direccion,
+											tbl_inspectores.inspectornombre,
 											tbl_empleadores.emplearazsoc,
-											tbl_inspectores.inspectornombre');
+											tbl_empleadores.empleaid');
 		$this->db->from('tbl_inspecciones');
-		$this->db->join('trg_actas','trg_actas.inspeccionid = tbl_inspecciones.inspeccionid');
 		$this->db->join('tbl_establecimiento', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
 		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
 		$this->db->join('tbl_inspectores', 'tbl_inspecciones.inspectorid = tbl_inspectores.inspectorid');
 		
 		if( ($data == 'inspeccion') || ($data == 'verificacion') || ($data == 'suspension') ){
-			$this->db->where('trg_actas.tipoacta', $data);
+			$this->db->where('tbl_inspecciones.tipoacta', $data);
 		}
-		if( ($data =='cierre') || ($data =='ampliacion-plazo') || ($data =='infraccion') ){
-			$this->db->where('trg_actas.accion', $data);
+		if( ($data =='cierre-acta') || ($data =='ampliacion-plazo') || ($data =='infraccion') ){
+			$this->db->where('tbl_inspecciones.accion', $data);
 		}			
 		if( ($data == 'inspectorAsignado') ){
 			$this->db->where('tbl_inspecciones.inspectorid', $idInspector);
