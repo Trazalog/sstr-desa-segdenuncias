@@ -29,7 +29,7 @@ if(!function_exists('cargarCabecera')){
 				}
 
 			// consulta para Inspecciones			
-			$ci->db->select('trg_actas.*,tbl_inspecciones.*');
+			$ci->db->select('trg_actas.actaid,trg_actas.acta,trg_actas.tipoActa AS tipo,trg_actas.accion AS accionacta,trg_actas.fechaProrroga,trg_actas.inspeccionid,tbl_inspecciones.*');
 			$ci->db->from('trg_actas');
 			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_actas.inspeccionid');			
 			$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
@@ -165,8 +165,8 @@ if(!function_exists('cargarCabecera')){
 							</tr>';
 							foreach ($resultInspecciones as $insp) {					
 								echo '<tr>';					
-								echo '<td style="text-align: left" width="10%">'.$insp['tipoActa'].'</td>';	
-								echo '<td style="text-align: left" width="10%">'.$insp['accion'].'</td>';						
+								echo '<td style="text-align: left" width="10%">'.$insp['tipo'].'</td>';	
+								echo '<td style="text-align: left" width="10%">'.$insp['accionacta'].'</td>';						
 								echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
 							//	echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
 								echo '<td style="text-align: left" width="10%"><a href="'.base_url().$insp['acta'].'" id="adjunto" target="_blank" > Ver Acta </a></td>';
