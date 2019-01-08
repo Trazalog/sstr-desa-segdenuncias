@@ -266,11 +266,10 @@
 	$("#btnInsp").on("click", function(e){
     e.preventDefault();    
     var idDenuncia = $('#idDenuncia').val(); 
-    //alert(idDenuncia);
     WaitingOpen();
     $('#content').empty();
-    $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/listInspPorDenuncia/<?php echo $permission; ?>/" + idDenuncia + "/");
-    WaitingClose();
+    $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>/" + idDenuncia + "/");
+    WaitingClose();	
   });
   /*  / ver inspecciones por denuncia */	
 	
