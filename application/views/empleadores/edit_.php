@@ -640,7 +640,7 @@
     hay_error = false;
     $('#errorEmpleador').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error").css("color","inherit");
-alert(empleacui);
+  
     if ( empleacui == '') {
       $("#cuit").parent().addClass("has-error");
       hay_error = true;
@@ -745,6 +745,7 @@ alert(empleacui);
   // Agregar Establecimiento
   $(document).on("click", "#add-establecimiento", function(e){
     e.preventDefault();
+    e.stopImmediatePropagation();
     WaitingOpen('Agregando Establecimiento');
 
     //var estableid       = $("#tomo").val();

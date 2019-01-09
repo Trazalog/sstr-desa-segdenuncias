@@ -93,31 +93,10 @@ class Imports extends CI_Model{
 
   // devuelve denuncias cargadas en tabla temporal por id de usr logueado
   function getDenTemporales(){
-    //// USUARIO LOGUEADO
+    
     $userdata = $this->session->userdata('user_data');
     $usrId = $userdata[0]['usrId'];
-    // $this->db->select('tbl_denuncias_temp.denunciaid_temp,
-      //                   tbl_denuncias_temp.denunciasfecha,
-      //                   tbl_denuncias_temp.denunciariesgo,
-      //                   tbl_denuncias_temp.denunciaprograma,
-      //                   tbl_denuncias_temp.denunciafechaverif,
-      //                   tbl_denuncias_temp.denunciainclucion,
-      //                   tbl_denuncias_temp.denuncianroobra,
-      //                   tbl_denuncias_temp.denuncianroacta,
-      //                   tbl_denuncias_temp.denunciamotivos,
-      //                   tbl_denuncias_temp.estableid,
-      //                   tbl_denuncias_temp.denunciaestado,
-      //                   tbl_denuncias_temp.usrId,
-      //                   tbl_empleadores.empleacui,
-      //                   tbl_empleadores.empleaid,
-      //                   tbl_establecimiento.estableid,
-      //                   tbl_establecimiento.establecalle,
-      //                   tbl_establecimiento.establealtura');
-      // $this->db->from('tbl_denuncias_temp');
-      // $this->db->join('tbl_establecimiento', 'tbl_denuncias_temp.estableid = tbl_establecimiento.estableid');
-      // $this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
-      // $this->db->where('tbl_denuncias_temp.usrId', $usrId);
-
+    
     $this->db->select('tbl_denuncias_temp.*,                                          
                       tbl_establecimiento.estableid,
                       tbl_establecimiento.establecalle,
@@ -128,38 +107,12 @@ class Imports extends CI_Model{
     $query = $this->db->get();
 		if ($query->num_rows()!=0){   
 			return $query->result_array();  
-		}
+		}else{
+      array();
+    }
   }
-
+  // devuelve establecimientos por cuit
   function getEstablecimientos($cuit){
-    
-    // if($idEstab != 0){
-      //   $sql = "SELECT
-      //     tbl_establecimiento.estableid,
-      //     tbl_establecimiento.establecalle,
-      //     tbl_establecimiento.establealtura,
-      //     tbl_establecimiento.empleaid,
-      //     tbl_establecimiento.estableestado
-      //     FROM
-      //     tbl_establecimiento
-      //     INNER JOIN tbl_empleadores ON tbl_establecimiento.empleaid = tbl_empleadores.empleaid
-      //     WHERE
-      //     tbl_establecimiento.empleaid = (SELECT
-      //                                     tbl_empleadores.empleaid
-      //                                     FROM
-      //                                     tbl_establecimiento
-      //                                     INNER JOIN tbl_empleadores ON tbl_establecimiento.empleaid = tbl_empleadores.empleaid
-      //                                     WHERE
-      //                                     tbl_establecimiento.estableid = $idEstab)";
-      //     $query = $this->db->query($sql);
-      //     if ($query->num_rows()!=0){   
-      //       return $query->result_array();  
-      //     }else{
-      //       return array();
-      //     }
-      // }else{
-      //   return array();
-      // }
 
     $this->db->select('tbl_establecimiento.estableid,
                         tbl_establecimiento.establecalle,
@@ -167,12 +120,13 @@ class Imports extends CI_Model{
     $this->db->from('tbl_establecimiento');
     $this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');    
     $this->db->where('tbl_empleadores.empleacui', $cuit);
+    $this->db->where('tbl_establecimiento.estableestado', 'AC');
     $query = $this->db->get();
 		if ($query->num_rows()!=0){   
 			return $query->result_array();  
-		}
-
-    
+		}else{
+      return array();
+    }  
 
   }
 
@@ -220,12 +174,6 @@ class Imports extends CI_Model{
     }else{
       return false;
     }
-
   }
-  function matchFechaMotivo($FECHA_DENUNCIA,$MOTIVO){
-
-  }
-  function procesarDenuncia($sql){
-
-  }
+  
 }
