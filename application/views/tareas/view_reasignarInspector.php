@@ -64,99 +64,49 @@
 												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
 												>	
 
-												<form>
+											
 													<div class="panel panel-default">
-														<h4 class="panel-heading">INFORMACION:</h4>
 
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="tarea">Tarea</label>
-																<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
-																 disabled><!-- id de listarea -->
-																<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
-																<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
-																<!-- id de task en bonita -->
-																<input type="text" class="hidden" id="idTarBonita" value="<?php echo $TareaBPM ["id"] ?>">
-															</div>
+														<div class="panel-heading">
+															<h3 class="panel-title">Información:</h3>															
 														</div>
 
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="fecha">Fecha de Creación</label>
-																<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
-																 disabled>
+														<div class="panel-body">
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="tarea">Tarea</label>
+																	<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
+																	disabled><!-- id de listarea -->
+																	<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
+																	<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
+																	<!-- id de task en bonita -->
+																	<input type="text" class="hidden" id="idTarBonita" value="<?php echo $TareaBPM ["id"] ?>">
+																</div>
 															</div>
-														</div><br>
 
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="fecha">Fecha de Creación</label>
+																	<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
+																	disabled>
+																</div>
+															</div><br>
 
-														<!-- <div class="form-group ">
-															<div class="col-sm-6 col-md-6 ">
-																<label for="ot ">Orden de Trabajo:</label>
-																<input type="text " class="form-control " id="ot
-                                                                    "
-																 placeholder=" " value="<?php //echo $datos[0][ 'id_orden'] ?>" disabled>
+															<div class="form-group">
+																<div class="col-sm-12 col-md-12">
+																	<label for="detalle">Detalle</label>
+																	<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
+																</div>
 															</div>
-														</div><br>
 
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="duracion_std">Duracion Estandar (minutos):</label>
-																<input type="text" class="form-control" id="duracion_std" placeholder="" value="<?php //echo $datos[0]['duracion_std']  ?>"
-																 disabled>
-															</div></br>
-														</div> -->
-
-														<br>
-
-														<div class="form-group">
-															<div class="col-sm-12 col-md-12">
-																<label for="detalle">Detalle</label>
-																<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
-															</div>
-														</div></br> </br> </br> </br> </br>
-													</div>
-
-													<div class="form-group">
-														<div class="col-sm-12 col-md-12">
-															<!-- Modal formulario tarea -->
-															<?php if($idForm != 0){echo '<button type="button" id="formulario" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="getformulario()">Completar Formulario</button>';}?>
-														</div>
-													</div>
-												</form>
-												
-
-												<form enctype="multipart/form-data" id="formInspeccion" class="form-horizontal" style="padding:0px 15px;" role="form" action="" method="" >
-												
-
-													<!-- <div class="btn-group" data-toggle="buttons">
-															<label class="btn btn-primary active">
-																<input type="radio" name="options" id="option1" autocomplete="off" value="cierre_acta"> Cierre 
-															</label>
-															<label class="btn btn-primary">
-																<input type="radio" name="options" id="option2" autocomplete="off" value="ampliacion_plazos"> Ampliación Plazos
-															</label>
-															<label class="btn btn-primary">
-																<input type="radio" name="options" id="option3" autocomplete="off" value="infraccion"> Infracción
-															</label>
 														</div>
 
-
-													<div class="form-group">
-															<label for="fechaProrroga">Fecha de Prórroga</label>
-															<input type="date" name="fechaProrroga" class="form-control" id="fechaProrroga" value="<?php //echo date('Y-m-d') ?>">
 													</div>
 
-													<div class="form-group">
-															<label for="filePdf">filePdf</label>
-															<div class="fileinput fileinput-new" data-provides="fileinput">
-																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf"/></span>
-																<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
-															</div>
-														</div> -->
+
+												<form enctype="multipart/form-data" id="formInspeccion" class="form-horizontal" style="padding:0px 15px;" role="form" action="" method="" >	
 														
-														<div class="col-sm-12 col-md-12">		
+														<div class="col-sm-12 col-md-12" id="selectInspector">		
 															<div class="col-xs-8"><label for="idInspector">Asignar Inspector </label>
 																<select id="idInspector" name="idInspector" class="form-control" >
 																</select>
@@ -461,6 +411,7 @@
 		//desahilito btn tomar      
 		$("#btontomar").hide();
 		$("#formulario").show();
+		$("#selectInspector").show();
 	}
 
 	function deshabilitar() {
@@ -472,6 +423,7 @@
 		$("#guardarComentario").hide();
 		$("#comentario").hide();
 		$("#formulario").hide();
+		$("#selectInspector").hide();
 	}
 
 	// Volver al atras

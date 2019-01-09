@@ -10,7 +10,7 @@
 					<div class="row">
 						<div class="col-sm-12 col-md-12">
 							<div role="tabpanel" class="tab-pane">
-								<div class="form-group">
+								<!-- <div class="form-group"> -->
 
 									<!-- Nav tabs -->
 									<ul class="nav nav-tabs" role="tablist">
@@ -39,7 +39,7 @@
 															echo "&nbsp"; 
 															echo "&nbsp";
 															echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
-												//	}    
+													//	}    
 															echo "</br>"; 
 															echo "</br>"; 
 
@@ -54,72 +54,50 @@
 
 															echo "<input type='text' class='hidden' id='idPedTrabajo' value='$idPedTrabajo' >";
 
-													?>												
+												?>												
 
 												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
 												>
 
-												<form>
+											
 													<div class="panel panel-default">
-														<h4 class="panel-heading">INFORMACION:</h4>
-
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="tarea">Tarea</label>
-																<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
-																 disabled><!-- id de listarea -->
-																<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
-																<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
-																<!-- id de task en bonita -->
-																<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
-															</div>
+														
+														<div class="panel-heading">
+															<h3 class="panel-title">Información:</h3>															
 														</div>
 
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="fecha">Fecha de Creación</label>
-																<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
-																 disabled>
+														<div class="panel-body">
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="tarea">Tarea</label>
+																	<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
+																	 disabled><!-- id de listarea -->
+																	<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
+																	<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
+																	<!-- id de task en bonita -->
+																	<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
+																</div>
 															</div>
-														</div><br>
-
-
-														<!-- <div class="form-group ">
-															<div class="col-sm-6 col-md-6 ">
-																<label for="ot ">Orden de Trabajo:</label>
-																<input type="text " class="form-control " id="ot
-                                                                    "
-																 placeholder=" " value="<?php echo $datos[0][ 'id_orden'] ?>" disabled>
+															<div class="clearfix"></div>
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="fecha">Fecha de Creación</label>
+																	<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
+																	 disabled>
+																</div>
 															</div>
-														</div><br>
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="duracion_std">Duracion Estandar (minutos):</label>
-																<input type="text" class="form-control" id="duracion_std" placeholder="" value="<?php echo $datos[0]['duracion_std']  ?>"
-																 disabled>
-															</div></br>
-														</div>
-
-														<br> -->
-
-														<div class="form-group">
-															<div class="col-sm-12 col-md-12">
-																<label for="detalle">Detalle</label>
-																<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
+	
+															<div class="form-group">
+																<div class="col-sm-12 col-md-12">
+																	<label for="detalle">Detalle</label>
+																	<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
+																</div>
 															</div>
-														</div></br> </br> </br> </br> </br>
+														</div>															
+
 													</div>
 
-													<div class="form-group">
-														<div class="col-sm-12 col-md-12">
-															<!-- Modal formulario tarea -->
-															<?php if($idForm != 0){echo '<button type="button" id="formulario" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="getformulario()">Completar Formulario</button>';}?>
-														</div>
-													</div>
-												</form>
+										
 												
 												<br><br>
                               
@@ -149,13 +127,13 @@
 																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf" /></span>
 																<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
 															</div>
-															<a id="adjunto" target="_blank">Ver Archivo Adjunto</a>
+															<a id="adjunto" href="" target="_blank">Ver Archivo Adjunto</a>
 														</div>
 													</div>	
 												</div>	<!-- /.col-sm-12 col-md-12 -->
 													
 													
-													<!-- Acciones     -->
+												<!-- Acciones     -->
 												<div class="col-sm-12 col-md-12">
 													<div class="col-sm-6 col-md-6">		
 														<h4>Acciones</h4>                          
@@ -285,7 +263,7 @@
 										</div>
 
 									</div>
-								</div>
+								<!-- </div> -->
 							</div>
 						</div>
 
@@ -430,13 +408,11 @@
 	}
 </style>
 
-
 <script>
 
-$('#filePdf').on('change', function() {
-        $('#adjunto').attr("href",URL.createObjectURL(this.files[0]));              
-});
-
+	$('#filePdf').on('change', function() {
+		$('#adjunto').attr("href",URL.createObjectURL(this.files[0])); 	            
+	});
 	evaluarEstado();
 	function evaluarEstado() {
 
@@ -448,7 +424,6 @@ $('#filePdf').on('change', function() {
 			deshabilitar();
 		}
 	}
-
 	function habilitar() {
 		// habilito btn y textarea       
 		$("#btonsoltr").show();
@@ -470,7 +445,6 @@ $('#filePdf').on('change', function() {
 		$("#comentario").hide();
 		$("#formulario").hide();
 	}
-
 	// Volver al atras
 	$('#cerrar').click(function cargarVista() {
 		WaitingOpen();
@@ -504,33 +478,35 @@ $('#filePdf').on('change', function() {
 			}
 		});
 	});
- 
 	// termina la tarea en BPM y guarda los datos en  BD	
 	function tareaTerminada(){
 		
 		var errorInsp = true;
 		
 		if( $("input[name='tipoActa']:radio").is(':checked')	 ){
-			alert('chequeado tipo acta');
-			errorInsp = false;
+			//alert('chequeado tipo acta');
+			errorInsp = false;			
 		}else{
 			alert('Por favor seleccione un tipo de Acta...');
+			return;
 		}
 
 		if ( $("input[name='accion']:radio").is(':checked') ) {
-			alert('chequeado accion');
+			//alert('chequeado accion');
 			errorInsp = false;
 		} else {
 			alert('Por favor seleccione una acción...');
+			return;
 		}
 
 		if ($('#filePdf').val() == '') {
 			alert('Por favor suba el acta en formato PDF...');
+			return;
 		} else {
 			errorInsp = false;
 		}
 
-		if(!errorInsp){
+		if(errorInsp == false){
 			var formData = new FormData($("#formInspeccion")[0]);
 			/* Ajax de Grabado en BD */
 			$.ajax({
@@ -540,56 +516,21 @@ $('#filePdf').on('change', function() {
 				cache: false,
 				contentType: false,
 				processData: false,
-				success: function (respuesta) {						
-							$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+				success: function (data) {	
+					var repuesta = JSON.parse(data);					
+					// toma a tarea exitosamente
+					if (repuesta['reponse_code'] == 204) {								
+						$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+					}else{
+						alert('Error en BPM. La tarea no ha podido ser completada...');
 					}
+				},
+				error:function(data){
+					console.table(data);
+				}
 			});
 		}				
 	}	
-
-	// Boton Hecho generico
-	function estado() {
-		var idTarBonita = $('#idTarBonita').val();
-		$.ajax({
-			type: 'POST',
-			data: {
-				'idTarBonita': idTarBonita,
-			},
-			url: 'index.php/Tarea/estadoCuenta',
-			success: function (result) {
-				console.log(result);
-				alert("SII");
-			},
-			error: function (result) {
-				alert("Noo");
-				console.log(result);
-			},
-			dataType: 'json'
-		});
-	}
-	//Funcion COMENTARIOS
-	function guardarComentario() {
-		console.log("Guardar Comentarios...");
-		var id = <?php echo json_encode($TareaBPM['caseId']);?>;
-		var nombUsr = $('#usrName').val();
-		var apellUsr = $('#usrLastName').val();;
-
-		var comentario = $('#comentario').val();
-		$.ajax({
-			type: 'POST',
-			data: { 'processInstanceId': id, 'content': comentario },
-			url: 'index.php/Tarea/GuardarComentario',
-			success: function (result) {
-				console.log("Submit");
-				var lista = $('#listaComentarios');
-				lista.prepend(' <hr/><li><h4>' + nombUsr + ' ' + apellUsr + '<small style="float: right">Hace un momento</small></h4><p>' + comentario + '</p></li>');
-				$('#comentario').val('');
-			},
-			error: function (result) {
-				console.log("Error");
-			}
-		});
-	}
 	// Toma tarea en BPM
 	function tomarTarea() {
 
@@ -639,327 +580,38 @@ $('#filePdf').on('change', function() {
 			},
 			dataType: 'json'
 		});
-	}
-
-	/** Formulario **/
-
-	var click = 0;
-	$('#formulario').click(function () {
-		click = 1;
-	});
-
-	// evento de cierre de modal guarda parcialmente los datos
-	// $('#modalForm').on('hidden.bs.modal', function (e) {
-
-		// 	$('#error').fadeOut('slow');
-		// 	// toma  el valor de todos los input file 
-		// 	var imgs = $('input.archivo');
-
-		// 	var formData = new FormData($("#genericForm")[0]);
-
-		// 	/** subidad y resubida de imagenes **/
-		// 	// Tomo los inputs auxiliares cargados
-		// 	var aux = $('input.auxiliar');
-
-		// 	var auxArray = [];
-		// 	aux.each(function () {
-		// 		auxArray.push($(this).val());
-		// 	});
-		// 	//console.table(aux);
-		// 	for (var i = 0; i < imgs.length; i++) {
-
-		// 		var inpValor = $(imgs[i]).val();
-		// 		var idValor = $(imgs[i]).attr('name');
-		// 		//console.log("idValor: "+idValor);
-		// 		// si tiene algun valor (antes de subir img)
-		// 		if (inpValor != "") {
-		// 			//al subir primera img
-		// 			formData.append(idValor, inpValor);
-		// 		} else {
-		// 			// sino sube img guarda la del auxiliar         
-		// 			//inpValor = auxArray[i]; //valor del input auxiliar
-		// 			//console.table(inpValor);
-		// 			//formData.append(idValor, inpValor);
-		// 		}
-		// 	}
-
-		// 	/* text tipo check */
-		// 	var check = $('input.check');
-		// 	//console.log("aux");
-		// 	//console.table(aux);
-		// 	var checkArray = [];
-		// 	// check.each(function() {
-		// 	//     checkArray.push($(this).val());
-		// 	// });
-		// 	//console.log('array de chech: ');
-		// 	//console.table(checkArray);
-
-		// 	for (var i = 0; i < check.length; i++) {
-		// 		//var chekValor = $(check[i]).val();
-		// 		var idCheckValor = $(check[i]).attr('name');
-		// 		console.log('valor: ');
-		// 		console.log(idCheckValor);
-		// 		if ($(check[i]).is(':checked')) {
-		// 			chekValor = 'tilde';
-		// 		} else {
-		// 			chekValor = 'notilde';
-		// 		}
-		// 		formData.append(idCheckValor, chekValor);
-		// 	}
-		// 	// console.log('array de chech: ');
-		// 	// console.table(check);
-
-		// 	/* Ajax de Grabado en BD */
-		// 	$.ajax({
-		// 		url: 'index.php/Tarea/guardarForm',
-		// 		type: 'POST',
-		// 		data: formData,
-		// 		cache: false,
-		// 		contentType: false,
-		// 		processData: false,
-
-		// 		success: function (respuesta) {
-
-
-		// 			if (respuesta === "exito") {
-
-		// 			}
-		// 			else if (respuesta === "error") {
-		// 				alert("Los datos no se han podido guardar");
-		// 			}
-		// 			else {
-		// 				//$("#msg-error").show();
-		// 				//$(".list-errors").html(respuesta);
-		// 				//alert("Los datos no se han guardado");
-		// 			}
-		// 		}
-		// 	});
-
-		// });
-
-	// trae valores validos para llenar form asoc.  
-	function getformulario(event) {
-
-		// trae valor de imagenes y llena inputs.
-		getImgValor();
-
-		// llena form una sola vez al primer click
-		if (click == 0) {
-			var estadoTarea = $('#estadoTarea').val();
-			// toma id de form asociado a listarea en TJS
-			var idForm = $('#idform').val();
-			console.log('id de form: ');
-			console.log(idForm);
-
-			// guarda el id form asoc a tarea std en modal para guardar
-			$('#idformulario').val(idForm);
-
-			idForm = idForm;
-			// trae valores validos para llenar componentes de form asoc.
-			$.ajax({
-				type: 'POST',
-				data: { idForm: idForm },
-				url: 'index.php/Tarea/getValValido',
-				success: function (data) {
-					//console.log('valores de componentes: ');
-					//console.table(data);                   
-
-					llenaComp(data);
-				},
-				error: function (result) {
-
-					console.log(result);
-				},
-				dataType: 'json'
-			});
-		}
-	}
-
-	// llena los componentes de form asoc con valores validos
-	function llenaComp(data) {
-
-		var id_listarea = $('#tbl_listarea').val();
-		$('#id_listarea').val(id_listarea);
-
-
-		$.each(data, function (index) {
-			//$( "#" + i ).append(  );
-			var idSelect = data[index]['idValor'];
-			//console.log('idvalor: '+ data[index]['idValor'] + '-- valor: ' + data[index]['VALOR']);
-			var i = 0;
-			var valor = "";
-			var valorSig = "";
-
-			$('#' + idSelect).append($('<option />',
-				{ value: data[index]['VALOR'], text: data[index]['VALOR'] }));
-
-			valor = data[index]['idValor'];
-			valorSig = data[index]['idValor'];
-		});
-	}
-
-	//Trae valor de las imagenes
-	function getImgValor() {
-		var valores;
-		// guarda el id form asoc a tarea std en modal para guardar
-		idForm = $('#idform').val();
-		idPedTrabajo = $('#idPedTrabajo').val();
-		// trae valores validos para llenar componentes input files.
-		$.ajax({
-			type: 'POST',
-			data: {
-				idForm: idForm,
-				idPedTrabajo: idPedTrabajo
-			},
-			url: 'index.php/Tarea/getImgValor',
-			success: function (data) {
-				console.table(data);
-				valores = data;
-				llenarInputFile(valores);
-			},
-			error: function (result) {
-
-				console.log(result);
-			},
-			dataType: 'json'
-		});
-	}
-
-	// carga inputs auxiliares con url de imagen desde BD
-	function llenarInputFile(data) {
-
-		var id_listarea = $('inptut.archivo').val();
-		var base_url = "http://35.239.41.196/mtba-desa-procprod-desarrollo/";
-		var imagen = "";
-		$.each(data, function (index) {
-			var id = data[index]['valoid'];
-			var valor = data[index]['valor'];
-			//carga el valor que viene de DB
-			//$("."+data[index]['valoid']).val(valor);
-			imagen = base_url + valor;
-			$("a." + data[index]['valoid']).attr("href", imagen);
-
-			console.log("valor id: ");
-			console.log(data[index]['valoid']);
-			console.log("  imagen: ");
-			console.log(valor);
-
-			console.log(" url imagen: ");
-			console.log(imagen);
-			//$("#"+data[index]['valoid']).val(valor);
-		});
-
-
-
-		// var id_listarea = $('inptut.archivo').val();
-
-		// $.each(data,function( index ) {
-
-		//   var id = data[index]['valoid'];
-		//   var valor = data[index]['valor'];
-		//   //carga el valor que viene de DB
-		//   $("."+data[index]['valoid']).val(valor);
-		//      console.log("valor id: ");
-		//      console.log(data[index]['valoid']);
-		//      console.log("  imagen: ");
-		//      console.log(valor);
-		//      //$("#"+data[index]['valoid']).val(valor);
-		// });
-	}
-
-	// Validacion de campos obligatorios y vacios
-	function validarFormGuardado() {
-
-		var id_listarea = $('#id_listarea').val();
-
-		var oblig = $('.requerido');
-		//console.log("oblig");
-		//console.table(oblig);
-		var obligArrayIds = [];
-		oblig.each(function () {
-			obligArrayIds.push($(this).attr('name'));
-		});
-		//console.log('obligatorios: ');
-		//console.log(obligArray),
-		$.ajax({
-			type: 'POST',
-			data: {
-				obligArrayIds: obligArrayIds,
-				id_listarea: id_listarea
-			},
-			url: 'index.php/Tarea/validarFormGuardado',
-			success: function (data) {
-				console.log('por sucess: ');
-				console.log(data);
-				if (data == false) {
-					$('#error').fadeIn('slow');
-				}
-				else {
-					$('#error').fadeOut('slow');
-				}
-
-			},
-			error: function (result) {
-				console.log('por error: ');
-				console.log(data);
-				console.log(result);
-			},
-			dataType: 'json'
-		});
-	}
+	}	
 
 	$('.fecha').datepicker({
 		autoclose: true
 	});
 
+	//Funcion COMENTARIOS
+	function guardarComentario() {
+		console.log("Guardar Comentarios...");
+		var id = <?php echo json_encode($TareaBPM['caseId']);?>;
+		var nombUsr = $('#usrName').val();
+		var apellUsr = $('#usrLastName').val();;
 
-
-
-	// CABECERA
-		// carga denuncias por establecimiento en modal agregar
-		// cargarCabecera();
-		// function cargarCabecera(){
-			
-		//   //var idEstab = $('#estable option:selected').val();
-		// 	var bpm_Id = $('#caseId').val();
-		// 	$('.insp').append(bpm_Id);
-		// 	var tbl = $('#tblDenEstab');
-			
-		//   $.ajax({
-		//     data: { bpm_Id : bpm_Id },
-		//     dataType: 'json',
-		//     type: 'POST',
-		//     url: 'index.php/Tarea/getDenPorBpmId',
-		//     success: function(data){             
-		//             $('#tblDenEstab tbody tr').remove();
-		//             var trow = ""; 
-		//             for (var i=0; i< data.length; i++) {                  
-
-		//               var tr = "<tr id='"+data['denunciaid']+"'>";
-		//               var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-		//                 var tipo = "<td class='' style='text-align: left'> "+data[i]['denunciatipo'] +" </td>" ;
-		//                 var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
-		//                 var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
-		//               var trCierre = "</tr>";
-								
-		//               trow = tr + tdDenunciaId + tipo + tdfecha + tdmotivos;
-		//               // Agrego a tabla
-		//               $(tbl).append(trow);                                  
-		//             }             
-							
-		//     },
-		//     error: function(result){
-		//       console.error("Error cargando denuncias por estabelcimiento");
-		//     },
-		//   });
-
-		// }
-
-
+		var comentario = $('#comentario').val();
+		$.ajax({
+			type: 'POST',
+			data: { 'processInstanceId': id, 'content': comentario },
+			url: 'index.php/Tarea/GuardarComentario',
+			success: function (result) {
+				console.log("Submit");
+				var lista = $('#listaComentarios');
+				lista.prepend(' <hr/><li><h4>' + nombUsr + ' ' + apellUsr + '<small style="float: right">Hace un momento</small></h4><p>' + comentario + '</p></li>');
+				$('#comentario').val('');
+			},
+			error: function (result) {
+				console.log("Error");
+			}
+		});
+	}
+	
 
 </script>
-
-
 
 <div class="modal fade bs-example-modal-lg" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
 	<div class="modal-dialog modal-lg" role="document">

@@ -49,8 +49,13 @@ class Import extends CI_Controller{
 
       		//obtenemos el nombre de la tabla que el usuario quiere insertar el excel
 			$table_name = trim($this->security->xss_clean($this->input->post("table")));
+			$fields_table = array();
+			// $fields_table = array('/A','ALTURA','ALTURA/#agg','CALLE','CUIT','CUIT/#agg','DESCRIPCION_x0020_PROGRAMA','DPTO','ESTABLECIMIENTO_x0020_EMPRESA_x0020_ID','ESTABLECIMIENTO_x0020_EMPRESA_x0020_ID/#agg','FECHA_x0020_DE_x0020_VERIFICACION_x0020_DE_x0020_LA_x0020_DENUNCIA','FECHA_x0020_DENUNCIA','INTERSECCION','LATITUD','LATITUD/#agg','LOCALIDAD','LONGITUD','LONGITUD/#agg','MOTIVOS_x0020_INFRINGIDOS','NRO_x0020_ACTA_x0020_ANTERIOR_x0020_A_x0020_LA_x0020_VERIFICACION','NRO_x0020_OBRA','NRO_x0020_OBRA/#agg','NROS_x0020_ACTAS_x0020_POSTERIORES_x0020_A_x0020_LA_x0020_VERIFICACION','PISO','PROGRAMA_x0020_INCLUSION','RAZON_x0020_SOCIAL','RIESGO_x0020_GRAVE_x0020_O_x0020_INMINENTE');
 
-			$fields_table = array('/A','ALTURA','ALTURA/#agg','CALLE','CUIT','CUIT/#agg','DESCRIPCION_x0020_PROGRAMA','DPTO','ESTABLECIMIENTO_x0020_EMPRESA_x0020_ID','ESTABLECIMIENTO_x0020_EMPRESA_x0020_ID/#agg','FECHA_x0020_DE_x0020_VERIFICACION_x0020_DE_x0020_LA_x0020_DENUNCIA','FECHA_x0020_DENUNCIA','INTERSECCION','LATITUD','LATITUD/#agg','LOCALIDAD','LONGITUD','LONGITUD/#agg','MOTIVOS_x0020_INFRINGIDOS','NRO_x0020_ACTA_x0020_ANTERIOR_x0020_A_x0020_LA_x0020_VERIFICACION','NRO_x0020_OBRA','NRO_x0020_OBRA/#agg','NROS_x0020_ACTAS_x0020_POSTERIORES_x0020_A_x0020_LA_x0020_VERIFICACION','PISO','PROGRAMA_x0020_INCLUSION','RAZON_x0020_SOCIAL','RIESGO_x0020_GRAVE_x0020_O_x0020_INMINENTE');
+
+			$fields_table = array('ALTURA','ALTURA/#agg','CALLE','CUIT','CUIT/#agg','DESCRIPCION_x0020_PROGRAMA','DPTO','ESTABLECIMIENTO_x0020_EMPRESA_x0020_ID','ESTABLECIMIENTO_x0020_EMPRESA_x0020_ID/#agg','FECHA_x0020_DE_x0020_VERIFICACION_x0020_DE_x0020_LA_x0020_DENUNCIA','FECHA_x0020_DENUNCIA','INTERSECCION','LATITUD','LATITUD/#agg','LOCALIDAD','LONGITUD','LONGITUD/#agg','MOTIVOS_x0020_INFRINGIDOS','NRO_x0020_ACTA_x0020_ANTERIOR_x0020_A_x0020_LA_x0020_VERIFICACION','NRO_x0020_OBRA',	'NRO_x0020_OBRA/#agg','NROS_x0020_ACTAS_x0020_POSTERIORES_x0020_A_x0020_LA_x0020_VERIFICACION','PISO','PROGRAMA_x0020_INCLUSION','RAZON_x0020_SOCIAL','RIESGO_x0020_GRAVE_x0020_O_x0020_INMINENTE');
+
+			
 
       		//inicializamos sql como un array
 			$sql = array();
@@ -61,6 +66,11 @@ class Import extends CI_Controller{
 				"H","I","J","K","L","M","N",
 				"O","P","Q","R","S","T","U",
 				"V","W","X","Y","Z","AA","AB");
+				// $letras = array(
+				// 	"A","B","C","D","E","F","G",
+				// 	"H","I","J","K","L","M","N",
+				// 	"O","P","Q","R","S","T","U",
+				// 	"V","W","X","Y","Z");
 
       		// recorremos el excel y creamos un array para después insertarlo en la base de datos
       		// $i=3 xq arranca de la fila 3 (1 y 2 son titulos)
@@ -71,7 +81,7 @@ class Import extends CI_Controller{
 					$sql[$i][trim($fields_table[$z])] = $objPHPExcel->getActiveSheet()->getCell($letras[$z].$i)->getCalculatedValue();					
 				}
 			} 
-			
+			//dump_exit($sql);
 			$tamaño = 3 + count($sql); //  xq el array empieza desde 3.
 			$y = 0; // variable para array inconsistencias
 			$e = 0; // variable para array de cuit no inscriptos en BD
@@ -81,25 +91,19 @@ class Import extends CI_Controller{
 			for ($i=3; $i < $tamaño; $i++) { 
 			
 				$CUIT  = $sql[$i]['CUIT'];
-				$CALLE = $sql[$i]['CALLE'];
-				
+				$CALLE = $sql[$i]['CALLE'];				
 				$ALTURA = $sql[$i]["ALTURA"];
-				$FECHA_DENUNCIA = $sql[$i]["FECHA_x0020_DENUNCIA"];	
-				$MOTIVO = $sql[$i]["MOTIVOS_x0020_INFRINGIDOS"];
-				//var_dump($CUIT);
-				//var_dump($CALLE);
-				//var_dump($ALTURA);
+				
+				// $FECHA_DENUNCIA = $sql[$i]["FECHA_x0020_DENUNCIA"];	
+				// $MOTIVO = $sql[$i]["MOTIVOS_x0020_INFRINGIDOS"];
+
 				// si el empleador esta registrado devuelve el id de empleador
 				if ($idEmpleador = $this->Imports->matchCuit($CUIT)) {	
 					// busca el establecimiento por calle y altura
-					$idEstab = $this->Imports->matchEstablecimiento($idEmpleador, $CALLE, $ALTURA);							
-					// echo "id estabecimiento: ";
-					// var_dump($idEstab);
+					$idEstab = $this->Imports->matchEstablecimiento($idEmpleador, $CALLE, $ALTURA);	
 					// agrego id de establecimiento si se encuentra si agrega 0
 					$sql[$i]['ID_ESTABLECIMIENTO'] = $idEstab;
-					$nuevaDenuncia[$nueva] = $sql[$i];
-					// echo "nueva denuncia con cuit encontrado: ";
-					// var_dump($nuevaDenuncia);
+					$nuevaDenuncia[$nueva] = $sql[$i];					
 					$nueva++;	
 				}else{
 					//echo "no esta registrado el cuit de empleador: ".$CUIT;
@@ -112,14 +116,16 @@ class Import extends CI_Controller{
 			echo "Debes subir un archivo";
 		}
 
+		//dump_exit($sql);
+
 		//finalmente, eliminamos el archivo pase lo que pase
 		unlink("./excel_files/".$file);
-
+		//dump($nuevaDenuncia, 'denuncias nuevas: ');
 		// si existen nuevas denuncias se arman y se guardan temporalmente
 		if (isset($nuevaDenuncia)) {
 			// arma las denuncias para grabar en BD temporalmente
-			$denListas = $this->armarDenunciasNuevas($nuevaDenuncia);
-			//dump_exit($denListas);
+			$denListas = $this->armarDenunciasNuevas($nuevaDenuncia);				
+			
 			// borra las denuncias que pudieran estar guardadas anteriormente
 			$delete = $this->Imports->deleteDenuncias();			
 			// guarda denuncias temporales con cuit coincidente con CUITS registrados
@@ -137,7 +143,7 @@ class Import extends CI_Controller{
 		}else{
 			$response['noCuit'] = array();
 		}		
-
+//dump($response, 'respuesta:');
 		echo json_encode($response);		
 	}
 
@@ -154,10 +160,14 @@ class Import extends CI_Controller{
 		$usrId = $userdata[0]['usrId'];     // guarda usuario logueado   
 		
 		for ($i=0; $i < count($nuevaDenuncia) ; $i++) { 
+		
 			$denuncia[$i]['denunciasfecha'] = $this->formatoFecha($nuevaDenuncia[$i]["FECHA_x0020_DENUNCIA"]);
+			
 			$denuncia[$i]['denunciariesgo'] = $nuevaDenuncia[$i]["RIESGO_x0020_GRAVE_x0020_O_x0020_INMINENTE"];
-			$denuncia[$i]['denunciaprograma'] = $nuevaDenuncia[$i]["PROGRAMA_x0020_INCLUSION"];
+			$denuncia[$i]['denunciaprograma'] = $nuevaDenuncia[$i]["PROGRAMA_x0020_INCLUSION"];			
+
 			$denuncia[$i]['denunciafechaverif'] = $this->formatoFecha($nuevaDenuncia[$i]["FECHA_x0020_DE_x0020_VERIFICACION_x0020_DE_x0020_LA_x0020_DENUNCIA"]);
+
 			$denuncia[$i]['denunciainclucion'] = $nuevaDenuncia[$i]['PROGRAMA_x0020_INCLUSION'];
 			$denuncia[$i]['denuncianroobra'] = $nuevaDenuncia[$i]["NRO_x0020_OBRA"];
 			$denuncia[$i]['denunciacuit'] = $nuevaDenuncia[$i]["CUIT"];			
@@ -171,7 +181,7 @@ class Import extends CI_Controller{
 			$denuncia[$i]['denunciaestado'] = 'AC';
 			$denuncia[$i]['usrId'] = $usrId;
 		}
-	
+	//dump_exit($denuncia);
 		return $denuncia;
 	}
 	// Cambia el formato de fecha para insertar en BD
@@ -179,7 +189,8 @@ class Import extends CI_Controller{
 		$date = $fecha;
 	    $date = explode('/', $date);                    
 	    $date = $date[2].'-'.$date[1].'-'.$date[0];
-	    return $date;
+			
+			return $date;
 	}
 	// guardar denuncia definitiva
 	function setDenuncias(){

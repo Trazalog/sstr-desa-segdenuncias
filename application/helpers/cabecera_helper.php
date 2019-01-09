@@ -3,82 +3,52 @@
 if(!function_exists('cargarCabecera')){
     
 		function cargarCabecera($caseId){
-			// echo "bpm id: ";
-			// var_dump($caseId);
-			//get main CodeIgniter object
-			$ci =& get_instance();			
-			//load databse library
-			$ci->load->database();			
-			//get data from database	
-			$ci->db->select('tbl_empleadores.empleaid,
-										tbl_empleadores.empleatipo,
-										tbl_empleadores.empleacui,
-										tbl_empleadores.empleafecha,
-										tbl_empleadores.empleainscrip,
-										tbl_empleadores.emplearazsoc,
-										tbl_empleadores.empleaexp,
-										tbl_empleadores.empleadomicilior,
-										tbl_empleadores.empleadomiciliolegal,
-										tbl_empleadores.empleadepid,
-										tbl_empleadores.emplealocid,
-										tbl_empleadores.empleaprovid,
-										tbl_empleadores.empleasliquiid,
-										tbl_empleadores.empleapmasc,
-										tbl_empleadores.empleapfem,
-										tbl_empleadores.ampleafechaalta,
-										tbl_empleadores.empleaestado,
-										tbl_establecimiento.establecalle,
-										tbl_establecimiento.establealtura,
-										tbl_establecimiento.dptoid,
-										tbl_establecimiento.provid,
-										tbl_inspecciones.bpm_id,
-										tbl_establecimiento.establelongitud,
-										provincias.provincia,
-										localidades.localidad');
-			$ci->db->from('tbl_establecimiento');
-			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
-			$ci->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
-			$ci->db->join('provincias', 'provincias.id = tbl_establecimiento.provid');
-			$ci->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
-			$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
-			$query = $ci->db->get();
-
-			if($query->num_rows() > 0){
-					$result = $query->row_array();
-			}
-
-			
-			$ci->db->select('tbl_denuncias.denunciaid,
-											tbl_denuncias.denunciasfecha,
-											tbl_denuncias.denunciariesgo,
-											tbl_denuncias.denunciaprograma,
-											tbl_denuncias.denunciafechaverif,
-											tbl_denuncias.denunciainclucion,
-											tbl_denuncias.denuncianroobra,
-											tbl_denuncias.denuncianroacta,
-											tbl_denuncias.denunciamotivos,
-											tbl_denuncias.estableid,
-											tbl_denuncias.denunciaestado,
-											tbl_denuncias.denunciatipo,
+			// consulta para empleador y establecimiento
+				$ci =& get_instance();			
+				//load databse library
+				$ci->load->database();			
+				//get data from database	
+				$ci->db->select('tbl_empleadores.*,
 											tbl_establecimiento.establecalle,
 											tbl_establecimiento.establealtura,
-											tbl_inspecciones.inspeccionid,
-											tbl_inspecciones.accion,
-											tbl_inspecciones.fechaProrroga');
+											tbl_establecimiento.dptoid,
+											tbl_establecimiento.provid,
+											tbl_inspecciones.bpm_id,
+											tbl_establecimiento.establelongitud,
+											provincias.provincia,
+											localidades.localidad');
+				$ci->db->from('tbl_establecimiento');
+				$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
+				$ci->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
+				$ci->db->join('provincias', 'provincias.id = tbl_establecimiento.provid');
+				$ci->db->join('localidades', 'localidades.id = tbl_establecimiento.dptoid');
+				$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
+				$query = $ci->db->get();
+				if($query->num_rows() > 0){
+						$result = $query->row_array();
+				}
 
-			$ci->db->from('tbl_denuncias');
-			$ci->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid');
-			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
-			$ci->db->join('tbl_establecimiento', 'tbl_denuncias.estableid = tbl_establecimiento.estableid');
-
-			$ci->db->where('tbl_inspecciones.bpm_id', $caseId);
-			$queryDenuncias = $ci->db->get();
-			if ($queryDenuncias->num_rows()!=0){ 
-				$resultDenuncias = $queryDenuncias->result_array();  
-		 		 
+			// consulta para Inspecciones			
+			$ci->db->select('trg_actas.actaid,trg_actas.acta,trg_actas.tipoActa AS tipo,trg_actas.accion AS accionacta,trg_actas.fechaProrroga,trg_actas.inspeccionid,tbl_inspecciones.*');
+			$ci->db->from('trg_actas');
+			$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_actas.inspeccionid');			
+			$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
+			$queryInspecciones = $ci->db->get();
+			if ($queryInspecciones->num_rows()!=0){ 
+				$resultInspecciones = $queryInspecciones->result_array(); 
 			} 
 			
-			//var_dump($resultDenuncias);
+			//consulta para Denuncia 
+				$ci->db->select('tbl_denuncias.*');
+				$ci->db->from('tbl_denuncias');
+				$ci->db->join('trg_inspecciondenuncia', 'tbl_denuncias.denunciaid = trg_inspecciondenuncia.denunciaid');
+				$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_inspecciondenuncia.inspeccionid');
+				$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
+				
+				$queryDenuncias = $ci->db->get();
+				if ($queryDenuncias->num_rows()!=0){ 
+					$resultDenuncias = $queryDenuncias->result_array(); 
+				} 
 
 			echo '<div id="collapseDivCli" class="box box-default collapsed-box box-solid">
 					<div class="box-header with-border">
@@ -152,60 +122,82 @@ if(!function_exists('cargarCabecera')){
 				';
 
 
-
+			//Inspeccion	
 			echo '<div id="collapseDiv" class="box box-default collapsed-box box-solid">
-			<div class="box-header with-border">
-					<h3 id="pedidoInfo" class="box-title">Inspeccion Nº: '.$resultDenuncias[0]['inspeccionid'].'</h3> 
+				<div class="box-header with-border">
+						<h3 id="pedidoInfo" class="box-title">Inspeccion Nº: '.$resultInspecciones[0]['inspeccionid'].'</h3> 
 
-					<input type="text" id="idDenuncia" class="form-control hidden" value="'.$resultDenuncias[0]['inspeccionid'].'" disabled/>
+						<input type="text" id="idDenuncia" class="form-control hidden" value="'.$resultInspecciones[0]['inspeccionid'].'" disabled/>
 
-					<div class="box-tools pull-right">
-							<button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" >
-									<i class="fa fa-plus"></i>
-							</button>
-					</div>
-					<!-- /.box-tools -->
-			</div>
+						<div class="box-tools pull-right">
+								<button id="infoCliente" type="button" class="btn btn-box-tool" data-widget="collapse" >
+										<i class="fa fa-plus"></i>
+								</button>
+						</div>
+						<!-- /.box-tools -->
+				</div>
 
-			<div class="box-body">
-				<div class="row">
-					<div class="col-xs-12 col-sm-4">
+				<div class="box-body">
+					<div class="row">			
+
+						<div class="col-md-4 ">
+								<div class="form-group">
+										<label style="margin-top: 7px;">Fecha: </label>
+										<input type="text" id="razon" class="form-control" value="'.$resultInspecciones[0]['inspeccionfechaasigna'].'" disabled/>
+								</div>
+						</div>
+						<div class="clearfix"></div>
+
+						<div class="col-md-8 ">
+							<label for="detalle">Detalle</label>
+							<textarea class="form-control" id="detalle" rows="3" disabled> '.$resultInspecciones[0]['inspecciondescrip'].' </textarea>
+						</div>
 
 
+						<div class="col-xs-12 col-md-12">
+						<h4>Actas</h4>
+						<table class="table table-bordered table-hover" id="" width= 100%>
+							<tr>
+								<th>Tipo Acta</th>
+								<th>Acción</th>
+								<th >Fecha Prórroga</th>	
+								<th>Adjunto</th>			
+							</tr>';
+							foreach ($resultInspecciones as $insp) {					
+								echo '<tr>';					
+								echo '<td style="text-align: left" width="10%">'.$insp['tipo'].'</td>';	
+								echo '<td style="text-align: left" width="10%">'.$insp['accionacta'].'</td>';						
+								echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
+							//	echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
+								echo '<td style="text-align: left" width="10%"><a href="'.base_url().$insp['acta'].'" id="adjunto" target="_blank" > Ver Acta </a></td>';
+								
+								echo '</tr>';						
+							}
+						echo '</table> 
+						</div>
+
+						<div class="col-xs-12 col-md-12">
+							<h4>Denuncias</h4>
 							<table class="table table-bordered table-hover" id="" width= 100%>
 								<tr>
-									<th >Fecha Acta</th>
 									<th>Nº Denuncia</th>
-									<th>Motivos</th>
-									<th>Dom. Establecimiento</th>
-									<th>Tipo Denuncia</th>
-									<th>Tipo Tipo Acta</th>
-									<th>Prórroga</th>
-									
+									<th >Fecha Acta</th>						
+									<th>Motivos</th>			
 								</tr>';
-
-								foreach ($resultDenuncias as $f) {
-									//dump_exit($f);
-									echo '<tr>';
-									
-									echo '<td style="text-align: left" width="10%">'.$f['denunciasfecha'].'</td>';
-									echo '<td style="text-align: left" width="10%">'.$f['denunciaid'].'</td>';
+								foreach ($resultDenuncias as $f) {					
+									echo '<tr>';					
+									echo '<td style="text-align: left" width="10%">'.$f['denunciaid'].'</td>';	
+									echo '<td style="text-align: left" width="10%">'.$f['denunciasfecha'].'</td>';						
 									echo '<td style="text-align: left" width="10%">'.$f['denunciamotivos'].'</td>';
-									echo '<td style="text-align: left" width="10%">'.$f['establecalle'].' '.$f['establealtura'].'</td>';
-									echo '<td style="text-align: left" width="10%">'.$f['denunciatipo'].'</td>';
-									echo '<td style="text-align: left" width="10%">'.$f['accion'].'</td>';
-									echo '<td style="text-align: left" width="10%">'.$f['fechaProrroga'].'</td>';
-									
-									echo '</tr>';
-									
+									echo '</tr>';						
 								}
-
 							echo '</table> 
 
-					</div>
-				</div>				
-			</div> <!-- /.box-body -->
-		</div>		';		
+						</div>	
+
+					</div>	<!-- /.row -->				
+				</div> <!-- /.box-body -->
+			</div>		';		
 		
 			}
 } 

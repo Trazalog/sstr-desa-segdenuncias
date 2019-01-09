@@ -149,24 +149,13 @@ class Inspecciones extends CI_Model
 	}
 
 	// devuelve inspecciones por tipo acta o accion
-	function getInspeccionesCriterio($data,$idInspector){					
-
-		$this->db->select('tbl_inspecciones.inspeccionid,
-											tbl_inspecciones.inspeccionfechaasigna,
-											tbl_inspecciones.inspeccionfecharecp,
-											tbl_inspecciones.inspectorid,
-											tbl_inspecciones.inspecciondescrip,
-											tbl_inspecciones.estableid,
-											tbl_inspecciones.inspeestado,
-											tbl_inspecciones.bpm_id,
-											tbl_inspecciones.adjunto,
-											tbl_inspecciones.tipoacta,
-											tbl_inspecciones.accion,
-											tbl_inspecciones.fechaProrroga,
+	function getInspeccionesCriterio($data,$idInspector){		
+	
+		$this->db->select('tbl_inspecciones.*,
 											concat(tbl_establecimiento.establecalle, " ",tbl_establecimiento.establealtura) as direccion,
-											
+											tbl_inspectores.inspectornombre,
 											tbl_empleadores.emplearazsoc,
-											tbl_inspectores.inspectornombre');
+											tbl_empleadores.empleaid');
 		$this->db->from('tbl_inspecciones');
 		$this->db->join('tbl_establecimiento', 'tbl_inspecciones.estableid = tbl_establecimiento.estableid');
 		$this->db->join('tbl_empleadores', 'tbl_establecimiento.empleaid = tbl_empleadores.empleaid');
@@ -175,7 +164,7 @@ class Inspecciones extends CI_Model
 		if( ($data == 'inspeccion') || ($data == 'verificacion') || ($data == 'suspension') ){
 			$this->db->where('tbl_inspecciones.tipoacta', $data);
 		}
-		if( ($data =='cierre') || ($data =='ampliacion-plazo') || ($data =='infraccion') ){
+		if( ($data =='cierre-acta') || ($data =='ampliacion-plazo') || ($data =='infraccion') ){
 			$this->db->where('tbl_inspecciones.accion', $data);
 		}			
 		if( ($data == 'inspectorAsignado') ){
@@ -190,8 +179,7 @@ class Inspecciones extends CI_Model
 
 	// devuelve listado de inspecciones por id de denuncia
 	function listInspPorDenuncia($idDenuncia){
-		//FIXME: SACAR HARDCODE JEJE
-		$idDenuncia = 55;
+	
 		$this->db->select('*,concat(tbl_establecimiento.establecalle," - ",tbl_establecimiento.establealtura," - ",localidades.localidad) as direccionCompleta');
 		$this->db->from('tbl_inspecciones');
 		$this->db->join('tbl_inspectores', 'tbl_inspecciones.inspectorid = tbl_inspectores.inspectorid');

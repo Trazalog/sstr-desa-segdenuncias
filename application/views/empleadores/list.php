@@ -44,17 +44,17 @@
                   echo '<tr id="'.$id.'" class="'.$id.'" >';
   	              	echo '<td>';
                     if (strpos($permission,'View') !== false) {
-                      echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'" title="Ver Detalle"></i>';
                     }
                     if (strpos($permission,'Add') !== false) {
-                      echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'" title="Editar"></i>';
                     }
   	                if (strpos($permission,'Del') !== false) {
-                      echo '<i class="fa fa-fw fa fa-times text-light-blue btnBorrado" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa fa-times text-light-blue btnBorrado" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'" title="Eliminar"></i>';
                       
   	                }
   	                if (strpos($permission,'View') !== false) {
-                      echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnNote" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnNote" style="cursor: pointer; margin-left: 15px;" data-idempleador="'.$id.'" title="Notas"></i>';
   	                }
   	                echo '</td>';
   									echo '<td>'.$e['empleatipo'].'-'.$e['empleainscrip'].'</td>';

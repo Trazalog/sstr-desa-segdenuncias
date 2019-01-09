@@ -86,16 +86,14 @@ class Inspeccion extends CI_Controller {
 		$data['timeline'] = $this->ObtenerLineaTiempo($idTarBonita);
 
 		$this->load->view('inspecciones/view_',$data);
-	}
-	
+	}	
 	// trea comentarios de BPM para mostrar en detalle de inspeccion
 	function ObtenerComentariosBPM($caseId){
-		//$metodo = "POST";
+	
 		$parametros = $this->Bonitas->conexiones();
 		$param = stream_context_create($parametros);
 		return $this->Tareas->ObtenerComentariosBPM($caseId,$param);
 	}
-
 	// trea lineade tiempo de BPM para mostrar en detalle de inspeccion
 	function ObtenerLineaTiempo($caseId){
 		
@@ -106,14 +104,12 @@ class Inspeccion extends CI_Controller {
 		$data['listArch'] = $this->Overviews->ObtenerActividadesArchivadas($caseId,$param);
 		return $data;
   }
-
 	//trae todos los inspectores
 	public function getInspector(){
 
 		$result = $this->Inspecciones->getInspector();
 		echo json_encode($result);
 	}
-
 	// Guarda inspeccion nueva
 	public function Guardar_Inspeccion(){
 
@@ -123,39 +119,47 @@ class Inspeccion extends CI_Controller {
 		$inspecciondescrip=$this->input->post('inspecciondescrip');
 		$estableid=$this->input->post('estableid');
 		$idsDenuncias = $this->input->post('idsDenuncias');
+		
 		// convierte a formato datetime para guardar en BD
 		$date = date_create($inspeccionfechaasigna);
-		$fecha_actual = date_format($date, 'Y-m-d H:i:s');	
-
+		$fecha_actual = date_format($date, 'Y-m-d H:i:s');
 		// Lanza proceso de inspeccion (retorna case_id)
 		$result = $this->lanzarProcesoBPM($inspectorid);
 		$caseId = json_decode($result, true)['caseId'];
-
-		$data = array(
-			'inspeccionfechaasigna' => $fecha_actual,
-			'inspeccionfecharecp' => $fecha_actual,
-			'inspectorid' => $inspectorid,
-			'inspecciondescrip' => $inspecciondescrip,
-			'estableid' => $estableid,
-			'inspeestado' =>"C",
-			'bpm_id' =>$caseId
-		);
-
-		$idInsercion = $this->Inspecciones->Guardar_Inspecciones($data);
 		
-		if($idInsercion > 0){
-			$datosInspDenun = $this->armarBatch($idInsercion,$idsDenuncias);
-			$response = $this->Inspecciones->setInsDenIds($datosInspDenun);
-
-			if($response){
+		// si lanza proceso exitosamente		
+		if ($caseId) {		
+			
+			$data = array(
+				'inspeccionfechaasigna' => $fecha_actual,
+				'inspeccionfecharecp' => $fecha_actual,
+				'inspectorid' => $inspectorid,
+				'inspecciondescrip' => $inspecciondescrip,
+				'estableid' => $estableid,
+				'inspeestado' =>"C",
+				'bpm_id' =>$caseId
+			);	
+			$idInsercion = $this->Inspecciones->Guardar_Inspecciones($data);
+			
+			if($idInsercion > 0){
+				// si hay denuncias, las guarda
+				if($idsDenuncias!= null){
+					$datosInspDenun = $this->armarBatch($idInsercion,$idsDenuncias);
+					$response = $this->Inspecciones->setInsDenIds($datosInspDenun);
+					echo json_encode($response);
+				}else{
+					$response = true;
+					echo json_encode($response);
+				}				
+			}else{
+				$response = false;
 				echo json_encode($response);
 			}
-		}else{
+		} else{
 			$response = false;
 			echo json_encode($response);
-		}		
+		}				
 	}
-
 	// arma batch de relacion denuncias/inspecciones
 	function armarBatch($idInsercion,$idsDenuncias){
 		
@@ -167,7 +171,6 @@ class Inspeccion extends CI_Controller {
 		}
 		return $batch;
 	}
-
 	// lanza proceso en BPM (inspección)
 	function lanzarProcesoBPM($inspectorid){
 
@@ -179,9 +182,10 @@ class Inspeccion extends CI_Controller {
 		$parametros["http"]["content"] = json_encode($idInspector);
 		$param = stream_context_create($parametros);
 		$result = $this->Inspecciones->lanzarProcesoBPM($param);
+		//dump($result, 'Result:');
 		return $result;		
 	}
-
+	// filtar inspecciones por distintos criterios
 	public function getInspeccionesCriterio(){
 		
 		$tipoOaccion = $this->input->post('criterio');
@@ -196,7 +200,7 @@ class Inspeccion extends CI_Controller {
 		}
 				
 	}
-
+	// devuelve listado de inspecciones por denuncia
 	public function listInspPorDenuncia($permission, $idDenuncia){
 	
 		$data['list'] = $this->Inspecciones->listInspPorDenuncia($idDenuncia);

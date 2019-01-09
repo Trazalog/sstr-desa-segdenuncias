@@ -235,8 +235,8 @@ class Empleadores extends CI_Model
     // Guarda libros entregados al agregar empleador
     function setLibro($libro,$idEmpleador){
         foreach ($libro as $comp) { 
-            $dato['librofechaentrega'] = $comp[1];
-            $dato['librotomo']         = $comp[2];
+            $dato['librofechaentrega'] = $comp[2];
+            $dato['librotomo']         = $comp[1];
             $dato['empleaid']          = $idEmpleador;
             $dato['libroestado']       = 'AC';
             
@@ -301,6 +301,7 @@ class Empleadores extends CI_Model
             $dato['detaactivrubro'] = $comp[1];
             $dato['detaactivconvenio'] = $comp[2];
             $dato['empleaid'] = $idEmpleador;
+            $dato['detaactivestado'] = 'AC';
             
             $response = $this->db->insert('tbl_detaactiv', $dato);
         }   

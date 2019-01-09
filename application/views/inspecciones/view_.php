@@ -1,5 +1,6 @@
 <input type="hidden" id="permission" value="<?php echo $permission;?>">
 <section class="content">
+	<h3>Detalle de Inspección</h3>
 	<?php cargarCabecera($idTarBonita); ?>
 	<input id="idTarBonita" class="hidden" value="<?php echo $idTarBonita;?>">
 	<div class="row">
@@ -259,24 +260,18 @@
 	}
 </style>
 
-
 <script>
-
-
 
 	/* ver inspecciones por denuncia */ // LISTO!
 	$("#btnInsp").on("click", function(e){
     e.preventDefault();    
     var idDenuncia = $('#idDenuncia').val(); 
-    //alert(idDenuncia);
     WaitingOpen();
     $('#content').empty();
-    $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/listInspPorDenuncia/<?php echo $permission; ?>/" + idDenuncia + "/");
-    WaitingClose();
+    $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>/" + idDenuncia + "/");
+    WaitingClose();	
   });
-  /*  / ver inspecciones por denuncia */
-
-	
+  /*  / ver inspecciones por denuncia */	
 	
 	//Funcion COMENTARIOS
 	function guardarComentario() {

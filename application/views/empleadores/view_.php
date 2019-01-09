@@ -439,6 +439,9 @@
   });
   /* agrego establecimientoes */
   $("#add-establecimiento").click(function (e) {
+    
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var establecalle    = $('#calle').val();
     var establealtura   = $('#altura').val();
     var establepiso     = $('#piso').val();
@@ -511,6 +514,9 @@
 
   /* agrego actividades */
   $("#add-actividad").click(function (e) {
+    
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var id_actividad = $('#actividad').val();
     var actividad    = $("#actividad option:selected").val();
     var rubro        = $('#rubro').val();

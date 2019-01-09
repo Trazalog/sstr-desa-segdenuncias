@@ -41,7 +41,7 @@
                   </label>
                   
                   <label class="btn btn-primary" style="margin-left:20px;">
-                    <input type="radio" name="accion" id="cierre" autocomplete="off" value="cierre">Cierre
+                    <input type="radio" name="accion" id="cierre" autocomplete="off" value="cierre-acta">Cierre
                   </label>
                   <label class="btn btn-primary">
                     <input type="radio" name="accion" id="ampliacion" autocomplete="off" value="ampliacion-plazo">Ampliación Plazos
@@ -87,7 +87,7 @@
 
                     echo '<tr>';
                       echo '<td class="acciones">';
-                        echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'"></i>';
+                        echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Ver detalle"></i>';
                       echo '</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';                  
@@ -112,35 +112,30 @@
 
 <style>
   @media print
-{    
-    /* .no_imprimir, .no_imprimir *
-    {
-        display: none !important;
-    } */
-}
+  {    
+      /* .no_imprimir, .no_imprimir *
+      {
+          display: none !important;
+      } */
+  }
 </style>
 
 <script>
 
-// var table = $('#tbl_inspeccion').DataTable();
- 
-//  new $.fn.dataTable.Buttons( table, {
-//      buttons: [
-//          'print'
-//      ]
-//  } );
-  
-//  table.buttons().container()
-//      .appendTo( $('.acciones', table.table().container() ) );
-  
-  // $('#tbl_inspeccion').DataTable( {
-  //       dom: 'Bfrtip',
-  //       buttons: [
-  //           'print'
-  //       ]
-  //   } );
-
-  
+  // autocompletar empleadores   
+  autocompEmp();
+  function autocompEmp() {  
+    $( "#busEmpleador" ).autocomplete({
+      source: "Inspeccion/getDenominacionSocial",
+      minLength: 1,
+      select: function( event, ui ) {        
+        $("#busEmpleador").val(ui.item.label);
+        $("#empleaid").val(ui.item.id);
+        //alert('calgo');
+        getEstablecimientos();
+      }
+    });
+  }
   function getEstablecimientos(){
     var selector = $('#estable');
     var idEmpleador = $("#empleaid").val();
@@ -221,10 +216,18 @@
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>");
   }
-
-// FUNCIONES NUEVAS HUGO
- 
-  $('.btnView').on("click", function(){
+  // muestra detalle de inspeccion en vista estandrar
+  // $('.btnView').on("click", function(){
+  //   var idTarBonita = $(this).data("bpmid");
+  //   alert(idTarBonita);
+  //   WaitingOpen();
+  //   $('#content').empty();
+  //   $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/");
+  //   WaitingClose();
+  // });
+  verDetalle();  
+  function verDetalle(){
+    $('.btnView').on("click", function(){
     var idTarBonita = $(this).data("bpmid");
     //alert(idTarBonita);
     WaitingOpen();
@@ -232,142 +235,147 @@
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/");
     WaitingClose();
   });
-
-  // carga denuncias por establecimiento en modal agregar
-  $('#estable').change(function(){
-    
-    var idEstab = $('#estable option:selected').val();
-    var tbl = $('#tblDenEstab');
-    
-    $.ajax({
-      data: { idEstab : idEstab },
-      dataType: 'json',
-      type: 'POST',
-      url: 'index.php/Inspeccion/getDenPorEstabId',
-      success: function(data){             
-              $('#tblDenEstab tbody tr').remove();
-              var trow = ""; 
-              for (var i=0; i< data.length; i++) {                  
-
-                var tr = "<tr id='"+data['denunciaid']+"'>";
-                var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-                  var tdnroacta = "<td class='' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
-                  var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
-                  var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
-                var trCierre = "</tr>";
-              
-                trow = tr + tdDenunciaId + tdnroacta + tdfecha + tdmotivos;
-                // Agrego a tabla
-                $(tbl).append(trow);                                  
-              }             
-             
-      },
-      error: function(result){
-        console.error("Error cargando denuncias por estabelcimiento");
-      },
-    });
-
-  });
-
-  // al cargar la pantalla graba el criterio de filtrado
-  $('#criterio').val('todas');
-  
-  // busca inspecciones segun distintos criterios 
-  $('input:radio[name=accion]').change(function() {
-    
-    var idInsp = 0;
-    
-    if (this.value == 'todas') {   
-      $('#inspAsig').hide(300); 
-      $('#criterio').val('Todas');    
-      getInspecciones('todas', idInsp);
-    }
-    if (this.value == 'inspeccion') {   
-      $('#inspAsig').hide(300);
-      $('#criterio').val('Inspeccion');     
-      getInspecciones('inspeccion', idInsp);
-    }
-    if (this.value == 'verificacion') {
-      $('#inspAsig').hide(300);
-      $('#criterio').val('Verificacion');
-      getInspecciones('verificacion', idInsp);      
-    }
-    if (this.value == 'suspension') {
-      $('#inspAsig').hide(300);
-      $('#criterio').val('Suspension');
-      getInspecciones('suspension', idInsp);                   
-    }
-    if (this.value == 'cierre') {
-      $('#inspAsig').hide(300);
-      $('#criterio').val('Cierre');
-      getInspecciones('cierre', idInsp);                   
-    }
-    if (this.value == 'ampliacion-plazo') {
-      $('#inspAsig').hide(300);
-      $('#criterio').val('Ampliación Plazo');
-      getInspecciones('ampliacion-plazo', idInsp);                   
-    }
-    if (this.value == 'infraccion') {
-      $('#inspAsig').hide(300);
-      $('#criterio').val('Infraccion');
-      getInspecciones('infraccion', idInsp);                   
-    }
-    if (this.value == 'inspectorAsignado') { 
-      $('#inspAsig').show(300);
-      $('#criterio').val('Inspector'); 
-      // guarda el tipo de busqueda    
-      $('#tipoAccion').val('inspectorAsignado');                          
-    }
-  });  
-
-  $('#inspAsig').change(function(){
-
-    var criterio = $('#tipoAccion').val();
-    var idInsp = $('#inspAsig option:selected').val();
-    getInspecciones(criterio, idInsp);
-  });
-
-  function getInspecciones(criterio, idinspectorAsig){
-    
-    $.ajax({
-      type: 'POST',
-      data: {criterio: criterio,
-            idinspectorAsig:idinspectorAsig},
-      dataType: 'json',
-      url: 'index.php/Inspeccion/getInspeccionesCriterio',
-      success: function(data){
-        //console.table(data);
-        tabla = $('#tbl_inspeccion').DataTable();
-        tabla.clear().draw();
-
-        for(i = 0; i < data.length; i++) {
-          
-          var inspeccionid = data[i]['inspeccionid'];
-          var inspeccionfechaasigna = data[i]['inspeccionfechaasigna'];
-          var emplearazsoc = data[i]['emplearazsoc'];
-          var direccion = data[i]['direccion'];
-          var inspectornombre = data[i]['inspectornombre'];
-          //agrego valores a la tabla
-          $('#tbl_inspeccion').DataTable().row.add( [
-            '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-idempleador="1"></i>',
-            inspeccionid,
-            inspeccionfechaasigna,
-            emplearazsoc,
-            direccion,
-            inspectornombre              
-          ] );
-          $('#tbl_inspeccion').DataTable().draw();        
-        }
-      },
-      error: function(result){
-        //alert(result);
-        console.error("error al cargar inspecciones por criterios: " + result);
-        WaitingClose();
-      }
-    });
   }
 
-  // guarda inspeccion nueva
+  /*  Bloque busqueda */
+    // carga denuncias por establecimiento en modal agregar
+    $('#estable').change(function(){
+      
+      var idEstab = $('#estable option:selected').val();
+      var tbl = $('#tblDenEstab');
+      
+      $.ajax({
+        data: { idEstab : idEstab },
+        dataType: 'json',
+        type: 'POST',
+        url: 'index.php/Inspeccion/getDenPorEstabId',
+        success: function(data){             
+                $('#tblDenEstab tbody tr').remove();
+                var trow = ""; 
+                for (var i=0; i< data.length; i++) {                  
+
+                  var tr = "<tr id='"+data['denunciaid']+"'>";
+                  var tdDenunciaId = "<td class='denunciaId hidden' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
+                    var tdnroacta = "<td class='' style='text-align: left'> "+data[i]['denunciaid'] +" </td>" ;
+                    var tdfecha = "<td class='' style='text-align: left'> "+data[i]['denunciasfecha'] +" </td>" ; 
+                    var tdmotivos = "<td class='' id='fecha' style='text-align: left'> "+data[i]['denunciamotivos']+"</td>";
+                  var trCierre = "</tr>";
+                
+                  trow = tr + tdDenunciaId + tdnroacta + tdfecha + tdmotivos;
+                  // Agrego a tabla
+                  $(tbl).append(trow);                                  
+                }   
+                verDetalle();          
+              
+        },
+        error: function(result){
+          console.error("Error cargando denuncias por estabelcimiento");
+        },
+      });
+
+    });
+    // al cargar la pantalla graba el criterio de filtrado
+    $('#criterio').val('todas');  
+    // busca inspecciones segun distintos criterios 
+    $('input:radio[name=accion]').change(function() {
+      
+      var idInsp = 0;
+      
+      if (this.value == 'todas') {   
+        $('#inspAsig').hide(300); 
+        $('#criterio').val('todas');    
+        getInspecciones('todas', idInsp);
+      }
+      if (this.value == 'inspeccion') {   
+        $('#inspAsig').hide(300);
+        $('#criterio').val('Inspeccion');     
+        getInspecciones('inspeccion', idInsp);
+      }
+      if (this.value == 'verificacion') {
+        $('#inspAsig').hide(300);
+        $('#criterio').val('Verificacion');
+        getInspecciones('verificacion', idInsp);      
+      }
+      if (this.value == 'suspension') {
+        $('#inspAsig').hide(300);
+        $('#criterio').val('Suspension');
+        getInspecciones('suspension', idInsp);                   
+      }
+      if (this.value == 'cierre-acta') {
+        $('#inspAsig').hide(300);
+        $('#criterio').val('Cierre');
+        getInspecciones('cierre-acta', idInsp);                   
+      }
+      if (this.value == 'ampliacion-plazo') {
+        $('#inspAsig').hide(300);
+        $('#criterio').val('Ampliación Plazo');
+        getInspecciones('ampliacion-plazo', idInsp);                   
+      }
+      if (this.value == 'infraccion') {
+        $('#inspAsig').hide(300);
+        $('#criterio').val('Infraccion');
+        getInspecciones('infraccion', idInsp);                   
+      }
+      if (this.value == 'inspectorAsignado') { 
+        $('#inspAsig').show(300);
+        $('#criterio').val('Inspector'); 
+        // guarda el tipo de busqueda    
+        $('#tipoAccion').val('inspectorAsignado');                          
+      }
+    });  
+    // busca inspecciones segun inspector
+    $('#inspAsig').change(function(){
+
+      var criterio = $('#tipoAccion').val();
+      var idInsp = $('#inspAsig option:selected').val();
+      getInspecciones(criterio, idInsp);
+    });
+    // Trae inspecciones de acuerdo a criterios
+    function getInspecciones(criterio, idinspectorAsig){
+      
+      $.ajax({
+        type: 'POST',
+        data: {criterio: criterio,
+              idinspectorAsig:idinspectorAsig},
+        dataType: 'json',
+        url: 'index.php/Inspeccion/getInspeccionesCriterio',
+        success: function(data){
+          //console.table(data);
+          tabla = $('#tbl_inspeccion').DataTable();
+          tabla.clear().draw();
+
+          for(i = 0; i < data.length; i++) {
+            
+            var inspeccionid = data[i]['inspeccionid'];
+            var inspeccionfechaasigna = data[i]['inspeccionfechaasigna'];
+            var emplearazsoc = data[i]['emplearazsoc'];
+            var direccion = data[i]['direccion'];
+            var inspectornombre = data[i]['inspectornombre'];
+            var bpm_id = data[i]['bpm_id'];
+            //agrego valores a la tabla
+            $('#tbl_inspeccion').DataTable().row.add( [
+              
+              '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'+ bpm_id +'" title="Ver detalle"></i>',
+              inspeccionid,
+              inspeccionfechaasigna,
+              emplearazsoc,
+              direccion,
+              inspectornombre              
+            ] );
+            $('#tbl_inspeccion').DataTable().draw();        
+          }
+          verDetalle();
+        },
+        error: function(result){
+          //alert(result);
+          console.error("error al cargar inspecciones por criterios: " + result);
+          WaitingClose();
+        }
+      });
+    }
+  /*  Bloque busqueda */
+
+  // guarda inspeccion nueva 
   function guardarInspeccion(){
     
     var inspeccionfechaasigna=$('#fecha').val();
@@ -395,8 +403,8 @@
         return;
     }else{
       $('#modalAgregar').modal('hide');
-      //$('#error').fadeOut('slow');   
-        WaitingOpen();
+      
+        //WaitingOpen();
         $.ajax({
           type: 'POST',
           data: {"inspeccionfechaasigna":inspeccionfechaasigna,  
@@ -407,70 +415,23 @@
                   "inspeestado":inspeestado,
                   "idsDenuncias": idsDenuncias
                   },
+          dataType: 'json',
           url: 'index.php/Inspeccion/Guardar_Inspeccion', 
           success: function(result){
-                  WaitingClose();                
-                  ActualizarPagina();
+                  WaitingClose();   
+                  if (result) {
+                    ActualizarPagina();
+                  } else {
+                    alert("Error! No se pudo guarda la nueva inspeccion...");
+                  }
           },
           error: function(result){
                   WaitingClose();
                   alert("Error! No se pudo guarda la nueva inspeccion...");
           }
-        });
-        console.log("Inspeccion Guardada");
+        });        
     }    
   }
-
-  // autocompletar empleadores   
-  autocompEmp();
-  function autocompEmp() {  
-    $( "#busEmpleador" ).autocomplete({
-      source: "Inspeccion/getDenominacionSocial",
-      minLength: 1,
-      select: function( event, ui ) {        
-        $("#busEmpleador").val(ui.item.label);
-        $("#empleaid").val(ui.item.id);
-        //alert('calgo');
-        getEstablecimientos();
-      }
-    });
-  }
-
-  // llena select de establecimientos
-  $('#busEmpleador').on("change", function(){
-    var selector = $('#estable');
-    var idEmp = $("#empleaid").val();
-    $.ajax({
-        async: true,
-        global: false,
-        url: "Inspeccion/getEstablecimiento",
-        type: 'POST',
-        dataType : "json",
-        data: {"empleaid" : idEmp },
-        'success': function (result) {
-                    
-                    selector.html('');
-                    if(result!=null){
-                      var opcion  = "<option value='-1'>Seleccione...</option>" ; 
-                      selector.append(opcion); 
-                      for(var i=0; i < result.length ; i++){    
-                        var direccion = result[i]['establecalle'];
-                        var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
-                        selector.append(opcion); 
-                      }
-                      selector.val(idEstablecimiento);
-                    }
-                    else{
-                      selector.append("<option value='-1'>No hay Establecimientos</option>");
-                    }
-                },
-        'error' : function (result){
-                  console.log('Funcion: getEstablecimientos ERROR');
-                  alert('error');
-              }
-    });
-  });
-
   // imprime listado de inspecciones
   $(".fa-print").click(function (e) {
     var critFilt = $('#criterio').val();
@@ -716,7 +677,7 @@
         </div><br><br>
 
         <div class="col-xs-6">
-          <label style="margin-top: 9px;">Detalle de la inspección:</label>
+          <label style="margin-top: 9px;">Detalle de la inspección<strong style="color: #dd4b39">*</strong>:</label>
         </div><br><br>
         <div class="col-xs-9">
           <textarea placeholder="Agregar detalle" class="form-control" rows="3" id="nota" value=""></textarea>

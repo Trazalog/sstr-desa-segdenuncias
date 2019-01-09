@@ -599,7 +599,10 @@
     
     // informacion personal 
     var empleatipo           = document.querySelector('input[name="tipoEmpleador"]:checked').value; 
-    var empleacui            = $('#cuit').val(); 
+    
+    var cuit                 = $('#cuit').val();
+    var cuitSinguiones       = cuit.split("-", 3);
+    var empleacui            = cuitSinguiones[0] + cuitSinguiones[1] + cuitSinguiones[2];    
     var empleafecha          = $('#fecha').val(); 
     var empleainscrip        = $('#nro-inscripcion').val(); 
     var emplearazsoc         = $('#razon-social').val(); 
@@ -637,7 +640,7 @@
     hay_error = false;
     $('#errorEmpleador').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error").css("color","inherit");
-
+  
     if ( empleacui == '') {
       $("#cuit").parent().addClass("has-error");
       hay_error = true;
@@ -742,6 +745,7 @@
   // Agregar Establecimiento
   $(document).on("click", "#add-establecimiento", function(e){
     e.preventDefault();
+    e.stopImmediatePropagation();
     WaitingOpen('Agregando Establecimiento');
 
     //var estableid       = $("#tomo").val();
@@ -1238,6 +1242,7 @@
   // Agregar Libro
   $(document).on("click", "#add-libro", function(e){
     e.preventDefault();
+    e.stopImmediatePropagation();
     WaitingOpen('Agregando Libro');
 
     var empleadorid = '<?php echo $idEmpleador ?>';

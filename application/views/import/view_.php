@@ -125,9 +125,12 @@
 								showMessage("");
 								var datos = JSON.parse(data);								
 								// si todos los CUIT estan inscriptos dibuja tabla
-								if (datos['noCuit'][0] == null) { 								
-									tabla = $('#tabladetalle').DataTable();
-									tabla.clear().draw();									
+								//if (datos['noCuit'][0] == null) { 								
+								tabla = $('#tabladetalle').DataTable();
+								tabla.clear().draw();		
+															
+								if(datos['respGuardado'] != 'sin denuncias'){
+
 									for(i = 0; i < datos['denTemporales'].length; i++) {		
 										var idEstab = datos['denTemporales'][i]['estableid'];
 										var dom =	datos['denTemporales'][i]['establecalle'] + ' '+datos['denTemporales'][i]['establealtura'];
@@ -144,10 +147,12 @@
 									}	
 									llenaSelect();
 									cambioSelect();
-								}else{
+								}			
+								// si hay cuit no registrados los muestra
+								if (datos['noCuit'][0] != null){
 									infoCuit(datos);
-									cambioSelect();
-								}								
+									//cambioSelect();
+								}							
 						},
 						//si ha ocurrido un error
 						error: function(){
@@ -251,34 +256,35 @@
 
 	//muestra mensajes varios
 	function showMessage(message){
-			$(".messages").html("").show();
-			$(".messages").html(message);
+		$(".messages").html("").show();
+		$(".messages").html(message);
 	}
 
 	function infoInconsistencias(datos){
 
-			$('tr.celdas').remove();
-			for (var i = 0; i < datos.inconsistencias.length; i++) {            
-					var tr = "<tr class='celdas'>"+
-					"<td>"+datos['inconsistencias'][i]["CALLE"]+"</td>"+
-					"<td>"+datos['inconsistencias'][i]["CUIT"]+"</td>"+
-					"<td>"+datos['inconsistencias'][i]["MOTIVOS_x0020_INFRINGIDOS"]+"</td>"+ 
-					"<td>"+datos['inconsistencias'][i]["FECHA_x0020_DENUNCIA"]+"</td>"+
-					"</tr>";
-					$('#tabladetalle tbody').append(tr);
-			}
+		$('tr.celdas').remove();
+		for (var i = 0; i < datos.inconsistencias.length; i++) {            
+				var tr = "<tr class='celdas'>"+
+				"<td>"+datos['inconsistencias'][i]["CALLE"]+"</td>"+
+				"<td>"+datos['inconsistencias'][i]["CUIT"]+"</td>"+
+				"<td>"+datos['inconsistencias'][i]["MOTIVOS_x0020_INFRINGIDOS"]+"</td>"+ 
+				"<td>"+datos['inconsistencias'][i]["FECHA_x0020_DENUNCIA"]+"</td>"+
+				"</tr>";
+				$('#tabladetalle tbody').append(tr);
+		}
 	}
 
 	function infoCuit(datos){
-			mens = $("<span class='nohaycuit'><h4>Los siguientes CUIT que no estan registrados en el Sistema, por favor proceda dar el Alta a Empleadores</h4></span>");
-			$("#nocuit").html("").show();
-			$("#nocuit").html(mens);
-			var cuit = 0;
-			for (var i = 0 ; i < datos['noCuit'].length ; i++) {
-					cuit = parseInt(datos['noCuit'][i]);
-					mensNocuit = "<div>" + cuit + "</div>" 
-					$('#cuitNoReg').append(mensNocuit);
-			} 
+		$('.nocuit').remove();
+		mens = $("<span class='nohaycuit'><h4>Los siguientes CUIT que no estan registrados en el Sistema, por favor proceda dar el Alta a Empleadores</h4></span>");
+		$("#nocuit").html("").show();
+		$("#nocuit").html(mens);
+		var cuit = 0;
+		for (var i = 0 ; i < datos['noCuit'].length ; i++) {
+			cuit = parseInt(datos['noCuit'][i]);
+			mensNocuit = "<div class='nocuit'>" + cuit + "</div>" 
+			$('#cuitNoReg').append(mensNocuit);
+		} 
 	}
 
 	function infoEstab(datos){
@@ -401,3 +407,6 @@
 	});
 
 </script>
+
+
+

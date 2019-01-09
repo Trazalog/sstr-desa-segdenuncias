@@ -1,7 +1,7 @@
 <input type="hidden" id="permission" value="<?php echo $permission;?>">
 
 <section class="content">
-	<?php //cargarCabecera($idPedTrabajo); ?>
+	<?php cargarCabecera($TareaBPM["caseId"]); ?>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="box">
@@ -29,10 +29,8 @@
 											<div class="panel-body">
 
 												<?php
-													//echo"id de form: ";
-													//dump_exit($TareaBPM["assigned_id"]);
-													//$TareaBPM["assigned_id"] = 'asignado';
-															//echo "<input type='text' class='hidden' id='estadoTarea' value='$estadoTarea' >";
+													
+													echo "<input type='text' class='form-control hidden' id='asignado' value='".$TareaBPM["assigned_id"]."' >";												
 													//if ($estadoTarea == "noasignado") {
 
 															echo "<button class='btn btn-block btn-success' id='btontomar' style='width: 100px; margin-top: 10px ;display: inline-block;' onclick='tomarTarea()'>Tomar tarea</button>";
@@ -41,7 +39,7 @@
 															echo "&nbsp"; 
 															echo "&nbsp";
 															echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
-													//}    
+												//	}    
 															echo "</br>"; 
 															echo "</br>"; 
 
@@ -56,62 +54,51 @@
 
 															echo "<input type='text' class='hidden' id='idPedTrabajo' value='$idPedTrabajo' >";
 
-													?>
-												<input type="text" class="form-control hidden" id="asignado" value="<?php echo $TareaBPM['assigned_id'] ?>"
+													?>												
+
+												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
 												>
-												<form>
+
+											
 													<div class="panel panel-default">
-														<h4 class="panel-heading">INFORMACION:</h4>
-
-
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="tarea">Tarea</label>
-																<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
-																 disabled><!-- id de listarea -->
-																<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
-																<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
-																<!-- id de task en bonita -->
-																<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
-															</div>
+														
+														<div class="panel-heading">
+															<h3 class="panel-title">Información:</h3>															
 														</div>
 
+														<div class="panel-body">
 
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="fecha">Fecha de Creación</label>
-																<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
-																 disabled>
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="tarea">Tarea</label>
+																	<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
+																	disabled><!-- id de listarea -->
+																	<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
+																	<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
+																	<!-- id de task en bonita -->
+																	<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
+																	
+																</div>
 															</div>
-														</div><br>
 
+															<div class="form-group">
+																<div class="col-sm-6 col-md-6">
+																	<label for="fecha">Fecha de Creación</label>
+																	<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
+																	disabled>
+																</div>
+															</div><br>													
 
-														<div class="form-group ">
-															<div class="col-sm-6 col-md-6 ">
-																<label for="ot ">Orden de Trabajo:</label>
-																<input type="text " class="form-control " id="ot
-                                                                    "
-																 placeholder=" " value="<?php echo $datos[0][ 'id_orden'] ?>" disabled>
+															<div class="form-group">
+																<div class="col-sm-12 col-md-12">
+																	<label for="detalle">Detalle</label>
+																	<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
+																</div>
 															</div>
-														</div><br>
 
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="duracion_std">Duracion Estandar (minutos):</label>
-																<input type="text" class="form-control" id="duracion_std" placeholder="" value="<?php echo $datos[0]['duracion_std']  ?>"
-																 disabled>
-															</div></br>
 														</div>
-
-														<br>
-
-														<div class="form-group">
-															<div class="col-sm-12 col-md-12">
-																<label for="detalle">Detalle</label>
-																<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
-															</div>
-														</div></br> </br> </br> </br> </br>
-													</div>
+														
+													</div> <!--	/panel panel-default-->
 
 													<div class="form-group">
 														<div class="col-sm-12 col-md-12">
@@ -119,68 +106,27 @@
 															<?php if($idForm != 0){echo '<button type="button" id="formulario" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="getformulario()">Completar Formulario</button>';}?>
 														</div>
 													</div>
-												</form>
+											
 												
-
+												<br><br>
+                              
 												<form enctype="multipart/form-data" id="formInspeccion" class="form-horizontal" style="padding:0px 15px;" role="form" action="" method="" >
 												
+												
+													<br><br>
 
-													<!-- <div class="btn-group" data-toggle="buttons">
-															<label class="btn btn-primary active">
-																<input type="radio" name="options" id="option1" autocomplete="off" value="cierre_acta"> Cierre 
-															</label>
-															<label class="btn btn-primary">
-																<input type="radio" name="options" id="option2" autocomplete="off" value="ampliacion_plazos"> Ampliación Plazos
-															</label>
-															<label class="btn btn-primary">
-																<input type="radio" name="options" id="option3" autocomplete="off" value="infraccion"> Infracción
-															</label>
-														</div>
-
-
-													<div class="form-group">
-															<label for="fechaProrroga">Fecha de Prórroga</label>
-															<input type="date" name="fechaProrroga" class="form-control" id="fechaProrroga" value="<?php echo date('Y-m-d') ?>">
-													</div>
-
-													<div class="form-group">
-															<label for="filePdf">filePdf</label>
-															<div class="fileinput fileinput-new" data-provides="fileinput">
-																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf"/></span>
-																<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
-															</div>
-														</div> -->
-														<div class="form-group">
-																<div class="col-xs-4">
-																		<label for="idInspector">Asignar Inspector </label>
-																</div> 
-																<div class="col-xs-8">
-																		<select class="form-control" id="idInspector" name="idInspector" value="">
-																			<option value="-1">Seleccione inspector...</option>
-																		</select>
-																</div>
-														</div>
-														<div class="col-sm-12 col-md-12">		
-															<div class="col-xs-8">Asignar Inspector:
-																<select    id="num" name="num" class="form-control" >
-																</select>
-															</div>
-														</div>
-															
-														<input type="text" name="case_id" class="form-control" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
-
-														<input type="text" name="estableid" class="form-control" id="estableid" value="<?php echo $datos[0]['estableid'] ?>">
-														
-														<input type="text" name="inspectorid" class="form-control" id="inspectorid" value="<?php echo $datos[0]['inspectorid'] ?>">
-
-														<textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php echo $TareaBPM['displayDescription']?></textarea>
-																							
+													<!-- Datos a guardar		 -->
+                          <input type="text" name="case_id" class="form-control hidden" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
+													<input type="text" name="id" class="form-control hidden" id="id" value="<?php echo $TareaBPM["id"] ?>">
+                          <input type="text" name="estableid" class="form-control hidden" id="estableid" value="<?php echo $datos[0]['estableid'] ?>">                          
+                          <input type="text" name="tipoTarea" class="form-control hidden" id="tipoTarea" value="estandar">
+                          <!-- <textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php //echo $TareaBPM['displayDescription']?></textarea>	 -->
 
 												</form>
 
 											</div>
 										</div>
-
+                    <!-- comentarios         -->
 										<div role="tabpanel" class="tab-pane" id="profile">
 											<div class="panel-body">
 												<div class="panel panel-primary">
@@ -205,7 +151,7 @@
 												<button class="btn btn-primary" id="guardarComentario" onclick="guardarComentario()">Agregar</button>
 											</div>
 										</div>
-
+                    <!-- Linea de tiempo             -->
 										<div role="tabpanel" class="tab-pane" id="messages">
 											<div class="panel-body">
 												<div class="panel panel-primary">
@@ -419,17 +365,21 @@
 
 <script>
 
-	// evaluarEstado();
-	// function evaluarEstado() {
+$('#filePdf').on('change', function() {
+  $('#adjunto').attr("href",URL.createObjectURL(this.files[0]));              
+});
 
-	// 	var asig = $('#asignado').val();
-	// 	// si esta tomada la tarea
-	// 	if (asig != "") {
-	// 		habilitar();
-	// 	} else {
-	// 		deshabilitar();
-	// 	}
-	// }
+	evaluarEstado();
+	function evaluarEstado() {
+
+		var asig = $('#asignado').val();
+		// si esta tomada la tarea
+		if (asig != "") {
+			habilitar();
+		} else {
+			deshabilitar();
+		}
+	}
 
 	function habilitar() {
 		// habilito btn y textarea       
@@ -489,56 +439,21 @@
  
 	// termina la tarea en BPM y guarda los datos en  BD	
 	function tareaTerminada(){
-		alert('algo');
+		
 		var formData = new FormData($("#formInspeccion")[0]);
 		/* Ajax de Grabado en BD */
 		$.ajax({
-		url: 'index.php/Tarea/cerrarTarea',
-		type: 'POST',
-		data: formData,
-		cache: false,
-		contentType: false,
-		processData: false,
-		success: function (respuesta) {
-				if (respuesta === "exito") {
-				}
-				else if (respuesta === "error") {
-					alert("Los datos no se han podido guardar");
-				}
-				else {
-					//$("#msg-error").show();
-					//$(".list-errors").html(respuesta);
-					//alert("Los datos no se han guardado");
-				}
-			}
-		});
-	}	
-
-	// funcion de MTBA
-	function terminarTarea() {
-		var idTarBonita = $('#idTarBonita').val();
-		var id_listarea = $('#id_listarea').val();
-		//alert(idTarBonita);
-		$.ajax({
+			url: 'index.php/Tarea/cerrarTarea',
 			type: 'POST',
-			data: {
-				'idTarBonita': idTarBonita,
-				'id_listarea': id_listarea
-			},
-			url: 'index.php/Tarea/terminarTareaStandarenBPM',
-			success: function (data) {
-				// toma a tarea exitosamente
-				if (data['reponse_code'] == 204) {
-					$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (respuesta) {						
+						$("#content").load("<?php echo base_url(); ?>index.php/Tarea/index/<?php echo $permission; ?>");
 				}
-			},
-			error: function (data) {
-				//alert("Noo");
-				console.log(data);
-			},
-			dataType: 'json'
-		});
-	}
+		});					
+	}	
 
 	// Boton Hecho generico
 	function estado() {
@@ -585,8 +500,9 @@
 	}
 	// Toma tarea en BPM
 	function tomarTarea() {
+
+		WaitingOpen('Tomando tarea...');
 		var idTarBonita = $('#idTarBonita').val();
-		//alert(idTarBonita);
 		$.ajax({
 			type: 'POST',
 			data: {
@@ -596,7 +512,8 @@
 			success: function (data) {
 				console.log(data['reponse_code']);
 				// toma a tarea exitosamente
-				if (data['reponse_code'] == 200) {
+				if (data['reponse_code'] == 200) {					
+					WaitingClose();
 					habilitar();
 				}
 
@@ -609,8 +526,8 @@
 	}
 	// Soltar tarea en BPM
 	function soltarTarea() {
-		var idTarBonita = $('#idTarBonita').val();
-		//alert(idTarBonita);
+		WaitingOpen('Soltando tarea...');
+		var idTarBonita = $('#idTarBonita').val();		
 		$.ajax({
 			type: 'POST',
 			data: {
@@ -621,7 +538,8 @@
 				console.log(data['reponse_code']);
 				// toma a tarea exitosamente
 				if (data['reponse_code'] == 200) {
-					deshabilitar();
+					WaitingClose();				
+					deshabilitar();			
 				}
 			},
 			error: function (result) {
@@ -641,91 +559,91 @@
 	// evento de cierre de modal guarda parcialmente los datos
 	// $('#modalForm').on('hidden.bs.modal', function (e) {
 
-	// 	$('#error').fadeOut('slow');
-	// 	// toma  el valor de todos los input file 
-	// 	var imgs = $('input.archivo');
+		// 	$('#error').fadeOut('slow');
+		// 	// toma  el valor de todos los input file 
+		// 	var imgs = $('input.archivo');
 
-	// 	var formData = new FormData($("#genericForm")[0]);
+		// 	var formData = new FormData($("#genericForm")[0]);
 
-	// 	/** subidad y resubida de imagenes **/
-	// 	// Tomo los inputs auxiliares cargados
-	// 	var aux = $('input.auxiliar');
+		// 	/** subidad y resubida de imagenes **/
+		// 	// Tomo los inputs auxiliares cargados
+		// 	var aux = $('input.auxiliar');
 
-	// 	var auxArray = [];
-	// 	aux.each(function () {
-	// 		auxArray.push($(this).val());
-	// 	});
-	// 	//console.table(aux);
-	// 	for (var i = 0; i < imgs.length; i++) {
+		// 	var auxArray = [];
+		// 	aux.each(function () {
+		// 		auxArray.push($(this).val());
+		// 	});
+		// 	//console.table(aux);
+		// 	for (var i = 0; i < imgs.length; i++) {
 
-	// 		var inpValor = $(imgs[i]).val();
-	// 		var idValor = $(imgs[i]).attr('name');
-	// 		//console.log("idValor: "+idValor);
-	// 		// si tiene algun valor (antes de subir img)
-	// 		if (inpValor != "") {
-	// 			//al subir primera img
-	// 			formData.append(idValor, inpValor);
-	// 		} else {
-	// 			// sino sube img guarda la del auxiliar         
-	// 			//inpValor = auxArray[i]; //valor del input auxiliar
-	// 			//console.table(inpValor);
-	// 			//formData.append(idValor, inpValor);
-	// 		}
-	// 	}
+		// 		var inpValor = $(imgs[i]).val();
+		// 		var idValor = $(imgs[i]).attr('name');
+		// 		//console.log("idValor: "+idValor);
+		// 		// si tiene algun valor (antes de subir img)
+		// 		if (inpValor != "") {
+		// 			//al subir primera img
+		// 			formData.append(idValor, inpValor);
+		// 		} else {
+		// 			// sino sube img guarda la del auxiliar         
+		// 			//inpValor = auxArray[i]; //valor del input auxiliar
+		// 			//console.table(inpValor);
+		// 			//formData.append(idValor, inpValor);
+		// 		}
+		// 	}
 
-	// 	/* text tipo check */
-	// 	var check = $('input.check');
-	// 	//console.log("aux");
-	// 	//console.table(aux);
-	// 	var checkArray = [];
-	// 	// check.each(function() {
-	// 	//     checkArray.push($(this).val());
-	// 	// });
-	// 	//console.log('array de chech: ');
-	// 	//console.table(checkArray);
+		// 	/* text tipo check */
+		// 	var check = $('input.check');
+		// 	//console.log("aux");
+		// 	//console.table(aux);
+		// 	var checkArray = [];
+		// 	// check.each(function() {
+		// 	//     checkArray.push($(this).val());
+		// 	// });
+		// 	//console.log('array de chech: ');
+		// 	//console.table(checkArray);
 
-	// 	for (var i = 0; i < check.length; i++) {
-	// 		//var chekValor = $(check[i]).val();
-	// 		var idCheckValor = $(check[i]).attr('name');
-	// 		console.log('valor: ');
-	// 		console.log(idCheckValor);
-	// 		if ($(check[i]).is(':checked')) {
-	// 			chekValor = 'tilde';
-	// 		} else {
-	// 			chekValor = 'notilde';
-	// 		}
-	// 		formData.append(idCheckValor, chekValor);
-	// 	}
-	// 	// console.log('array de chech: ');
-	// 	// console.table(check);
+		// 	for (var i = 0; i < check.length; i++) {
+		// 		//var chekValor = $(check[i]).val();
+		// 		var idCheckValor = $(check[i]).attr('name');
+		// 		console.log('valor: ');
+		// 		console.log(idCheckValor);
+		// 		if ($(check[i]).is(':checked')) {
+		// 			chekValor = 'tilde';
+		// 		} else {
+		// 			chekValor = 'notilde';
+		// 		}
+		// 		formData.append(idCheckValor, chekValor);
+		// 	}
+		// 	// console.log('array de chech: ');
+		// 	// console.table(check);
 
-	// 	/* Ajax de Grabado en BD */
-	// 	$.ajax({
-	// 		url: 'index.php/Tarea/guardarForm',
-	// 		type: 'POST',
-	// 		data: formData,
-	// 		cache: false,
-	// 		contentType: false,
-	// 		processData: false,
+		// 	/* Ajax de Grabado en BD */
+		// 	$.ajax({
+		// 		url: 'index.php/Tarea/guardarForm',
+		// 		type: 'POST',
+		// 		data: formData,
+		// 		cache: false,
+		// 		contentType: false,
+		// 		processData: false,
 
-	// 		success: function (respuesta) {
+		// 		success: function (respuesta) {
 
 
-	// 			if (respuesta === "exito") {
+		// 			if (respuesta === "exito") {
 
-	// 			}
-	// 			else if (respuesta === "error") {
-	// 				alert("Los datos no se han podido guardar");
-	// 			}
-	// 			else {
-	// 				//$("#msg-error").show();
-	// 				//$(".list-errors").html(respuesta);
-	// 				//alert("Los datos no se han guardado");
-	// 			}
-	// 		}
-	// 	});
+		// 			}
+		// 			else if (respuesta === "error") {
+		// 				alert("Los datos no se han podido guardar");
+		// 			}
+		// 			else {
+		// 				//$("#msg-error").show();
+		// 				//$(".list-errors").html(respuesta);
+		// 				//alert("Los datos no se han guardado");
+		// 			}
+		// 		}
+		// 	});
 
-	// });
+		// });
 
 	// trae valores validos para llenar form asoc.  
 	function getformulario(event) {
@@ -901,7 +819,6 @@
 	$('.fecha').datepicker({
 		autoclose: true
 	});
-
 
 
 </script>

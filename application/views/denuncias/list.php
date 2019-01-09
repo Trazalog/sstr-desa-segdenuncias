@@ -12,7 +12,8 @@
 						echo '<div class="form-group">';
 						echo '<button class="btn btn-primary" id="btnAdd" data-toggle="modal" data-target="#modalAgregar">Agregar</button>';
 						echo '</div>';
-					}
+          }
+          
 					?>
 					<table id="tbl-denuncias" class="table table-bordered table-hover">
 						<thead>
@@ -34,20 +35,18 @@
                   echo '<tr id="'.$id.'" class="'.$id.'" >';
   	              	echo '<td>';
                     if (strpos($permission,'View') !== false) {
-                      echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'"></i>';
+                      echo '<i class="fa fa-fw fa-search text-light-blue btnView" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" title="Ver detalle"></i>';
                     }
                     // if (strpos($permission,'Add') !== false) {
                     //   echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" data-toggle="modal" data-target="#modaleditar" ></i>';
                     // }  	                
   	                if (strpos($permission,'View') !== false) {
                       if ($e['inspeccionid'] > 0) {
-                        echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="cursor: pointer; margin-left: 15px;" data-denunciaId="'.$id.'"></i>';
-                      } else {
-                        // echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="margin-left: 15px;" data-denunciaId="'.$id.'" disabled></i>';
+                        echo '<i class="fa fa-fw fa-sticky-note text-light-blue btnInsp" style="cursor: pointer; margin-left: 15px;" data-denunciaId="'.$id.'" title="Ver inspecciones por Denuncia"></i>';
                       }                      
                     }
                     if (strpos($permission,'Del') !== false) {
-  	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue btnDelete" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'"></i>';
+  	                	echo '<i class="fa fa-fw fa-times-circle text-light-blue btnDelete" style="cursor: pointer; margin-left: 15px;" data-denunciaid="'.$id.'" title="Eliminar"></i>';
   	                }
   	                echo '</td>';
   									echo '<td>'.$e['denunciasfecha'].'</td>';
@@ -85,12 +84,12 @@
       select: function( event, ui ) {        
         $( "#busEmpleador" ).val(ui.item.value);
         $("#empleaid").val(ui.item.id);
+        getEstabecimiento();
       }
     });
   }
- 
   // llena select de establecimientos
-  $('#busEmpleador').on("change", function(){
+  function getEstabecimiento(){
     var selector = $('#estable');
     var idEmp = $("#empleaid").val();
     $.ajax({
@@ -111,7 +110,7 @@
                         var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
                         selector.append(opcion); 
                       }
-                      selector.val(idEstablecimiento);
+                      //selector.val(idEstablecimiento);
                     }
                     else{
                       selector.append("<option value='-1'>No hay Establecimientos</option>");
@@ -122,7 +121,7 @@
                   alert('error');
               }
     });
-  });
+  }    
 
   // guarda denuncia nueva
   function guardarDenuncia(){
@@ -211,7 +210,6 @@
   $(".btnInsp").on("click", function(e){
     e.preventDefault();    
     var idDenuncia = $(this).data('denunciaid'); 
-    //alert(idDenuncia);
     WaitingOpen();
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/listInspPorDenuncia/<?php echo $permission; ?>/" + idDenuncia + "/");
@@ -256,7 +254,7 @@
 
     function getEstablecimientos(idEmpleador){
       var selector = $('#estableEdit');
-      //console.log(id);
+      
       $.ajax({
         async: true,
         global: false,
@@ -274,7 +272,7 @@
                         var opcion  = "<option value='"+result[i]['estableid']+"'>" +direccion+ "</option>" ; 
                         selector.append(opcion);
                       }
-                      selector.val(idEstablecimiento);
+                      //selector.val(idEstablecimiento);
                     }
                     else{
                       selector.append("<option value='-1'>No hay Establecimientos</option>");
@@ -445,7 +443,7 @@
         </div><br><br>
 
         <div class="col-xs-6">
-          <label style="margin-top: 9px;">Detalle de la Denuncia:</label>
+          <label style="margin-top: 9px;">Detalle de la Denuncia<strong style="color: #dd4b39">*</strong>:</label>
         </div><br><br>
         <div class="col-xs-9">
           <textarea placeholder="Agregar detalle" class="form-control" name="denunciamotivos" rows="3" id="nota" value=""></textarea>
@@ -533,7 +531,7 @@
         </div><br><br>
 
         <div class="col-xs-6">
-          <label style="margin-top: 9px;">Detalle de la Denuncia:</label>
+          <label style="margin-top: 9px;">Detalle de la Denuncia<strong style="color: #dd4b39">*</strong>:</label>
         </div><br><br>
         <div class="col-xs-9">
           <textarea placeholder="" class="form-control" name="denunciamotivos" rows="3" id="motivosVer" value="" disabled></textarea>
@@ -544,8 +542,8 @@
     </div> <!--/ .modal-body -->
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" onclick="reset()" data-dismiss="modal">Cancelar</button>
-      <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarDenuncia()">Guardar</button>
+      <button type="button" class="btn btn-default" onclick="reset()" data-dismiss="modal">Cerrar</button>
+      <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarDenuncia()">Guardar</button> -->
     </div>
   </div> <!-- / .modal-conten -->
 </div>
@@ -656,7 +654,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <a class="btn btn-danger" id="btnConfirmDelete" onclick="borrarDenuncia()">Eliminar</a>
+        <a class="btn btn-danger" id="btnConfirmDelete" data-dismiss="modal" onclick="borrarDenuncia()">Eliminar</a>
       </div>
     </div>
   </div>
