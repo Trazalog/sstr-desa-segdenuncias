@@ -200,6 +200,12 @@ class Inspeccion extends CI_Controller {
 		}
 				
 	}
+
+	public function getInspeccionesporFecha(){
+		$fi = $this->input->post('fi');
+		$ff = $this->input->post('ff');
+		echo json_encode($this->Inspecciones->Listado_Inspecciones_por_Fecha($fi,$ff));
+	}
 	// devuelve listado de inspecciones por denuncia
 	public function listInspPorDenuncia($permission, $idDenuncia){
 	

@@ -24,6 +24,26 @@ class Inspecciones extends CI_Model
 				return array();
 			}
 	}
+		// Devuelve inspecciones en estado Curso 
+		function Listado_Inspecciones_por_Fecha($fi,$ff){
+
+			$this->db->select('*,concat(C.establecalle," - ",C.establealtura," - ",E.localidad) as direccionCompleta');
+			$this->db->from('tbl_inspecciones as A');
+			$this->db->join('tbl_inspectores as B','A.inspectorid=B.inspectorid');
+			$this->db->join('tbl_establecimiento as C','A.estableid=C.estableid');
+			$this->db->join('tbl_empleadores D','C.empleaid=D.empleaid');
+			$this->db->join('localidades as E','C.dptoid=E.id');
+			$this->db->where('A.inspeestado= "C" ');		
+			$this->db->where('date(A.inspeccionfecharecp)>=',$fi);$this->db->where('date(A.inspeccionfecharecp)<=',$ff);
+			$query=$this->db->get();
+			if ($query->num_rows()!=0)    
+			{
+				return $query->result_array();	
+			}
+			else{
+					return array();
+			}
+		}
 	// Devuelve establecimientos por ID de empleadores Activos
 	function getEstablecimientos($id){
 

@@ -44,7 +44,7 @@
                     <input type="radio" name="accion" id="cierre" autocomplete="off" value="cierre-acta">Cierre
                   </label>
                   <label class="btn btn-primary">
-                    <input type="radio" name="accion" id="ampliacion" autocomplete="off" value="ampliacion-plazo">Ampliación Plazos
+                    <input type="radio" name="accion" id="ampliacion" autocomplete="off" value="ampliacion-plazo">Prórroga
                     </label>
                   <label class="btn btn-primary">
                     <input type="radio" name="accion" id="infraccion" autocomplete="off" value="infraccion">Infracción
@@ -52,6 +52,9 @@
 
                   <label class="btn btn-primary" style="margin-left:20px;">
                       <input type="radio" name="accion" id="inspectorAsignado" autocomplete="off" value="inspectorAsignado">Inspector
+                  </label>
+                  <label class="btn btn-primary" style="margin-left:20px;">
+                      <input type="radio" name="accion" id="fecha" autocomplete="off" value="fecha">Fecha
                   </label>
                   <div class="clearfix"></div>
                   <div class="col-sm-3 col-md-3">
@@ -61,7 +64,19 @@
                   </div>  
                 </div>
             </div>    <!-- /col-sm-12 col-md-12-->
+          <div style="display:none;" id="fecha_filtro">
+            <div class="row" style="margin: 0 auto;display: table;">
+              <div class="col-sm-5 col-md-5"><br>
+                  <label>Fecha Desde:</label>
+                  <input type="date" id="fi"  autocomplete="off"  value="Fecha Desde"/>
+              </div>
+              <div class="col-sm-5 col-md-5"><br>
+                  <label>Fecha Hasta:</label>
+                  <input type="date" id="ff"  autocomplete="off"  value="Fecha Desde"/>
+              </div>
+            </div>
           </div>   
+          </div>
 
           <div class="row" style="margin-top:20px;">
             <div class="fa fa-fw fa-print" style="color: #A4A4A4; cursor: pointer; margin-left: 15px; border-radius: 18px; " title="Imprimir"  ></div>
@@ -280,7 +295,8 @@
     $('input:radio[name=accion]').change(function() {
       
       var idInsp = 0;
-      
+      $('#fecha_filtro').hide();
+      $('#inspAsig').hide();
       if (this.value == 'todas') {   
         $('#inspAsig').hide(300); 
         $('#criterio').val('todas');    
@@ -321,6 +337,13 @@
         $('#criterio').val('Inspector'); 
         // guarda el tipo de busqueda    
         $('#tipoAccion').val('inspectorAsignado');                          
+      }
+      if (this.value == 'fecha') { 
+        
+        $('#fecha_filtro').show(300);
+        $('#criterio').val('fecha'); 
+        // guarda el tipo de busqueda    
+        $('#tipoAccion').val('fecha');                          
       }
     });  
     // busca inspecciones segun inspector
@@ -373,6 +396,63 @@
         }
       });
     }
+
+    function getInspeccionesPorFecha(desde,hasta){
+      
+      $.ajax({
+        type: 'POST',
+        data: {fi:desde,ff:hasta},
+        dataType: 'json',
+        url: 'index.php/Inspeccion/getInspeccionesporFecha',
+        success: function(data){
+          //console.table(data);
+          tabla = $('#tbl_inspeccion').DataTable();
+          tabla.clear().draw();
+          console.table(data);
+          for(i = 0; i < data.length; i++) {
+            
+            var inspeccionid = data[i]['inspeccionid'];
+            var inspeccionfechaasigna = data[i]['inspeccionfechaasigna'];
+            var emplearazsoc = data[i]['emplearazsoc'];
+            var direccion = data[i]['direccionCompleta'];
+            var inspectornombre = data[i]['inspectornombre'];
+            var bpm_id = data[i]['bpm_id'];
+            //agrego valores a la tabla
+            $('#tbl_inspeccion').DataTable().row.add( [
+              
+              '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'+ bpm_id +'" title="Ver detalle"></i>',
+              inspeccionid,
+              inspeccionfechaasigna,
+              emplearazsoc,
+              direccion,
+              inspectornombre            
+            ] );
+            $('#tbl_inspeccion').DataTable().draw();        
+          }
+          verDetalle();
+        },
+        error: function(result){
+          //alert(result);
+          console.error("error al cargar inspecciones por criterios: " + result);
+          WaitingClose();
+        }
+      });
+    }
+
+    $('#fi').change(function(){
+      if($('#ff').val()!=''){
+        getInspeccionesPorFecha($('#fi').val(),$('#ff').val());
+      }
+      alert($('#fi').val());
+    });
+
+    $('#ff').change(function(){
+      if($('#fi').val()!=''){
+        getInspeccionesPorFecha($('#fi').val(),$('#ff').val());
+      }
+    });
+
+    
   /*  Bloque busqueda */
 
   // guarda inspeccion nueva 
