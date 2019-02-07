@@ -142,7 +142,7 @@
 																<input type="radio" name="accion" id="option1" autocomplete="off" value="cierre-acta"> Cierre 
 															</label>
 															<label class="btn btn-primary">
-																<input type="radio" name="accion" id="option2" autocomplete="off" value="ampliacion-plazo"> Ampliación Plazos
+																<input type="radio" name="accion" id="option2" autocomplete="off" value="ampliacion-plazo"> Prórroga
 															</label>
 															<label class="btn btn-primary">
 																<input type="radio" name="accion" id="option3" autocomplete="off" value="infraccion"> Infracción
