@@ -14,7 +14,6 @@ class empresa extends CI_Controller {
 		$data['list'] = $this->Empresas->Empresas_List();
 		$data['permission'] = $permission;
 		$this->load->view('empresas/list', $data);
-		//$this->load->view('empresas/nuevatab', $data);
 	}
 
 	public function getEmpresa()

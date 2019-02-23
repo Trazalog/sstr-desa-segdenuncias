@@ -239,7 +239,7 @@
         <div class="modal-content">
             <form method="POST" id="frmArchivo" enctype="multipart/form-data" accept-charset="utf-8">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title" id="myModalLabel"><span id="modalAction"> </span> Usuario</h4>
                 </div>
                 <div class="modal-body" id="modalBodyUsr">

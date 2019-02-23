@@ -19,8 +19,7 @@ class Actividad extends CI_Controller {
 	public function Obtener_tbl_actividade(){
 		$id=$_POST['actividadid'];
 		$result = $this->Actividades->Obtener_tbl_actividades($id);
-		print_r($result);
-		return $result;
+		echo json_encode($result);
 
 	}
 
@@ -29,10 +28,11 @@ class Actividad extends CI_Controller {
 	    $descripciongeneral=$this->input->post('descripciongeneral');
 	    $data = array(
 				'descripcion' => $descripcion,
-				'descripciongeneral' => $descripciongeneral
+				'descripciongeneral' => $descripciongeneral,
+				'actividadestado' =>"AC"
 				);
 	    $sql = $this->Actividades->Guardar_tbl_actividades($data);
-	    print_r($sql);
+	    echo json_encode($sql);
 	   
   	}
 
@@ -45,8 +45,8 @@ class Actividad extends CI_Controller {
 				'descripcion' => $descripcion,
 				'descripciongeneral' => $descripciongeneral
 				);
-	    $sql = $this->Actividades->Modificar_tbl_actividades($data);
-	    print_r($sql);
+	$sql = $this->Actividades->Modificar_tbl_actividades($data);
+	echo json_encode($sql);
 
   	}
 
@@ -54,7 +54,7 @@ class Actividad extends CI_Controller {
 	public function Eliminar_tbl_actividade(){
 	$id=$_POST['actividadid'];	
 	$result = $this->Actividades->Eliminar_tbl_actividades($id);
-	print_r($result);	
+	echo json_encode($result);	
 	}
 
 
