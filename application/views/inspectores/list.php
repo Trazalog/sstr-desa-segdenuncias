@@ -34,7 +34,7 @@
                   echo '<td>';
                   
                   if (strpos($permission,'Edit') !== false) {
-                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;"></i>';
+                        echo '<i class="fa fa-fw fa-pencil text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Editar"></i>';
                     }
                     if (strpos($permission,'Del') !== false) {
                         echo '<i class="fa fa-fw fa-times-circle text-light-blue" style="cursor: pointer; margin-left: 15px;" title="Eliminar"></i>';
@@ -59,8 +59,8 @@
   </div><!-- /.row -->
 </section><!-- /.content -->
 
-<script
->function guardarInspector(){
+<script>
+function guardarInspector(){
       var inspectornombre=$('#inspectornombre').val();
       var inspectormail=$('#inspectormail').val();
       var inspectorcel=$('#inspectorcel').val();
@@ -111,7 +111,7 @@
        '</div>'+
           '<div class="row">'+
             '<div class="col-xs-4">'+
-               ' <label style="margin-top: 7px;">inspectornombre <strong style="color: #dd4b39">*</strong>: </label>'+
+               ' <label style="margin-top: 7px;">inspector nombre <strong style="color: #dd4b39">*</strong>: </label>'+
             '</div>'+
             '<div class="col-xs-5">'+
                 '<input type="text" class="form-control"  id="inspectornombreE" value="'+inspectornombre+'" >'+
@@ -119,7 +119,7 @@
         '</div><br>'+
           '<div class="row">'+
             '<div class="col-xs-4">'+
-               ' <label style="margin-top: 7px;">inspectormail <strong style="color: #dd4b39">*</strong>: </label>'+
+               ' <label style="margin-top: 7px;">inspector mail <strong style="color: #dd4b39">*</strong>: </label>'+
             '</div>'+
             '<div class="col-xs-5">'+
                 '<input type="text" class="form-control"  id="inspectormailE" value="'+inspectormail+'" >'+
@@ -127,7 +127,7 @@
         '</div><br>'+
           '<div class="row">'+
             '<div class="col-xs-4">'+
-               ' <label style="margin-top: 7px;">inspectorcel <strong style="color: #dd4b39">*</strong>: </label>'+
+               ' <label style="margin-top: 7px;">inspector cel <strong style="color: #dd4b39">*</strong>: </label>'+
             '</div>'+
             '<div class="col-xs-5">'+
                 '<input type="text" class="form-control"  id="inspectorcelE" value="'+inspectorcel+'" >'+
@@ -135,7 +135,7 @@
         '</div><br>'+
           '<div class="row">'+
             '<div class="col-xs-4">'+
-               ' <label style="margin-top: 7px;">inspectorsector <strong style="color: #dd4b39">*</strong>: </label>'+
+               ' <label style="margin-top: 7px;">inspector sector <strong style="color: #dd4b39">*</strong>: </label>'+
             '</div>'+
             '<div class="col-xs-5">'+
                 '<input type="text" class="form-control"  id="inspectorsectorE" value="'+inspectorsector+'" >'+

@@ -21,8 +21,7 @@ class Inspector extends CI_Controller {
 	public function Obtener_Inspector(){
 	$id=$_POST['inspectorid'];
 	$result = $this->Inspectores->Obtener_Inspectores($id);
-	print_r($result);
-	return $result;
+	echo json_encode($result);
 
 	}
 
@@ -37,10 +36,11 @@ class Inspector extends CI_Controller {
 						    'inspectornombre' => $inspectornombre,
 						    'inspectormail' => $inspectormail,
 						    'inspectorcel' => $inspectorcel,
-						    'inspectorsector' => $inspectorsector
+						    'inspectorsector' => $inspectorsector,
+						    'inspectorestado' =>"AC"
 	    );
 	    $sql = $this->Inspectores->Guardar_Inspectores($data);
-	    print_r($sql);
+	  	echo json_encode($sql);
 	   
   	}
 
@@ -60,7 +60,7 @@ class Inspector extends CI_Controller {
 						    'inspectorsector' => $inspectorsector
 					   );
 	    $sql = $this->Inspectores->Modificar_Inspectores($data);
-	    print_r($sql);
+	    echo json_encode($sql);
   	}
 
 
@@ -68,7 +68,7 @@ class Inspector extends CI_Controller {
 	
 		$id=$_POST['inspectorid'];	
 		$result = $this->Inspectores->Eliminar_Inspectores($id);
-		print_r($result);
+		echo json_encode($result);
 		
 	}
 

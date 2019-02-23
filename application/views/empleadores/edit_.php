@@ -32,7 +32,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Información Personal</a></li>
             <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Libros</a></li>
-            <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Notas</a></li>
+            <li class=""><a href="#tab_3" data-toggle="tab" aria-expanded="false">Observaciones</a></li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -434,7 +434,8 @@
                     <th>Acción</th>
                     <th>Id Nota</th>
                     <th>Fecha</th>
-                    <th>Resolución</th>
+                    <th style="display:none">Observacion original</th>
+                    <th>Observación</th>
                     <th>Imagen</th>
                   </tr>
                 </thead>
@@ -454,7 +455,10 @@
                         echo '</td>';
                         echo '<td>'.$nota['notid'].'</td>';
                         echo '<td>'.$nota['fecha'].'</td>';
-                        echo '<td>'.$nota['res'].'</td>';
+                        echo '<td style="display:none">'.$nota['observacion'].'</td>';
+                        $observacion = substr( strip_tags( $nota['observacion'], ''), 0, 200);
+                        if(strlen($observacion) == 200) { $observacion = $observacion."..."; }
+                        echo '<td>'.$observacion.'</td>';
                         echo '<td><a href="#" class="pop"><img style="width: 20px; height: 20px;" src="'.base_url().'assets/notas/'.$nota['imagen'].'"></a></td>';
                       echo '</tr>';
                     }
@@ -476,6 +480,25 @@
 </section><!-- /.content -->
 
 <script>
+  // formateo texto para mostrar en tabla
+  function text_en_tabla(content) {
+    //filtro tags html
+    var fragmento   = document.createDocumentFragment();
+    var elementoDiv = document.createElement('div');
+    fragmento.appendChild(elementoDiv);
+    elementoDiv.innerHTML = content;
+    var cadena = fragmento.firstChild.innerText;
+    // elimino espacio al inicio y final
+    cadena = cadena.trim();
+    // recorto texto a 200 caracteres
+    cadena = cadena.substring(0,200);
+    //agrego puntos suspensivos
+    if(cadena.length == 200) {
+      cadena = cadena + "...";
+    }
+    return cadena;
+  }
+
   // formato de cuit 
   $('#cuit').inputmask({
     mask: '99-99999999-9'
@@ -576,7 +599,10 @@
     
     // informacion personal 
     var empleatipo           = document.querySelector('input[name="tipoEmpleador"]:checked').value; 
-    var empleacui            = $('#cuit').val(); 
+    
+    var cuit                 = $('#cuit').val();
+    var cuitSinguiones       = cuit.split("-", 3);
+    var empleacui            = cuitSinguiones[0] + cuitSinguiones[1] + cuitSinguiones[2];    
     var empleafecha          = $('#fecha').val(); 
     var empleainscrip        = $('#nro-inscripcion').val(); 
     var emplearazsoc         = $('#razon-social').val(); 
@@ -614,7 +640,7 @@
     hay_error = false;
     $('#errorEmpleador').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error").css("color","inherit");
-
+  
     if ( empleacui == '') {
       $("#cuit").parent().addClass("has-error");
       hay_error = true;
@@ -719,6 +745,7 @@
   // Agregar Establecimiento
   $(document).on("click", "#add-establecimiento", function(e){
     e.preventDefault();
+    e.stopImmediatePropagation();
     WaitingOpen('Agregando Establecimiento');
 
     //var estableid       = $("#tomo").val();
@@ -978,7 +1005,7 @@
   // Levanto Modal Editar Actividad
   $(document).on("click", ".btnEditActividad", function(e){
     e.preventDefault();
-    var detaactivid       = $(this).data("idactividad");
+    var detaactivid       = c
     var actividadid       = $(this).data("actividadid");
     var empleaid          = '<?php echo $idEmpleador ?>';
     var descripcion       = $(this).closest("tr > td:first-child").next().text();
@@ -1215,6 +1242,7 @@
   // Agregar Libro
   $(document).on("click", "#add-libro", function(e){
     e.preventDefault();
+    e.stopImmediatePropagation();
     WaitingOpen('Agregando Libro');
 
     var empleadorid = '<?php echo $idEmpleador ?>';
@@ -1377,18 +1405,18 @@
   // Levanto Modal Editar Notas 
   $(document).on("click", ".btnEditNota", function(e){
     e.preventDefault();
-    console.debug("click modal");
+    //console.debug("click modal");
     var empleaid = '<?php echo $idEmpleador ?>';
     var notid    = $(this).data("notaid");
     var fecha    = $(this).closest("tr > td:first-child").next().next().text();
-    var res      = $(this).closest("tr > td:first-child").next().next().next().text();
-    var img      = $(this).closest("tr > td:first-child").next().next().next().next().find("img").attr("src");
-    console.debug( empleaid, notid, fecha, res, img );
+    var observac = $(this).closest("tr > td:first-child").next().next().next().text();
+    var img      = $(this).closest("tr > td:first-child").next().next().next().next().next().find("img").attr("src");
+    console.debug( empleaid, notid, fecha, observac, img );
 
     $("#mEmpleadorId").val(empleaid);
     $("#mNotaId").val(notid);
     $("#mFecha").val(fecha);
-    $("#mResolucion").val(res);
+    $("#mObservacion").text(observac);
     $("#mImg").attr("src", img);
 
     $('#modalEditNotas').modal('show');
@@ -1401,18 +1429,23 @@
     var empleaid = $("#mEmpleadorId").val();
     var notid    = $("#mNotaId").val();
     var fecha    = $("#mFecha").val();
-    var res      = $("#mResolucion").val();
+    var observac = $("#mObservacion").text();
     var img      = '';
     
     //valido datos
     hay_error = false;
+    max_char = false;
+    $(".list-errors").empty();
     $('#errorNotaModal').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error");
 
-    if ( res == '') {
-      $("#mResolucion").parent().addClass("has-error");
-      hay_error = true;
+    if ( observac.length > 21844 ) { 
+      //maximos caracteres permitidos en un campo text con codificacion utf-8: 21,844 caracteres
+      // https://stackoverflow.com/questions/4420164/how-much-utf-8-text-fits-in-a-mysql-text-field
+      $("#mObservacion").parent().addClass("has-error");
+      max_char = true;
     }
+
     if ( fecha == '') {
       $("#mFecha").parent().addClass("has-error");
       hay_error = true;
@@ -1422,9 +1455,22 @@
       $('#errorNotaModal').fadeIn('slow');
       $(".list-errors").html('Complete los campos obligatorios');
       WaitingClose();
+      if( max_char ) {
+        $('#errorNotaModal').fadeIn('slow');
+        $(".list-errors").append('<br>El texto debe tener un máximo de 21844 caracteres');
+        WaitingClose();
+        return;
+      }
+      return;
+    }
+    if( max_char ) {
+      $('#errorNotaModal').fadeIn('slow');
+      $(".list-errors").html('El texto debe tener un máximo de 21844 caracteres');
+      WaitingClose();
       return;
     } 
     hay_error = false;
+    max_char = false;
     $('#errorNotaModal').fadeOut('slow');
     $('[class*="has-error"]').removeClass("has-error");
     
@@ -1433,16 +1479,16 @@
     formData.append('empleaid', empleaid);
     formData.append('notid', notid); 
     formData.append('fecha', fecha);
-    formData.append('res', res);
+    formData.append('observacion', observac);
 
     /*/ Display the key/value pairs
     for (var pair of formData.entries()) {
         console.log(pair[0]+ ', ' + pair[1]);
-    }*/
+    }//*/
     /*/ Display the values
     for (var value of formData.values()) {
        console.log(value);
-    }*/
+    }//*/
 
     //ajax
     $.ajax({
@@ -1454,24 +1500,31 @@
       type: "POST",
       url: "index.php/Empleador/editarNota",
       success: function(data){
+        console.debug(data);
         data = JSON.parse(data);
-        $('#tbl-nota').DataTable().clear();
+        tabla = $('#tbl-nota').DataTable();
+        tabla.clear().draw();
         for(i = 0; i < data['notas'].length; i++) {
-          var notid      = data['notas'][i]['notid'];
-          var fecha      = data['notas'][i]['fecha'];
-          var resolucion = data['notas'][i]['res'];
-          var imagen     = data['notas'][i]['imagen'];
-          console.info(imagen);
+          var notid       = data['notas'][i]['notid'];
+          var fecha       = data['notas'][i]['fecha'];
+          var observacion = data['notas'][i]['observacion'];
+          observaciontxt  = text_en_tabla(observacion);
+          var imagen      = data['notas'][i]['imagen'];
+          console.info(observacion);
           //agrego valores a la tabla
-          $('#tbl-nota').DataTable().row.add( [
+          tablaCompleta = tabla.row.add( [
             '<i class="fa fa-fw fa-pencil text-light-blue btnEditNota" style="cursor: pointer; margin-left: 15px;" data-notaid="'+notid+'"></i>'+
             '<i class="fa fa-fw fa-times-circle text-light-blue btnDeleteNota" style="cursor: pointer; margin-left: 15px;" data-notaid="'+notid+'"></i>',
             notid,
             fecha,
-            resolucion,
+            observacion,
+            observaciontxt,
             '<a href="#" class="pop"><img style="width: 20px; height: 20px;" src="<?php echo base_url() ?>assets/notas/'+imagen+'"></a>',
-            ] ).node().id = notid;
-          $('#tbl-nota').DataTable().draw();
+            ] );
+          tablaCompleta.node().id = notid;
+          var nodes = tabla.column(3).nodes();
+          $(nodes).addClass('hidden');
+          tabla.draw();
         }
 
         $('#modalEditNotas').modal('hide');
@@ -1504,7 +1557,7 @@
         for(i = 0; i < data['notas'].length; i++) {
           var notid      = data['notas'][i]['notid'];
           var fecha      = data['notas'][i]['fecha'];
-          var resolucion = data['notas'][i]['res'];
+          var resolucion = data['notas'][i]['observacion'];
           var imagen     = data['notas'][i]['imagen'];
           //agrego valores a la tabla
           $('#tbl-nota').DataTable().row.add( [
@@ -1965,14 +2018,14 @@
           <div class="row">
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
-                <label for="mResolucion">Resolución</label>
-                <input type="text" name="mResolucion" class="form-control" placeholder="" id="mResolucion" value="">
-              </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-              <div class="form-group">
                 <label for="mFecha">Fecha de entrega</label>
                 <input type="date" name="mFecha" class="form-control" id="mFecha" value="">
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="mObservacion">Observación</label>
+                <textarea name="mObservacion" class="form-control" id="mObservacion"></textarea>
               </div>
             </div>
           </div>

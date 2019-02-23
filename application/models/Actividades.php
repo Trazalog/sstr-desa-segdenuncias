@@ -6,27 +6,19 @@ class Actividades extends CI_Model
 	{
 		parent::__construct();
 	}
-
-	// function Listado_tbl_actividades(){
-
-	//  $query= $this->db->get('tbl_actividad');
-
-	//  if ($query->num_rows()!=0)
-	// {
-	//  return $query->result_array();	
-	// }
-
-	// }
-
+	
 
  	function Listado_tbl_actividades()
    	{
-    $this->db->where('actividadelimina', 'AC');
+    $this->db->where('actividadestado', 'AC');
 	$query=$this->db->get('tbl_actividad');
 
 		if ($query->num_rows()!=0)
 				{
 			 return $query->result_array();	
+			}
+			else{
+				return array();
 			}
 		}
 
@@ -51,30 +43,16 @@ class Actividades extends CI_Model
 	function Modificar_tbl_actividades($data){
 
 		$query =$this->db->update('tbl_actividad', $data, array('actividadid' => $data['actividadid']));
-		print_r($query);
+		return $query;
 	}
-
-
-	// function Eliminar_tbl_actividades($data){
-    	
-	//        $this->db->where('actividadid', $data);
-	//        $this->db->delete('tbl_actividad');
-	//        if ($this->db->affected_rows() > 0) {
-	// 		return true;
-	// 	}
-	// 	else{
-	// 		return false;
-	// 	}
-
- 	//    }
 
 
     function Eliminar_tbl_actividades($id){
 	
-		$this->db->set('actividadelimina', 'AN');
+		$this->db->set('actividadestado', 'AN');
 		$this->db->where('actividadid', $id);
 		$query=$this->db->update('tbl_actividad');
-		print_r($query);
+		return $query;
 
 	}
 }	

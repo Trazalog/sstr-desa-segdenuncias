@@ -365,6 +365,7 @@
 </section><!-- /.content -->
 
 <script>
+
   /* formato de cuit */
   $('#cuit').inputmask({
     mask: '99-99999999-9'
@@ -438,6 +439,9 @@
   });
   /* agrego establecimientoes */
   $("#add-establecimiento").click(function (e) {
+    
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var establecalle    = $('#calle').val();
     var establealtura   = $('#altura').val();
     var establepiso     = $('#piso').val();
@@ -510,6 +514,9 @@
 
   /* agrego actividades */
   $("#add-actividad").click(function (e) {
+    
+    e.preventDefault();
+    e.stopImmediatePropagation();
     var id_actividad = $('#actividad').val();
     var actividad    = $("#actividad option:selected").val();
     var rubro        = $('#rubro').val();
@@ -729,8 +736,19 @@
 		}
 		if ( empleainscrip == '') {
 			$("#nro-inscripcion").parent().addClass("has-error");
-			hay_error = true;
+			hay_error = true;      
 		}
+    
+    // validado que ingresen soloo numeros en la inscripción
+    //https://oscargascon.es/validacion-simple-de-formularios-con-jquery/
+    var namePattern = "^[0-9]{1,30}$";
+    var respuesta = $("#nro-inscripcion").val().match(namePattern) ? true : false;
+    if (!respuesta) {
+      hay_error = true;
+      $("#nro-inscripcion").val("");
+      $("#nro-inscripcion").attr("placeholder", "Ingrese solo números");
+    }       
+
 		if ( empleaexp == '') {
 			$("#expediente").parent().addClass("has-error");
 			hay_error = true;
