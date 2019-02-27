@@ -145,7 +145,8 @@ class Tarea extends CI_Controller {
 			//sube pdf
 			$config = [
 				'upload_path' => './assets/inspecciones/',
-				'allowed_types' => 'pdf'
+				'allowed_types' => '*',
+				'max_size'=>'5000'
 			];
 			$this->load->library("upload",$config);
 			if($this->upload->do_upload('filePdf')){
