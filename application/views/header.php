@@ -27,7 +27,9 @@
 
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrapValidator.min.css"/>
  
-
+    <!-- Propios -->
+    <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/css/propios.css" />
+    
 
 <!--esto agregue -->
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.bootstrap.min.css">

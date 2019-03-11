@@ -16,54 +16,53 @@
         </div><!-- /.box-header -->
         <div class="box-body">
          
-           <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <h4>Criterios de Búsqueda</h4>
-                
-                <input type="text" class="hidden" name="" id="criterio" autocomplete="off"  value="">
+         <div class="row">
+          <div class="col-xs-12">
+            <h4>Criterios de Búsqueda</h4>
 
-                <input type="text" class="hidden" name="accion" id="tipoAccion" autocomplete="off"  value="tipoAccion">
+            <input type="text" class="hidden" name="" id="criterio" autocomplete="off" value="">
+            <input type="text" class="hidden" name="accion" id="tipoAccion" autocomplete="off" value="tipoAccion">
 
-                <div class="btn-group" data-toggle="buttons">
-                  
-                <label class="btn btn-primary">
-                    <input type="radio" name="accion" id="todas" autocomplete="off"  value="todas"> Todas
-                  </label>
+            <div class="btn-group" data-toggle="buttons">
 
-                  <label class="btn btn-primary" style="margin-left:20px;">
-                    <input type="radio" name="accion" id="inspeccion" autocomplete="off"  value="inspeccion"> Inspeccion
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="accion" id="verificacion" autocomplete="off"  value="verificacion"> Verificación
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="accion" id="suspension" autocomplete="off"  value="suspension"> Suspensión
-                  </label>
-                  
-                  <label class="btn btn-primary" style="margin-left:20px;">
-                    <input type="radio" name="accion" id="cierre" autocomplete="off" value="cierre-acta">Cierre
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="accion" id="ampliacion" autocomplete="off" value="ampliacion-plazo">Prórroga
-                    </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="accion" id="infraccion" autocomplete="off" value="infraccion">Infracción
-                  </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="accion" id="todas" autocomplete="off"  value="todas"> Todas
+              </label>
 
-                  <label class="btn btn-primary" style="margin-left:20px;">
-                      <input type="radio" name="accion" id="inspectorAsignado" autocomplete="off" value="inspectorAsignado">Inspector
-                  </label>
-                  <label class="btn btn-primary" style="margin-left:20px;">
-                      <input type="radio" name="accion" id="fecha" autocomplete="off" value="fecha">Fecha
-                  </label>
-                  <div class="clearfix"></div>
-                  <div class="col-sm-3 col-md-3">
-                    <select name="inspAsig" class="form-control inspAsig" id="inspAsig" style="display:none;">
-                        <option value="-1">Seleccione inspector...</option>
-                    </select>  
-                  </div>  
-                </div>
-            </div>    <!-- /col-sm-12 col-md-12-->
+              <label class="btn btn-primary" style="margin-left:20px;">
+                <input type="radio" name="accion" id="inspeccion" autocomplete="off"  value="inspeccion"> Inspeccion
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="accion" id="verificacion" autocomplete="off"  value="verificacion"> Verificación
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="accion" id="suspension" autocomplete="off"  value="suspension"> Suspensión
+              </label>
+
+              <label class="btn btn-primary" style="margin-left:20px;">
+                <input type="radio" name="accion" id="cierre" autocomplete="off" value="cierre-acta">Cierre
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="accion" id="ampliacion" autocomplete="off" value="ampliacion-plazo">Prórroga
+              </label>
+              <label class="btn btn-primary">
+                <input type="radio" name="accion" id="infraccion" autocomplete="off" value="infraccion">Infracción
+              </label>
+
+              <label class="btn btn-primary" style="margin-left:20px;">
+                <input type="radio" name="accion" id="inspectorAsignado" autocomplete="off" value="inspectorAsignado">Inspector
+              </label>
+              <label class="btn btn-primary" style="margin-left:20px;">
+                <input type="radio" name="accion" id="fecha" autocomplete="off" value="fecha">Fecha
+              </label>
+              <div class="clearfix"></div>
+              <div class="col-sm-3 col-md-3">
+                <select name="inspAsig" class="form-control inspAsig" id="inspAsig" style="display:none;">
+                  <option value="-1">Seleccione inspector...</option>
+                </select>  
+              </div>  
+            </div>
+          </div>    <!-- /col-xs-12-->
           <div style="display:none;" id="fecha_filtro">
             <div class="row" style="margin: 0 auto;display: table;">
               <div class="col-sm-5 col-md-5"><br>
@@ -79,9 +78,9 @@
           </div>
 
           <div class="row" style="margin-top:20px;">
-            <div class="fa fa-fw fa-print" style="color: #A4A4A4; cursor: pointer; margin-left: 15px; border-radius: 18px; " title="Imprimir"  ></div>
-                  
-          </div>  
+            <div class="fa fa-fw fa-print" style="color: #A4A4A4; cursor: pointer; margin-left: 15px; border-radius: 18px;" title="Imprimir"></div>        
+          </div>
+
           <div class="row" style="margin-top:20px;">
             <div class="col-xs-12" id="tablaImp">
               <table id="tbl_inspeccion" class="table table-hover">
@@ -98,11 +97,13 @@
                 <tbody>
                 <?php
                 //var_dump($list[0]['bpm_id']);
-                  foreach($list as $f){
-
+                  foreach($list as $f)
+                  { 
                     echo '<tr>';
                       echo '<td class="acciones">';
                         echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Ver detalle"></i>';
+                        /*if($rolBonita == 3) //rol Edit "Coordinador de Inspecciones"
+                          echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Editar Inspección"></i>';*/
                       echo '</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';                  
@@ -123,17 +124,6 @@
   </div><!-- /.col -->
 </div><!-- /.row -->
 </section><!-- /.content -->
-
-
-<style>
-  @media print
-  {    
-      /* .no_imprimir, .no_imprimir *
-      {
-          display: none !important;
-      } */
-  }
-</style>
 
 <script>
 
@@ -231,15 +221,26 @@
     $('#content').empty();
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>");
   }
-  // muestra detalle de inspeccion en vista estandrar
-  // $('.btnView').on("click", function(){
-  //   var idTarBonita = $(this).data("bpmid");
-  //   alert(idTarBonita);
-  //   WaitingOpen();
-  //   $('#content').empty();
-  //   $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/");
-  //   WaitingClose();
-  // });
+
+  var idfin = "";
+  var id_tarea = "";
+  var nomTarea = "";
+  var tareaDesc = "";
+  var fechaCreacion = "";
+  $('.btnEdit').on("click", function(){
+    var idTarBonita = $(this).data("bpmid");
+    var rolBonita   = '<?php echo $rolBonita ?>';
+    
+    if(rolBonita == 3) { //si el usuario tiene rol "coordinador de inspectores"
+      WaitingOpen();
+      $('#content').empty();
+      $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/" );
+      WaitingClose()
+    } else {
+      alert("No tiene permisos para realizar la acción")
+    }
+  });
+
   verDetalle();  
   function verDetalle(){
     $('.btnView').on("click", function(){
@@ -458,8 +459,8 @@
   // guarda inspeccion nueva 
   function guardarInspeccion(){
     
-    var inspeccionfechaasigna=$('#fecha').val();
-    var inspeccionfecharecp=$('#fecha').val();    
+    var inspeccionfechaasigna=$('#fechaAgregar').val();
+    var inspeccionfecharecp=$('#fechaAgregar').val();    
     var inspectorid=$('#inspe').val();    // id inspector
     var inspecciondescrip=$("#nota").val(); // detalle inspeccion
     var estableid=$('#estable').val();   // id establecimiento      
@@ -471,6 +472,8 @@
       celId = $(this).find('td.denunciaId').html();
       idsDenuncias.push(celId);    
     });  
+    
+    //debugger;
     
     var hayError = false;
     
@@ -502,7 +505,7 @@
                   if (result) {
                     ActualizarPagina();
                   } else {
-                    alert("Error! No se pudo guarda la nueva inspeccion...");
+                    alert("Error! No se pudo guardar la nueva inspección...");
                   }
           },
           error: function(result){
@@ -618,7 +621,7 @@
       <br>
       <div class="col-xs-9">
         <input type="text" class="form-control empleadVer" placeholder="Buscar Empleador..." id="empleadVer" name="empleadVer" style="width: 80%;" disabled>
-      
+
       </div> 
       <br>
       <br>
@@ -656,7 +659,7 @@
     </div>
     <div class="modal-footer">
 
-      
+
       <button type="button" class="btn btn-default" data-dismiss="modal" onclick="reset()">Cerrar</button>
     </div>
   </div>
@@ -753,7 +756,7 @@
         </div><br>
         <br>
         <div class="col-xs-6">
-          <input type="text" class="form-control" id="fecha" name="fecha" value="<?php echo date_format(date_create(date("Y-m-d H:i:s")), 'd-m-Y H:i:s') ; ?>"  disabled/>
+          <input type="text" class="form-control" id="fechaAgregar" name="fechaAgregar" value="<?php echo date_format(date_create(date("Y-m-d H:i:s")), 'd-m-Y H:i:s') ; ?>"  disabled/>
         </div><br><br>
 
         <div class="col-xs-6">
