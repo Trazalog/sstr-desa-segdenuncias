@@ -139,8 +139,8 @@ class Inspecciones extends CI_Model
 	}
 
 	// guarda inspecciones nuevas
-	function Guardar_Inspecciones($data){
-
+	function Guardar_Inspecciones($data)
+	{
 		$query = $this->db->insert("tbl_inspecciones",$data);
 		$idIns = $this->db->insert_id();
 		return $idIns;

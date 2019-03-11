@@ -8,105 +8,96 @@
 
 				<div class="box-body">
 					<div class="row">
-						<div class="col-sm-12 col-md-12">
+						<div class="col-xs-12">
 							<div role="tabpanel" class="tab-pane">
 								<!-- <div class="form-group"> -->
 
-									<!-- Nav tabs -->
-									<ul class="nav nav-tabs" role="tablist">
-										<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Tareas</a></li>
-										<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Comentarios</a></li>
-										<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Vista
-												Global
-											</a></li>
-									</ul>
+								<!-- Nav tabs -->
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Tareas</a></li>
+									<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Comentarios</a></li>
+									<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Vista
+										Global
+									</a></li>
+								</ul>
 
-									<!-- Tab panes -->
-									<div class="tab-content">
+								<!-- Tab panes -->
+								<div class="tab-content">
 
-										<div role="tabpanel" class="tab-pane active" id="home">
-											<!-- <h4 class="panel-heading">Tarea</h4> -->
-											<div class="panel-body">
+									<div role="tabpanel" class="tab-pane active" id="home">
+										<!-- <h4 class="panel-heading">Tarea</h4> -->
+										<div class="panel-body">
 
-												<?php
+											<?php
+												echo "<input type='text' class='form-control hidden' id='asignado' value='".$TareaBPM["assigned_id"]."' >";												
+												//if ($estadoTarea == "noasignado") {
+													echo "<button class='btn btn-block btn-success' id='btontomar' style='width: 100px; margin-top: 10px ;display: inline-block;' onclick='tomarTarea()'>Tomar tarea</button>";
+												//}else{
+													echo "&nbsp"; 
+													echo "&nbsp"; 
+													echo "&nbsp";
+													echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
+												//	}    
+													echo "</br>"; 
+													echo "</br>"; 
+
+													$userdata = $this->session->userdata('user_data');
+													$usrId = $userdata[0]['usrId'];     // guarda usuario logueado 
+													$usrName =  $userdata[0]['usrName'];
+													$usrLastName = $userdata[0]["usrLastName"];
 													
-													echo "<input type='text' class='form-control hidden' id='asignado' value='".$TareaBPM["assigned_id"]."' >";												
-													//if ($estadoTarea == "noasignado") {
+													echo "<input type='text' class='hidden' id='usrName' value='$usrName' >";
+													echo "<input type='text' class='hidden' id='usrLastName' value='$usrLastName' >";
+													echo "<input type='text' class='hidden' id='id_listarea' value='$id_listarea' >";
+													echo "<input type='text' class='hidden' id='idPedTrabajo' value='$idPedTrabajo' >";
+											?>												
 
-															echo "<button class='btn btn-block btn-success' id='btontomar' style='width: 100px; margin-top: 10px ;display: inline-block;' onclick='tomarTarea()'>Tomar tarea</button>";
-													//}else{
-															echo "&nbsp"; 
-															echo "&nbsp"; 
-															echo "&nbsp";
-															echo "<button class='btn btn-block btn-danger grupNoasignado' id='btonsoltr' style='width: 100px; margin-top: 10px; display: inline-block;' onclick='soltarTarea()'>Soltar tarea</button>";
-													//	}    
-															echo "</br>"; 
-															echo "</br>"; 
+											<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
+											>
 
-															$userdata = $this->session->userdata('user_data');
-															$usrId = $userdata[0]['usrId'];     // guarda usuario logueado 
-															$usrName =  $userdata[0]['usrName'];
-															$usrLastName = $userdata[0]["usrLastName"];
-															
-															echo "<input type='text' class='hidden' id='usrName' value='$usrName' >";
-															echo "<input type='text' class='hidden' id='usrLastName' value='$usrLastName' >";
-															echo "<input type='text' class='hidden' id='id_listarea' value='$id_listarea' >";
+											<div class="panel panel-default">
+												
+												<div class="panel-heading">
+													<h3 class="panel-title">Información:</h3>															
+												</div>
 
-															echo "<input type='text' class='hidden' id='idPedTrabajo' value='$idPedTrabajo' >";
-
-												?>												
-
-												<input type="text" class="form-control hidden" id="caseId" value="<?php echo $TareaBPM ["caseId"] ?>"
-												>
-
-											
-													<div class="panel panel-default">
-														
-														<div class="panel-heading">
-															<h3 class="panel-title">Información:</h3>															
+												<div class="panel-body">
+													<div class="form-group">
+														<div class="col-sm-6 col-md-6">
+															<label for="tarea">Tarea</label>
+															<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
+															 disabled><!-- id de listarea -->
+															<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
+															<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
+															<!-- id de task en bonita -->
+															<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
 														</div>
-
-														<div class="panel-body">
-															<div class="form-group">
-																<div class="col-sm-6 col-md-6">
-																	<label for="tarea">Tarea</label>
-																	<input type="text" class="form-control" id="tarea" value="<?php echo $TareaBPM['displayName'] ?>"
-																	 disabled><!-- id de listarea -->
-																	<input type="text" class="hidden" id="tbl_listarea" value="<?php echo $datos[0]['id_listarea'] ?>">
-																	<input type="text" class="hidden" id="idform" value="<?php echo $idForm ?>">
-																	<!-- id de task en bonita -->
-																	<input type="text" class="hidden" id="idTarBonita" value="<?php echo $idTarBonita ?>">
-																</div>
-															</div>
-															<div class="clearfix"></div>
-															<div class="form-group">
-																<div class="col-sm-6 col-md-6">
-																	<label for="fecha">Fecha de Creación</label>
-																	<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
-																	 disabled>
-																</div>
-															</div>
-	
-															<div class="form-group">
-																<div class="col-sm-12 col-md-12">
-																	<label for="detalle">Detalle</label>
-																	<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
-																</div>
-															</div>
-														</div>															
-
+													</div>
+													<div class="clearfix"></div>
+													<div class="form-group">
+														<div class="col-sm-6 col-md-6">
+															<label for="fecha">Fecha de Creación</label>
+															<input type="text" class="form-control" id="fecha" placeholder="" value="<?php echo $TareaBPM['last_update_date'] ?>"
+															 disabled>
+														</div>
 													</div>
 
-										
-												
-												<br><br>
-                              
-												<form enctype="multipart/form-data" id="formInspeccion" class="form-horizontal" style="padding:0px 15px;" role="form" action="" method="" >
-												
-												<!-- Tipo de Acta     -->			
-												<div class="col-sm-12 col-md-12">													
-													<div class="col-sm-6 col-md-6">
-														<h4>Tipo de Acta</h4>
+													<div class="form-group">
+														<div class="col-sm-12 col-md-12">
+															<label for="detalle">Detalle</label>
+															<textarea class="form-control" id="detalle" rows="3" disabled><?php echo $TareaBPM['displayDescription']?></textarea>
+														</div>
+													</div>
+												</div>															
+											</div>
+											<br>
+                          
+											<form enctype="multipart/form-data" id="formInspeccion" class="form-horizontal" style="padding:0px 15px;" role="form" action="" method="" >
+											
+												<div class="row">
+													<!-- Tipo de Acta     -->															
+													<div class="col-xs-12 col-md-6">
+														<h4>Tipo de Acta *</h4>
 														<div class="btn-group" data-toggle="buttons">
 															<label class="btn btn-primary">
 																<input type="radio" name="tipoActa" id="inspeccion" autocomplete="off" value="inspeccion"> Inspección 
@@ -117,26 +108,23 @@
 															<label class="btn btn-primary">
 																<input type="radio" name="tipoActa" id="suspension" autocomplete="off" value="suspension"> Suspensión
 															</label>
+															<label class="btn btn-primary">
+																<input type="radio" name="tipoActa" id="infraccion" autocomplete="off" value="infraccion"> Infracción
+															</label>
 														</div>
 													</div>	
-													<div></div>
-													<div class="col-sm-6 col-md-6" style="margin-top:20px;">
-														<div class="form-group">
-															<label for="filePdf">Subir Acta</label>
-															<div class="fileinput fileinput-new" data-provides="fileinput">
-																<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf" /></span>
-																<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
-															</div>
-															<a id="adjunto" href="" target="_blank">Ver Archivo Adjunto</a>
+													<div class="col-xs-12 col-md-6">
+														<label for="filePdf"><h4>Subir Acta</h4></label>
+														<div class="fileinput fileinput-new" data-provides="fileinput">
+															<span class="btn btn-default btn-file"><span>Examinar...</span><input type="file" id="filePdf" name="filePdf" /></span>
+															<span class="fileinput-filename"></span><span class="fileinput-new">Ningún archivo seleccionado</span>
 														</div>
+														<a id="adjunto" href="" target="_blank">Ver Archivo Adjunto</a>
 													</div>	
-												</div>	<!-- /.col-sm-12 col-md-12 -->
-													
-													
-												<!-- Acciones     -->
-												<div class="col-sm-12 col-md-12">
-													<div class="col-sm-6 col-md-6">		
-														<h4>Acciones</h4>                          
+
+													<!-- Acciones -->
+													<div class="col-xs-12 col-md-6">		
+														<h4>Acciones *</h4>                          
 														<div class="btn-group" data-toggle="buttons">
 															<label class="btn btn-primary">
 																<input type="radio" name="accion" id="option1" autocomplete="off" value="cierre-acta"> Cierre 
@@ -147,122 +135,122 @@
 															<label class="btn btn-primary">
 																<input type="radio" name="accion" id="option3" autocomplete="off" value="infraccion"> Infracción
 															</label>
+															<label class="btn btn-primary">
+																<input type="radio" name="accion" id="option4" autocomplete="off" value="plazos"> Plazos
+															</label>
 														</div>
 													</div>
 													<div></div>
-													<div class="col-sm-6 col-md-6" style="margin-top:20px;">	
-														<div class="form-group">
-															<div class="col-sm-6 col-md-6">
-																<label for="fechaProrroga">Fecha de Prórroga</label>
-																<input type="date" name="fechaProrroga" class="form-control" id="fechaProrroga" value="<?php echo date('Y-m-d') ?>">
-															</div>		
-														</div>
+													<div class="col-xs-12 col-md-6">	
+														<label for="fechaProrroga"><h4>Fecha de Prórroga *</h4></label>
+														<input type="date" name="fechaProrroga" class="form-control" id="fechaProrroga" value="">
 													</div>
-												</div>		
-													<br><br>
+												</div>
+										<!--</div>-->		
+												<br><br>
 
-													<!-- Datos a guardar		 -->
-                          <input type="text" name="case_id" class="form-control hidden" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
-													<input type="text" name="id" class="form-control hidden" id="id" value="<?php echo $TareaBPM["id"] ?>">
-                          <input type="text" name="estableid" class="form-control hidden" id="estableid" value="<?php echo $datos[0]['estableid'] ?>">                          
-                          <!-- <input type="text" name="inspectorid" class="form-control" id="inspectorid" value="<?php //echo $datos[0]['inspectorid'] ?>">
-                          <textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php //echo $TareaBPM['displayDescription']?></textarea>	 -->
+												<!-- Datos a guardar		 -->
+												<input type="text" name="case_id" class="form-control hidden" id="case_id" value="<?php echo $TareaBPM["caseId"] ?>">
+												<input type="text" name="id" class="form-control hidden" id="id" value="<?php echo $TareaBPM["id"] ?>">
+												<input type="text" name="estableid" class="form-control hidden" id="estableid" value="<?php echo $datos[0]['estableid'] ?>">                          
+		                    					<!-- <input type="text" name="inspectorid" class="form-control" id="inspectorid" value="<?php //echo $datos[0]['inspectorid'] ?>">
+		                    					<textarea class="form-control" id="inspecciondescrip" name="inspecciondescrip" rows="3"><?php //echo $TareaBPM['displayDescription']?></textarea>	 -->
 
-												</form>
+											</form>
 
-											</div>
 										</div>
-                    <!-- comentarios         -->
-										<div role="tabpanel" class="tab-pane" id="profile">
-											<div class="panel-body">
-												<div class="panel panel-primary">
-													<div class="panel-heading">Comentarios</div>
-													<div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
-														<ul id="listaComentarios">
-															<?php 
-																foreach($comentarios as $f){
+									</div>
+                <!-- comentarios         -->
+									<div role="tabpanel" class="tab-pane" id="profile">
+										<div class="panel-body">
+											<div class="panel panel-primary">
+												<div class="panel-heading">Comentarios</div>
+												<div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
+													<ul id="listaComentarios">
+														<?php 
+															foreach($comentarios as $f){
 
-																	if(strcmp($f['userId']['userName'],'System')!=0){
-																	echo '<hr/>';
-																	echo '<li><h4>'.$f['userId']['firstname'].' '.$f['userId']["lastname"].'<small style="float: right">'.date_format(date_create($f['postDate']),'H:i  d/m/Y').'</small></h4>';
-																	echo '<p>'.$f['content'].'</p></li>';
-																	}
+																if(strcmp($f['userId']['userName'],'System')!=0){
+																echo '<hr/>';
+																echo '<li><h4>'.$f['userId']['firstname'].' '.$f['userId']["lastname"].'<small style="float: right">'.date_format(date_create($f['postDate']),'H:i  d/m/Y').'</small></h4>';
+																echo '<p>'.$f['content'].'</p></li>';
+																}
+															}
+														?>
+													</ul>
+												</div>
+											</div>
+											<textarea id="comentario" class="form-control" placeholder="Nuevo Comentario..."></textarea>
+											<br />
+											<button class="btn btn-primary" id="guardarComentario" onclick="guardarComentario()">Agregar</button>
+										</div>
+									</div>
+                <!-- Linea de tiempo             -->
+									<div role="tabpanel" class="tab-pane" id="messages">
+										<div class="panel-body">
+											<div class="panel panel-primary">
+												<div class="panel-heading">Línea de Tiempo</div>
+												<div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
+													<style type="text/css">
+													</style>
+
+													<div class="container">
+														<ul class="timeline">
+															<?php
+																echo '<h2 style="margin-left:50px;">Actividades Pendientes</h2>';
+																foreach ($timeline['listAct'] as $f) {       
+																echo '<li>
+																		<div class="timeline-badge info"><i class="glyphicon glyphicon-time"></i></div>
+																		<div class="timeline-panel">
+																				<div class="timeline-heading">
+																				<h4 class="timeline-title">'.$f['displayName'].'</h4>
+																				<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.date_format(date_create($f['last_update_date']),'H:i  d/m/Y').'</small></p>
+																				</div>
+																				<div class="timeline-body">';
+																				if(array_key_exists ( 'assigned_id' , $f ) && $f['assigned_id']!=''){
+																						echo '<p>Usuario: '.$f['assigned_id']['firstname'].' '.$f['assigned_id']['lastname'].'</p>';
+																				}else{
+																						echo '<p>Usuario: Sin Asignar</p>';
+																				}
+																echo   '<p>Descripción: '.$f['displayDescription'].'</p>
+																				<p>Case: '.$f['caseId'].'</p>
+																				</div>
+																		</div>
+																		</li>';
+																}
+																echo '<h2 style="margin-left:50px;">Actividades Terminadas</h2>';
+																foreach ($timeline['listArch'] as $f) {
+																
+																echo '<li>
+																		<div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+																		<div class="timeline-panel">
+																				<div class="timeline-heading">
+																				<h4 class="timeline-title">'.$f['displayName'].'</h4>
+																				<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.date_format(date_create($f['last_update_date']),'H:i  d/m/Y').'</small></p>
+																				</div>
+																				<div class="timeline-body">';
+																				if(array_key_exists ( 'assigned_id' , $f )){
+																						echo '<p>Usuario: '.$f['assigned_id']['firstname'].' '.$f['assigned_id']['lastname'].'</p>';
+																				}else{
+																						echo '<p>Usuario: Sin Asignar</p>';
+																				}
+																echo    '<p>Descripción: '.$f['displayDescription'].'</p>           
+																				<p>Case: '.$f['caseId'].'</p>
+																				</div>
+																		</div>
+																		</li>';
 																}
 															?>
 														</ul>
 													</div>
-												</div>
-												<textarea id="comentario" class="form-control" placeholder="Nuevo Comentario..."></textarea>
-												<br />
-												<button class="btn btn-primary" id="guardarComentario" onclick="guardarComentario()">Agregar</button>
-											</div>
-										</div>
-                    <!-- Linea de tiempo             -->
-										<div role="tabpanel" class="tab-pane" id="messages">
-											<div class="panel-body">
-												<div class="panel panel-primary">
-													<div class="panel-heading">Línea de Tiempo</div>
-													<div class="panel-body" style="max-height: 500px;overflow-y: scroll;">
-														<style type="text/css">
-														</style>
 
-														<div class="container">
-															<ul class="timeline">
-																<?php
-																	echo '<h2 style="margin-left:50px;">Actividades Pendientes</h2>';
-																	foreach ($timeline['listAct'] as $f) {       
-																	echo '<li>
-																			<div class="timeline-badge info"><i class="glyphicon glyphicon-time"></i></div>
-																			<div class="timeline-panel">
-																					<div class="timeline-heading">
-																					<h4 class="timeline-title">'.$f['displayName'].'</h4>
-																					<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.date_format(date_create($f['last_update_date']),'H:i  d/m/Y').'</small></p>
-																					</div>
-																					<div class="timeline-body">';
-																					if(array_key_exists ( 'assigned_id' , $f ) && $f['assigned_id']!=''){
-																							echo '<p>Usuario: '.$f['assigned_id']['firstname'].' '.$f['assigned_id']['lastname'].'</p>';
-																					}else{
-																							echo '<p>Usuario: Sin Asignar</p>';
-																					}
-																	echo   '<p>Descripción: '.$f['displayDescription'].'</p>
-																					<p>Case: '.$f['caseId'].'</p>
-																					</div>
-																			</div>
-																			</li>';
-																	}
-																	echo '<h2 style="margin-left:50px;">Actividades Terminadas</h2>';
-																	foreach ($timeline['listArch'] as $f) {
-																	
-																	echo '<li>
-																			<div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
-																			<div class="timeline-panel">
-																					<div class="timeline-heading">
-																					<h4 class="timeline-title">'.$f['displayName'].'</h4>
-																					<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> '.date_format(date_create($f['last_update_date']),'H:i  d/m/Y').'</small></p>
-																					</div>
-																					<div class="timeline-body">';
-																					if(array_key_exists ( 'assigned_id' , $f )){
-																							echo '<p>Usuario: '.$f['assigned_id']['firstname'].' '.$f['assigned_id']['lastname'].'</p>';
-																					}else{
-																							echo '<p>Usuario: Sin Asignar</p>';
-																					}
-																	echo    '<p>Descripción: '.$f['displayDescription'].'</p>           
-																					<p>Case: '.$f['caseId'].'</p>
-																					</div>
-																			</div>
-																			</li>';
-																	}
-																?>
-															</ul>
-														</div>
-
-													</div>
 												</div>
 											</div>
-
 										</div>
 
 									</div>
+
+								</div>
 								<!-- </div> -->
 							</div>
 						</div>
@@ -270,9 +258,8 @@
 					</div><!-- /.row -->
 
 					<div class="modal-footer">
-						<button type="button" id="cerrar" class="btn btn-primary" onclick="cargarVista()">Cerrar</button>
-						<!-- <button type="button" class="btn btn-success" id="hecho" onclick="terminarTarea()">Hecho</button> -->
-						<button type="button" class="btn btn-success" id="hecho" onclick="tareaTerminada()">Hecho</button>
+						<button type="button" id="cerrar" class="btn btn-primary" onclick="cargarVista()">Borrador</button>
+						<button type="button" class="btn btn-success" id="hecho" onclick="tareaTerminada()">Guardar</button>
 					</div> <!-- /.modal footer -->
 
 				</div><!-- /.box body -->
@@ -499,8 +486,8 @@
 			return;
 		}
 
-		if ($('#filePdf').val() == '') {
-			alert('Por favor suba el acta en formato PDF...');
+		if ( $("#fechaProrroga").val() == '' ) {
+			alert('Por favor ingrese fecha de prórroga...');
 			return;
 		} else {
 			errorInsp = false;
