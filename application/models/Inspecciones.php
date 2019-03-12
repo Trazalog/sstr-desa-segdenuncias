@@ -223,9 +223,36 @@ class Inspecciones extends CI_Model
 
 	
 
+	/**
+     * Equipos:updateAdjuntoEquipo();
+     *
+     * @param  String   $adjunto    Nombre del archivo
+     * @param  Int      $ultimoId   Id del acta a la que se va a adjuntar archivo
+     * @return String               Nombre del archivo adjuntado
+     */
+    public function updateAdjuntoActa($adjunto,$ultimoId)
+    {
+        $this->db->where('actaid', $ultimoId);
+        $query = $this->db->update("trg_actas", $adjunto);
+        $response['adjunto'] = $adjunto['acta'];
+        $response['idActa']  = $ultimoId;
+        return $response;
+    }
 
+	/**
+     * Inspecciones:eliminarAdjunto
+     * Elimina el Archivo Adjunto de un acta dada (no elimina el archivo).
+     *
+     * @param Int       $idPreventivo   Id de preventivo
+     * @return Bool                     True o False
+     */
+    public function eliminarAdjunto($idActa)
+    {
+        $data  = array( 'acta' => '' );
+        $this->db->where('actaid', $idActa);
+        $query = $this->db->update("trg_actas", $data);
+        return $query;
+    }
 
 
 }	
-
-?>
