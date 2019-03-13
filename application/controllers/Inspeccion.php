@@ -102,7 +102,7 @@ class Inspeccion extends CI_Controller {
 		$data['comentarios'] = $this->ObtenerComentariosBPM($idTarBonita);
 		$data['timeline']    = $this->ObtenerLineaTiempo($idTarBonita);
 
-		$this->load->view('inspecciones/view_editInspeccion',$data);
+		$this->load->view('inspecciones/view_editinspeccion',$data);
 	}
 
 	// trae detalle de inspeccion por Id BPM
@@ -114,7 +114,8 @@ class Inspeccion extends CI_Controller {
 		$data['timeline'] = $this->ObtenerLineaTiempo($idTarBonita);
 
 		$this->load->view('inspecciones/view_',$data);
-	}	
+	}
+
 	// trea comentarios de BPM para mostrar en detalle de inspeccion
 	function ObtenerComentariosBPM($caseId){
 	
@@ -251,7 +252,66 @@ class Inspeccion extends CI_Controller {
 		$this->load->view('inspecciones/list_inspdenuncia', $data);
 	}
 
-	
-}	
 
-?>
+	// Codifica nombre de imagen para no repetir en servidor
+	// formato "12_6_2018-05-21-15-26-24" idpreventivo_idempresa_fecha(año-mes-dia-hora-min-seg)
+	function codifNombre($ultimoId,$empId)
+	{
+		$guion       = '_';
+		$guion_medio = '-';
+		$hora        = date('Y-m-d H:i:s');// hora actual del sistema	
+		$delimiter   = array(" ",",",".","'","\"","|","\\","/",";",":");
+		$replace     = str_replace($delimiter, $delimiter[0], $hora);
+		$explode     = explode($delimiter[0], $replace);
+		$strigHora   = $explode[0].$guion_medio.$explode[1].$guion_medio.$explode[2].$guion_medio.$explode[3];
+		$nomImagen   = $ultimoId.$guion.$empId.$guion.$strigHora;
+		
+		return $nomImagen;
+	}
+
+	/**
+	 * Inspeccion:agregarAdjunto();
+	 *
+	 * @return String nomre de archivo adjunto
+	 */
+	public function agregarAdjunto()
+	{
+		$userdata     = $this->session->userdata('user_data');
+		$empId        = $userdata[0]['id_empresa'];
+
+		$idActa   = $this->input->post('idAgregaAdjunto');
+		$nomcodif = $this->codifNombre($idActa, $empId); // codificacion de nombre
+		$nomcodif = 'acta'.$nomcodif;
+		$config   = [
+			"upload_path"   => "./assets/inspecciones",
+			'allowed_types' => "png|jpg|pdf|xlsx",
+			'file_name'     => $nomcodif
+		];
+
+		$this->load->library("upload",$config);
+		if ($this->upload->do_upload('inputPDF')) 
+		{	
+			$data     = array("upload_data" => $this->upload->data());
+			$extens   = $data['upload_data']['file_ext'];//guardo extesnsion de archivo
+			$nomcodif = $nomcodif.$extens;
+			$adjunto  = array('acta' => 'assets/inspecciones/'.$nomcodif);
+			$response = $this->Inspecciones->updateAdjuntoActa($adjunto,$idActa);
+		}else{
+			$response = false;
+		}
+
+		echo json_encode($response);
+	}
+	
+	/**
+	 * Inspeccion:eliminarAdjunto();
+	 *
+	 * @return Bool 	True si se eliminó el archivo o false si hubo error
+	 */
+	public function eliminarAdjunto()
+	{
+		$idActa   = $this->input->post('idActa');
+		$response = $this->Inspecciones->eliminarAdjunto($idActa);
+		echo json_encode($response);
+	}
+}	

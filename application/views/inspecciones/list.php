@@ -102,8 +102,8 @@
                     echo '<tr>';
                       echo '<td class="acciones">';
                         echo '<i class="fa fa-fw fa-search text-light-blue btnView no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Ver detalle"></i>';
-                        /*if($rolBonita == 3) //rol Edit "Coordinador de Inspecciones"
-                          echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Editar Inspección"></i>';*/
+                        if($rolBonita == 3) //rol Edit "Coordinador de Inspecciones"
+                          echo '<i class="fa fa-fw fa-pencil text-light-blue btnEdit no_imprimir no-print" style="cursor: pointer; margin-left: 15px;" data-bpmId="'.$f['bpm_id'].'" title="Editar Adjunto"></i>';
                       echo '</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionid'].'</td>';
                       echo '<td style="text-align: left">'.$f['inspeccionfechaasigna'].'</td>';                  
@@ -222,10 +222,10 @@
     $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/index/<?php echo $permission; ?>");
   }
 
-  var idfin = "";
-  var id_tarea = "";
-  var nomTarea = "";
-  var tareaDesc = "";
+  var idfin         = "";
+  var id_tarea      = "";
+  var nomTarea      = "";
+  var tareaDesc     = "";
   var fechaCreacion = "";
   $('.btnEdit').on("click", function(){
     var idTarBonita = $(this).data("bpmid");
@@ -234,7 +234,7 @@
     if(rolBonita == 3) { //si el usuario tiene rol "coordinador de inspectores"
       WaitingOpen();
       $('#content').empty();
-      $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getGetDetaInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/" );
+      $("#content").load("<?php echo base_url(); ?>index.php/Inspeccion/getEditInspeccion/<?php echo $permission; ?>/" + idTarBonita+ "/" );
       WaitingClose()
     } else {
       alert("No tiene permisos para realizar la acción")
