@@ -112,12 +112,51 @@ class Tareas extends CI_Model
 		$response = $query->row('inspeccionid');
 		return $response;
 	}
-	// guarda eel acta de inspeccion
-	function setDatosInspeccion($data){
-		
+	// guarda el acta de inspeccion
+	function setDatosInspeccion($data)
+	{	
 		$response = $this->db->insert("trg_actas",$data);	
 		return $response;
 	}
+
+	function updateDatosInspeccion($data, $actaid)
+	{
+		$this->db->where('actaid', $actaid);
+		$query=$this->db->update('trg_actas',$data);
+		return $query;
+	}
+
+	/**
+	 * Devuleve los datos de acta no archivada guardada en borrador
+	 *
+	 * @param 	Int 	$caseId 	case id de bonita..
+	 * @return 	Array 				Datos de acta no archivada.
+	 */
+	public function obtenerBorradorInspeccion($caseId)
+	{
+		$this->db->select('trg_actas.*');
+		$this->db->from('trg_actas');
+		$this->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_actas.inspeccionid');			
+		$this->db->where('tbl_inspecciones.bpm_id',$caseId);
+		$this->db->where('trg_actas.archivada', 'NO');
+		$query = $this->db->get();
+		if ($query->num_rows()!=0)
+		{
+			return $query->result_array();  
+		}
+		else {
+			$datosActaVacia[0] = array(
+				'actaid'        => '',
+				'acta'          => '',
+				'tipoActa'      => '',
+				'fechaProrroga' => '',
+				'inspeccionid'  => '',
+				'archivada'     => 'NO',
+			);
+			return $datosActaVacia;
+		}
+	}
+	
 	// actualiza en tbl_inspecciones
 	function actualizaInspeccion($idInspeccion,$datos){
 		$this->db->where('inspeccionid', $idInspeccion);
@@ -156,17 +195,15 @@ class Tareas extends CI_Model
 	}
 
 	// Tomar Tareas
-	function tomarTarea($idTarBonita,$param){
-
+	function tomarTarea($idTarBonita,$param)
+	{
 		try {
 			$resource = 'API/bpm/humanTask/';
-			$url = BONITA_URL.$resource.$idTarBonita;
-
+			$url      = BONITA_URL.$resource.$idTarBonita;
 			file_get_contents($url, false, $param);
 			$response = $this->parseHeaders( $http_response_header );
-			//dump_exit($response);
 			return $response;
-		}catch (Exception $e) {
+		} catch (Exception $e) {
 			var_dump($e->getMessage());
 		 }
 	}
@@ -216,19 +253,19 @@ class Tareas extends CI_Model
 		return $id_listarea;
 	}
 
-	function detaInspecciones($caseId){
-
+	function detaInspecciones($caseId)
+	{
 		$this->db->select('tbl_inspecciones.*');
 		$this->db->from('tbl_inspecciones');	 
 		$this->db->where('tbl_inspecciones.bpm_id', $caseId);
 		$query = $this->db->get();
 
-	 if ($query->num_rows()!=0){
+	 	if ($query->num_rows()!=0) {
 			return $query->result_array();
-		}else{
+		} else {
 			return false;
 		}
- }
+ 	}
 	
 	function getDatosBPM($idTarBonita,$param){
 

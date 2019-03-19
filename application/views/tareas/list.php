@@ -112,36 +112,30 @@
 </div>
 
 <script>
+  var idfin         = "";
+  var id_tarea      = "";
+  var nomTarea      = "";
+  var tareaDesc     = "";
+  var fechaCreacion = "";
 
-    var idfin="";
-    var id_tarea = "";
-    var nomTarea = "";
-    var tareaDesc = "";
-    var fechaCreacion = "";
-//Tomo valor de la celda y carga detalle de la tarea
+  //Tomo valor de la celda y carga detalle de la tarea
   $('.celda').click( function () {
-
     var idTarBonita = $(this).parents('tr').find('td').eq(8).html();
-    //console.log('id tarea INTERNO de bonita: ');
-    //console.log(idTarBonita);
-
-    //var id_orden = 17;
+    //console.log('id tarea INTERNO de bonita: '+idTarBonita);
     var estado = $(this).parents('tr').find('td').eq(6).html();
+    console.log('Estado de tarea: '+estado);
 
     // toma nombre y descripcion de tarea para Notific Estandar
     nomTarea = $(this).parents('tr').find('td').eq(2).html();
-    //console.log('nom tarea: ');
-    //console.log(nomTarea);
+    //console.log('nom tarea: '+nomTarea);
+
     tareaDesc = $(this).parents('tr').find('td').eq(3).html();
     tareaDesc = "descripcion";
-    //console.log('desc tarea: ');
-    //console.log(tareaDesc);
+    //console.log('desc tarea: '+tareaDesc);
 
-    //fechaCreacion = $(this).parents('tr').find('td').eq(4).html();
+    fechaCreacion = $(this).parents('tr').find('td').eq(4).html();
     fechaCreacion = "2018-12-01";
-
-    //console.log('fechaCreacion tarea: ');
-    //console.log(fechaCreacion);
+    //console.log('fechaCreacion tarea: '+fechaCreacion);
 
     var estadoTarea = "";
     if (estado!="") {
@@ -153,17 +147,12 @@
     verTarea(idTarBonita);
     //idfin = id_orden;
     //console.log(idfin);
-
   });
 
-
   // Carga notif strandar
-
   function verTarea(idTarBonita){
-
     WaitingOpen();
-
-    $(".content").load("<?php echo base_url(); ?>index.php/Tarea/detaTarea/<?php echo $permission; ?>/" + idTarBonita+ "/"  );
+    $(".content").load("<?php echo base_url(); ?>index.php/Tarea/detaTarea/<?php echo $permission ?>/"+idTarBonita);
     WaitingClose();
   }
 

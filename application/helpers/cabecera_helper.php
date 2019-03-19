@@ -38,8 +38,8 @@ if(!function_exists('cargarCabecera')){
 			$datos['result'] = $query->row_array();
 		}
 
-		// consulta para Inspecciones			
-		$ci->db->select('trg_actas.actaid,trg_actas.acta,trg_actas.tipoActa AS tipo,trg_actas.accion AS accionacta,trg_actas.fechaProrroga,trg_actas.inspeccionid,tbl_inspecciones.*');
+		// consulta para Actas			
+		$ci->db->select('trg_actas.actaid,trg_actas.acta,trg_actas.tipoActa AS tipo,trg_actas.accion AS accionacta,trg_actas.fechaProrroga, trg_actas.archivada, trg_actas.inspeccionid,tbl_inspecciones.*');
 		$ci->db->from('trg_actas');
 		$ci->db->join('tbl_inspecciones', 'tbl_inspecciones.inspeccionid = trg_actas.inspeccionid');			
 		$ci->db->where('tbl_inspecciones.bpm_id',$caseId);
@@ -160,7 +160,8 @@ if(!function_exists('cargarCabecera')){
 							<tr>
 								<th>Tipo Acta</th>
 								<th>Acción</th>
-								<th >Fecha Prórroga</th>	
+								<th>Fecha Prórroga</th>	
+								<th>Archivada</th>
 								<th>Adjunto</th>			
 							</tr>';
 							foreach ($resultInspecciones as $insp) {					
@@ -168,6 +169,7 @@ if(!function_exists('cargarCabecera')){
 								echo '<td style="text-align: left" width="10%">'.$insp['tipo'].'</td>';
 								echo '<td style="text-align: left" width="10%">'.$insp['accionacta'].'</td>';
 								echo '<td style="text-align: left" width="10%">'.$insp['fechaProrroga'].'</td>';
+								echo '<td style="text-align: left" width="10%">'.$insp['archivada'].'</td>';
 								echo '<td style="text-align: left" width="10%"><a href="'.base_url().$insp['acta'].'" id="adjunto" target="_blank" >Ver Acta</a></td>';
 								echo '</tr>';
 							}
@@ -179,7 +181,7 @@ if(!function_exists('cargarCabecera')){
 						<table class="table table-bordered table-hover" id="" width= 100%>
 							<tr>
 								<th>Nº Denuncia</th>
-								<th >Fecha Acta</th>						
+								<th>Fecha Acta</th>						
 								<th>Motivos</th>			
 							</tr>';
 							foreach ($resultDenuncias as $f) {					
@@ -242,7 +244,7 @@ if(!function_exists('cargarCabecera')){
 								<tr>
 									<th>Tipo Acta</th>
 									<th>Acción</th>
-									<th >Fecha Prórroga</th>	
+									<th>Fecha Prórroga</th>	
 									<th>Adjunto</th>			
 								</tr>
 							</thead>
