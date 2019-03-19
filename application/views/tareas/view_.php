@@ -225,8 +225,7 @@
 
 					<div class="modal-footer">
 						<button type="button" id="cerrar" class="btn btn-primary" onclick="cargarVista()">Cerrar</button>
-						<!-- <button type="button" class="btn btn-success" id="hecho" onclick="terminarTarea()">Hecho</button> -->
-						<button type="button" class="btn btn-success" id="hecho" onclick="tareaTerminada()">Hecho</button>
+						<button type="button" class="btn btn-success" id="hecho" onclick="tareaTerminada()">Guardar</button>
 					</div> <!-- /.modal footer -->
 
 				</div><!-- /.box body -->

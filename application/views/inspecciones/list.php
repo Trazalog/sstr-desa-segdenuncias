@@ -457,26 +457,24 @@
   /*  Bloque busqueda */
 
   // guarda inspeccion nueva 
-  function guardarInspeccion(){
-    
-    var inspeccionfechaasigna=$('#fechaAgregar').val();
-    var inspeccionfecharecp=$('#fechaAgregar').val();    
-    var inspectorid=$('#inspe').val();    // id inspector
-    var inspecciondescrip=$("#nota").val(); // detalle inspeccion
-    var estableid=$('#estable').val();   // id establecimiento      
-    var inspeestado="C";
+  function guardarInspeccion() {
+    var inspeccionfechaasigna = $('#fechaAgregar').val();
+    var inspeccionfecharecp   = $('#fechaAgregar').val();
+    var inspectorid           = $('#inspe').val();    // id inspector
+    var inspecciondescrip     = $("#nota").val();     // detalle inspeccion
+    var estableid             = $('#estable').val();  // id establecimiento
+    var inspeestado           = "C";
     // arma array de ids de denuncias
-    var idsTr = $('#tblDenEstab tbody tr');
-    var idsDenuncias = [];    
-    $(idsTr).each(function(){       
+    var idsTr                 = $('#tblDenEstab tbody tr');
+    var idsDenuncias          = [];
+
+    $(idsTr).each(function() {    
       celId = $(this).find('td.denunciaId').html();
       idsDenuncias.push(celId);    
     });  
-    
     //debugger;
     
     var hayError = false;
-    
     if(inspectorid == '-1' || inspecciondescrip == '' || estableid == '-1'){
       hayError = true;
     }
@@ -486,35 +484,35 @@
         return;
     }else{
       $('#modalAgregar').modal('hide');
-      
-        //WaitingOpen();
-        $.ajax({
-          type: 'POST',
-          data: {"inspeccionfechaasigna":inspeccionfechaasigna,  
-                  "inspeccionfecharecp":inspeccionfecharecp,  
-                  "inspectorid":inspectorid,  
-                  "inspecciondescrip":inspecciondescrip,  
-                  "estableid":estableid,  
-                  "inspeestado":inspeestado,
-                  "idsDenuncias": idsDenuncias
-                  },
-          dataType: 'json',
-          url: 'index.php/Inspeccion/Guardar_Inspeccion', 
-          success: function(result){
-                  WaitingClose();   
-                  if (result) {
-                    ActualizarPagina();
-                  } else {
-                    alert("Error! No se pudo guardar la nueva inspección...");
-                  }
-          },
-          error: function(result){
-                  WaitingClose();
-                  alert("Error! No se pudo guarda la nueva inspeccion...");
+      //WaitingOpen();
+      $.ajax({
+        type: 'POST',
+        data: {"inspeccionfechaasigna":inspeccionfechaasigna,  
+                "inspeccionfecharecp":inspeccionfecharecp,  
+                "inspectorid":inspectorid,  
+                "inspecciondescrip":inspecciondescrip,  
+                "estableid":estableid,  
+                "inspeestado":inspeestado,
+                "idsDenuncias": idsDenuncias
+                },
+        dataType: 'json',
+        url: 'index.php/Inspeccion/Guardar_Inspeccion', 
+        success: function(result){
+          WaitingClose();   
+          if (result) {
+            ActualizarPagina();
+          } else {
+            alert("Error! No se pudo guardar la nueva inspección...");
           }
-        });        
+        },
+        error: function(result){
+          WaitingClose();
+          alert("Error! No se pudo guarda la nueva inspeccion...");
+        }
+      });        
     }    
   }
+  
   // imprime listado de inspecciones
   $(".fa-print").click(function (e) {
     var critFilt = $('#criterio').val();

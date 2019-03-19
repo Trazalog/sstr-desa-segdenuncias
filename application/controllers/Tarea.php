@@ -118,9 +118,9 @@ class Tarea extends CI_Controller {
 	/* funciones nuevas SST */
 
 	public function cerrarTarea(){	
-
 		$userdata = $this->session->userdata('user_data');
-		$usrId = $userdata[0]['usrId'];		
+		$usrId = $userdata[0]['usrId'];	
+		$actaid = $this->input->post('actaid');	
 		$tipoActa = $this->input->post('tipoActa');
 		$accion = $this->input->post('accion');
 		$fechaProrroga = $this->input->post('fechaProrroga');		
@@ -164,7 +164,11 @@ class Tarea extends CI_Controller {
 			$data['accion'] = $accion;
 			$data['fechaProrroga'] = $fechaProrroga; 
 			$data['inspeccionid'] = $idInspeccion; 
-			$this->Tareas->setDatosInspeccion($data, $idInspeccion);	
+			$data['archivada'] = 'SI';
+			if($actaid == '')
+				$this->Tareas->setDatosInspeccion($data);	
+			else
+				$this->Tareas->updateDatosInspeccion($data, $actaid);
 			// actualiza en tb_inspecciones
 			$datos['tipoActa'] = $tipoActa;
 			$datos['accion'] = $accion;		
@@ -172,6 +176,50 @@ class Tarea extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
+
+	/**
+	 * Tarea:inspeccionBorrador();
+	 *
+	 * @return 	Bool 	True si està todo ok y false si hay algún error
+	 */
+	public function inspeccionBorrador()
+	{
+		$userdata      = $this->session->userdata('user_data');
+		$usrId         = $userdata[0]['usrId'];	
+		$actaid        = $this->input->post('actaid');
+		$tipoActa      = $this->input->post('tipoActa');
+		$accion        = $this->input->post('accion');
+		$fechaProrroga = $this->input->post('fechaProrroga');		
+		$tipoTarea     = $this->input->post('tipoTarea');	
+		$idTarBonita   = $this->input->post('id');
+		$idCaseBonita  = $this->input->post('case_id');
+		$idInspeccion  = $this->Tareas->getIdInspPoridCase($idCaseBonita);
+
+		// graba en trg_actas
+		$data['tipoActa']      = $tipoActa;
+		$data['accion']        = $accion;
+		$data['fechaProrroga'] = $fechaProrroga; 
+		$data['inspeccionid']  = $idInspeccion; 
+		$data['archivada']     = 'NO';
+		if($actaid == '')
+			$query1 = $this->Tareas->setDatosInspeccion($data);	
+		else
+			$query1 = $this->Tareas->updateDatosInspeccion($data, $actaid);	
+		
+		// actualiza en tb_inspecciones
+		$datos['tipoActa']  = $tipoActa;
+		$datos['accion']    = $accion;
+		$query2 = $this->Tareas->actualizaInspeccion($idInspeccion,$datos);
+
+		if($query1 && $query2)
+		{
+			echo json_encode( 'true' );
+		} else {
+			echo json_encode( 'false' );
+		}
+	}
+	
+	
 	public function reasignarInspector(){
 
 		$idInspector = $this->input->post('idInspector');
@@ -200,25 +248,27 @@ class Tarea extends CI_Controller {
 		//dump_exit($response);
 		echo json_encode($response);
 	}
+
 	// Usr Toma tarea en BPM (Vistas tareas comunes)
-	public function tomarTarea(){
-		$userdata = $this->session->userdata('user_data');
-    $usrId = $userdata[0]['usrId'];     // guarda usuario logueado
-		//dump_exit($usrId);
+	public function tomarTarea()
+	{
+		$userdata    = $this->session->userdata('user_data');
+		$usrId       = $userdata[0]['usrId']; // usuario logueado
 		$idTarBonita = $this->input->post('idTarBonita');
-		$estado = array (
- 		  "assigned_id"	=>	$usrId
+		$estado      = array (
+ 		  "assigned_id"	=> $usrId
  		);
  		// trae la cabecera
- 		$parametros = $this->Bonitas->conexiones();
+ 		$parametros  = $this->Bonitas->conexiones();
  		// Cambio el metodo de la cabecera a "PUT"
  		$parametros["http"]["method"] = "PUT";
  		$parametros["http"]["content"] = json_encode($estado);
 		// Variable tipo resource referencia a un recurso externo.
-		$param = stream_context_create($parametros);
+		$param    = stream_context_create($parametros);
 		$response = $this->Tareas->tomarTarea($idTarBonita,$param);
 		echo json_encode($response);
 	}
+
 	// Usr Toma tarea en BPM   CAMBIAR EL USR POR USR LOGUEADO !!!!!!!
 	public function soltarTarea(){
 
@@ -237,34 +287,36 @@ class Tarea extends CI_Controller {
 		$response = $this->Tareas->soltarTarea($idTarBonita,$param);
 		echo json_encode($response);
 	}
-	// trae datos para llenar notificaion estandar y formulario asociado
-	public function detaTarea($permission,$idTarBonita){		
-
-		//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
-		$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
-		$data['permission'] = $permission;
-		//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
-		$data['TareaBPM'] = json_decode($this->getDatosBPM($idTarBonita),true);
-		$caseId = $data['TareaBPM']["caseId"];			
-		// trae datos de inspeccion por case_id
-		$data['datos'] = $this->Tareas->detaInspecciones($caseId);	
-		$data['idTarBonita'] = $idTarBonita;	
 	
+	// trae datos para llenar notificaion estandar y formulario asociado
+	public function detaTarea($permission, $idTarBonita)
+	{
+		$data['permission']  = $permission;
+		//OBTENER DATOS DE TAREA SELECCIONADA DESDE BONITA
+		$data['TareaBPM']    = json_decode($this->getDatosBPM($idTarBonita),true);
+		$caseId              = $data['TareaBPM']["caseId"];			
+		// trae datos de inspeccion por case_id
+		$data['datos']       = $this->Tareas->detaInspecciones($caseId);	
+		$data['idTarBonita'] = $idTarBonita;	
+		
 		$data['comentarios'] = $this->ObtenerComentariosBPM($caseId);
-		$data['timeline'] = $this->ObtenerLineaTiempo($caseId);
+		$data['timeline']    = $this->ObtenerLineaTiempo($caseId);
 
 		switch ($data['TareaBPM']['displayName']) {			
 			case 'Reasignar Inspector a Inspección':
-						$this->load->view('tareas/view_reasignarInspector', $data);
-						break;
+				$this->load->view('tareas/view_reasignarInspector', $data);
+				break;
 			case 'Realiza Inspección':
-						$this->load->view('tareas/view_realizaInspeccion', $data);
-						break;	
+				// traigo la info guardada en borrador
+				$data['datosBorrador'] = $this->Tareas->obtenerBorradorInspeccion($caseId);
+				$this->load->view('tareas/view_realizaInspeccion', $data);
+				break;	
 			default:				
-						$this->load->view('tareas/view_', $data);				
-						break;
+				$this->load->view('tareas/view_', $data);				
+				break;
 		}
 	}
+
 	public function getDenPorBpmId(){
 		$bpm_Id = $this->input->post('bpm_Id');	
 		$response = $this->Tareas->getDenPorBpmId($bpm_Id);
