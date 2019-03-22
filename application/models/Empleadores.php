@@ -214,7 +214,7 @@ class Empleadores extends CI_Model
     }
 
     // Actualiza datos de edicion de Establecimientos
-    function updateEstablecimientoPorIds($estab,$id){
+    function updateEstablecimientoPorIds($estab, $id){
         $this->db->where('tbl_establecimiento.estableid', $id);
         $response = $this->db->update('tbl_establecimiento', $estab);
         return $response;
@@ -233,7 +233,7 @@ class Empleadores extends CI_Model
     /***   LIBROS   ***/
 
     // Guarda libros entregados al agregar empleador
-    function setLibro($libro,$idEmpleador){
+    function setLibro($libro, $idEmpleador){
         foreach ($libro as $comp) { 
             $dato['librofechaentrega'] = $comp[2];
             $dato['librotomo']         = $comp[1];
