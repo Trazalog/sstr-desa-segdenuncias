@@ -9851,7 +9851,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"aLengthMenu": [ 10, 25, 50, 100 ],
+		"aLengthMenu": [ 5, 10, 25, 50, 100 ],
 	
 	
 		/**
@@ -10190,7 +10190,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"bScrollCollapse": false,
+		"bScrollCollapse": true, //false,
 	
 	
 		/**
@@ -10975,7 +10975,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sSortAscending": ": activate to sort column ascending",
+				"sSortAscending": ": Activar para ordenar la columna de manera ascendente",//": activate to sort column ascending",
 	
 				/**
 				 * ARIA label that is added to the table headers when the column may be
@@ -10998,7 +10998,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sSortDescending": ": activate to sort column descending"
+				"sSortDescending": ": Activar para ordenar la columna de manera descendente",//": activate to sort column descending"
 			},
 	
 			/**
@@ -11028,7 +11028,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sFirst": "First",
+				"sFirst": "Primero",//"First",
 	
 	
 				/**
@@ -11051,7 +11051,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sLast": "Last",
+				"sLast": "Último",//"Last",
 	
 	
 				/**
@@ -11074,7 +11074,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sNext": "Next",
+				"sNext": "Sig.",//"Next",
 	
 	
 				/**
@@ -11097,7 +11097,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sPrevious": "Previous"
+				"sPrevious": "Ant.",//"Previous"
 			},
 	
 			/**
@@ -11120,7 +11120,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sEmptyTable": "No data available in table",
+			"sEmptyTable": "Ningún dato disponible en esta tabla",//"No data available in table",
 	
 	
 			/**
@@ -11152,7 +11152,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "Mostrando del _START_ al _END_ de un total de _TOTAL_ registros.",//"Showing _START_ to _END_ of _TOTAL_ entries",
 	
 	
 			/**
@@ -11173,7 +11173,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			"sInfoEmpty": "Mostrando del 0 al 0 de un total de 0 registros",//sUrlsUrlShowing 0 to 0 of 0 entries",
 	
 	
 			/**
@@ -11195,7 +11195,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",//"(filtered from _MAX_ total entries)",
 	
 	
 			/**
@@ -11249,7 +11249,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sDecimal": "",
+			"sDecimal": ",",
 	
 	
 			/**
@@ -11272,7 +11272,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sThousands": ",",
+			"sThousands": ".",
 	
 	
 			/**
@@ -11313,7 +11313,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "Show _MENU_ entries",
+			"sLengthMenu": "Mostrar _MENU_ registros", //"Show _MENU_ entries",
 	
 	
 			/**
@@ -11337,7 +11337,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLoadingRecords": "Loading...",
+			"sLoadingRecords": "Cargando...",//"Loading...",
 	
 	
 			/**
@@ -11358,7 +11358,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sProcessing": "Processing...",
+			"sProcessing": "Procesando...", //"Processing...",
 	
 	
 			/**
@@ -11393,7 +11393,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "Search:",
+			"sSearch": "Buscar:",//"Search:",
 	
 	
 			/**
@@ -11451,7 +11451,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sZeroRecords": "No matching records found"
+			"sZeroRecords": "No se encontraron registros",//"No matching records found"
 		},
 	
 	
@@ -11617,7 +11617,7 @@
 		 *      } );
 		 *    } )
 		 */
-		"sPaginationType": "simple_numbers",
+		"sPaginationType": "full_numbers",//"simple_numbers",
 	
 	
 		/**
@@ -11642,7 +11642,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"sScrollX": "",
+		"sScrollX": "100%",//"",
 	
 	
 		/**
@@ -11666,7 +11666,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"sScrollXInner": "",
+		"sScrollXInner": "100%",//"",
 	
 	
 		/**
@@ -12634,7 +12634,7 @@
 			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
-			"bAutoWidth": null,
+			"bAutoWidth": true, //null,
 	
 			/**
 			 * Delay the creation of TR and TD elements until they are actually

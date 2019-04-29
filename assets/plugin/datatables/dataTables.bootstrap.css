@@ -133,6 +133,10 @@ table.dataTable.table-condensed thead .sorting_desc:after {
 }
 
 /* Scrolling */
+div.dataTables_scroll { /* Agregada */
+    margin-bottom: 10px !important;
+}
+
 div.dataTables_scrollHead table {
 	margin-bottom: 0 !important;
 	border-bottom-left-radius: 0;
