@@ -59,9 +59,26 @@ class TareasProfesionales extends CI_Model {
      */
     function agregarTareaProfesional($datos)
     {
-        $datos['estado']      = 'AC';
-        $datos['profesional'] = $this->getIdProfesional($datos['profesional']);
-        $result = $this->db->insert('trg_tareasprofesionales',$datos);
+        //dump_exit($datos);
+        $tipo          = $datos['tipo'];
+        $fecha         = $datos['fecha'];
+        $profesional   = $this->getIdProfesional($datos['profesional']);
+        $observaciones = $datos['observaciones'];
+        $vencimiento   = $datos['vencimiento'];
+        $caldera       = $datos['calderaId'];
+        $estado        = 'AC';
+                
+        $data = Array (
+            'tipo'          => $tipo,
+            'fecha'         => $fecha,
+            'profesional'   => $profesional,
+            'observaciones' => $observaciones,
+            'vencimiento'   => $vencimiento,
+            'caldera'       => $caldera,
+            'estado'        => $estado,
+        );
+
+        $result = $this->db->insert('trg_tareasprofesionales',$data);
         return $result;
     }
 
@@ -142,7 +159,7 @@ class TareasProfesionales extends CI_Model {
     function editarTareaProfesional($datos)
     {
         $tare_id       = $datos['tare_idE'];
-        $tipo          = $datos['tipoE'];
+        $tipo          = $datos['tipoTareaE'];
         $fecha         = $datos['fechaE'];
         $profesional   = $this->getIdProfesional($datos['profesionalE']);
         $observaciones = $datos['observacionesE'];
