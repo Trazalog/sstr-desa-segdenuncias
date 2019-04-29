@@ -67,16 +67,11 @@ class Caldera extends CI_Controller {
         echo json_encode($response);
     }
 
-    /**
-     * Trae datos de caldera con id dado.
-     * 
-     * @return  String   Json con los datos de la caldera.
-     */
-    public function obtenerCaldera()
-    {
-        $cald_id  = $this->input->post('cald_id');
-        $response = $this->Calderas->obtenerCaldera($cald_id);
-        echo json_encode($response[0]);
+    public function verCaldera($permission, $idCaldera, $operacion){
+        $data['permission'] = $permission;
+        $data['operacion']  = $operacion;
+        $data['list']       = $this->Calderas->obtenerCaldera($idCaldera);
+        $this->load->view('calderas/_view', $data);
     }
 
     /**
@@ -91,6 +86,3 @@ class Caldera extends CI_Controller {
         echo json_encode($response);
     }
 }
-
-/* End of file Caldera.php */
-/* Location: ./application/controllers/Caldera.php */

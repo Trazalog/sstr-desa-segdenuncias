@@ -113,7 +113,24 @@ class Calderas extends CI_Model {
 
         if ($query->num_rows()!=0)
         {
-            return $query->result_array(); 
+            $caldera = $query->result_array(); 
+
+            $this->db->select('trg_tareasprofesionales.*, trg_profesionales.nombre AS profesionalNombre, trg_tipotareaprofesional.nombre AS tipoNombre');
+            $this->db->from('trg_tareasprofesionales');
+            $this->db->join('trg_profesionales','trg_profesionales.prof_id = trg_tareasprofesionales.profesional');
+            $this->db->join('trg_tipotareaprofesional', 'trg_tipotareaprofesional.tita_id = trg_tareasprofesionales.tipo');
+            $this->db->where('trg_tareasprofesionales.estado', 'AC');
+            $this->db->where('trg_tareasprofesionales.caldera', $caldera[0]["cald_id"]);
+
+            $query2 = $this->db->get();
+            if($query2->num_rows()>0){
+                $caldera[0]['tareasProfesionales'] = $query2->result_array();
+            }
+            else{
+                $caldera[0]['tareasProfesionales'] = array();
+            }
+
+            return $caldera; 
         }
         else{
             return array();
@@ -170,5 +187,4 @@ class Calderas extends CI_Model {
         $result = $this->db->update('trg_calderas', $data, array('trg_calderas.cald_id' => $cald_id));
         return $result;
     }
-
 }

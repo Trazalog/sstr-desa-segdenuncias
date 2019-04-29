@@ -449,6 +449,10 @@ $('#tbl-profesionales').DataTable({
   {
       "targets": [ 0 ], 
       "orderable": false
+  },
+  {
+    "targets": [ 1 ],
+    "type": "num",
   } ],
   "order": [[1, "asc"]],
 });
