@@ -464,6 +464,47 @@
 
 
 <script>
+var operacion = '<?php echo $operacion ?>';
+if (operacion == 'ver') {
+  $("#tipoE").attr("disabled", true);
+  $('#cald_idE').attr('disabled', true);
+  $('#empresaE').attr('disabled', true);
+  $("#establecimientoE").attr("disabled", true);
+  $('#nom_fabricanteE').attr('disabled', true);
+  $('#max_presionE').attr('disabled', true);
+  $('#superficieCalefaccionE').attr('disabled', true);
+  $('#max_capacidadVaporE').attr('disabled', true);
+  $('#temperaturaPresionMaximaE').attr('disabled', true);
+  $('#num_serieE').attr('disabled', true);
+  $('#codigoNormaE').attr('disabled', true);
+  $('#anioFabricacionE').attr('disabled', true);
+  $('#num_registroE').attr('disabled', true);
+  $('#documentacionE').attr('disabled', true);
+
+  $('.box-title').html('Ver Calderas ó Recipientes a Presión');
+  $('#btnEditarCaldera').hide();
+}
+if (operacion == 'editar') {
+  $("#tipoE").attr("disabled", false);
+  $('#cald_idE').attr('disabled', false);
+  $('#empresaE').attr('disabled', false);
+  $("#establecimientoE").attr("disabled", false);
+  $('#nom_fabricanteE').attr('disabled', false);
+  $('#max_presionE').attr('disabled', false);
+  $('#superficieCalefaccionE').attr('disabled', false);
+  $('#max_capacidadVaporE').attr('disabled', false);
+  $('#temperaturaPresionMaximaE').attr('disabled', false);
+  $('#num_serieE').attr('disabled', false);
+  $('#codigoNormaE').attr('disabled', false);
+  $('#anioFabricacionE').attr('disabled', false);
+  $('#num_registroE').attr('disabled', false);
+  $('#documentacionE').attr('disabled', false);
+
+  $('.box-title').html('Editar Calderas ó Recipientes a Presión');
+  $('#btnEditarCaldera').show();
+}
+
+
 /*================================
 =            CALDERAS            =
 ================================*/
@@ -720,8 +761,8 @@ $("#btnAgregar").on("click", function(e){
 
 /*----------  llena tabla de tareas profesionales  ----------*/
 function llenarTablaTareasProfesionales(tareasProfesionales){
-  var table = $("#tbl-tareaProfesional").DataTable();
-  table.clear();
+  $("#tbl-tareaProfesional").DataTable().destroy();
+  //$("#tbl-tareaProfesional").DataTable().clear().draw();
   for(i = 0; i < tareasProfesionales.length; i++) {
     var id                = tareasProfesionales[i].tare_id;
     var tipo              = tareasProfesionales[i].tipo;
@@ -744,7 +785,7 @@ function llenarTablaTareasProfesionales(tareasProfesionales){
     <?php } ?>
     console.log("primer columna: "+primerColumna);
     //agrego valores a la tabla
-    var rowNode = table.row.add( [
+    var rowNode = $("#tbl-tareaProfesional").DataTable().row.add( [
       primerColumna,
       id,
       tipoNombre,
@@ -754,8 +795,8 @@ function llenarTablaTareasProfesionales(tareasProfesionales){
       ]
     ).node();
     rowNode.id = id;
-    table.draw();
-    $( rowNode ).find('td').eq(0).addClass('details-control');
+    $("#tbl-tareaProfesional").DataTable().draw();
+    /*$( rowNode ).find('td').eq(0).addClass('details-control');*/
   }
 }
 
@@ -1103,8 +1144,9 @@ $('#modalAgregar, #modalEditar').on('hide.bs.modal', function (e) {
   $('[class*="has-error"]').removeClass("has-error").css("color","inherit");
 })
 
-/*----------  carga database en tabla listado de profesionales  ----------* /
-$('#tbl-tareaProfesional').DataTable({
+/*----------  carga database en tabla listado de profesionales  ----------*/
+$('#tbl-profesionales, #tbl-tareaProfesional').DataTable({
+  "destroy": true,
   "aLengthMenu": [ 10, 25, 50, 100 ],
   "columnDefs": [ {
       "targets": [ 0 ], 
@@ -1119,5 +1161,5 @@ $('#tbl-tareaProfesional').DataTable({
     "type": "num",
   } ],
   "order": [[1, "asc"]],
-});*/
+});
 </script>
