@@ -24,6 +24,26 @@ class Inspecciones extends CI_Model
 				return array();
 			}
 	}
+		// Devuelve inspecciones en estado Curso 
+		function Listado_Inspecciones_por_Fecha($fi,$ff){
+
+			$this->db->select('*,concat(C.establecalle," - ",C.establealtura," - ",E.localidad) as direccionCompleta');
+			$this->db->from('tbl_inspecciones as A');
+			$this->db->join('tbl_inspectores as B','A.inspectorid=B.inspectorid');
+			$this->db->join('tbl_establecimiento as C','A.estableid=C.estableid');
+			$this->db->join('tbl_empleadores D','C.empleaid=D.empleaid');
+			$this->db->join('localidades as E','C.dptoid=E.id');
+			$this->db->where('A.inspeestado= "C" ');		
+			$this->db->where('date(A.inspeccionfecharecp)>=',$fi);$this->db->where('date(A.inspeccionfecharecp)<=',$ff);
+			$query=$this->db->get();
+			if ($query->num_rows()!=0)    
+			{
+				return $query->result_array();	
+			}
+			else{
+					return array();
+			}
+		}
 	// Devuelve establecimientos por ID de empleadores Activos
 	function getEstablecimientos($id){
 
@@ -119,8 +139,8 @@ class Inspecciones extends CI_Model
 	}
 
 	// guarda inspecciones nuevas
-	function Guardar_Inspecciones($data){
-
+	function Guardar_Inspecciones($data)
+	{
 		$query = $this->db->insert("tbl_inspecciones",$data);
 		$idIns = $this->db->insert_id();
 		return $idIns;
@@ -203,9 +223,36 @@ class Inspecciones extends CI_Model
 
 	
 
+	/**
+     * Equipos:updateAdjuntoEquipo();
+     *
+     * @param  String   $adjunto    Nombre del archivo
+     * @param  Int      $ultimoId   Id del acta a la que se va a adjuntar archivo
+     * @return String               Nombre del archivo adjuntado
+     */
+    public function updateAdjuntoActa($adjunto,$ultimoId)
+    {
+        $this->db->where('actaid', $ultimoId);
+        $query = $this->db->update("trg_actas", $adjunto);
+        $response['adjunto'] = $adjunto['acta'];
+        $response['idActa']  = $ultimoId;
+        return $response;
+    }
 
+	/**
+     * Inspecciones:eliminarAdjunto
+     * Elimina el Archivo Adjunto de un acta dada (no elimina el archivo).
+     *
+     * @param Int       $idPreventivo   Id de preventivo
+     * @return Bool                     True o False
+     */
+    public function eliminarAdjunto($idActa)
+    {
+        $data  = array( 'acta' => '' );
+        $this->db->where('actaid', $idActa);
+        $query = $this->db->update("trg_actas", $data);
+        return $query;
+    }
 
 
 }	
-
-?>

@@ -39,8 +39,8 @@ class Inspector extends CI_Controller {
 						    'inspectorsector' => $inspectorsector,
 						    'inspectorestado' =>"AC"
 	    );
-	    $sql = $this->Inspectores->Guardar_Inspectores($data);
-	  	echo json_encode($sql);
+	    $response = $this->Inspectores->Guardar_Inspectores($data);
+	  	echo json_encode($response);
 	   
   	}
 

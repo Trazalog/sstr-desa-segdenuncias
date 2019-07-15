@@ -24,35 +24,19 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/jquery-ui.min.css">
     <!-- DataTables 1.10.7 -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.css">
-
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/bootstrapValidator.min.css"/>
- 
-
-
-<!--esto agregue -->
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.bootstrap.min.css">
-
-
-<script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.4/js/buttons.bootstrap.min.js"></script>
-
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
-
-<!-- <link rel="stylesheet" href="">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.4/css/buttons.dataTables.min.css">
-<script src=""></script>
-<script src="https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script> -->
-
-<!--hasta aca agregue -->
-
+    <!-- Bootstrap validator -->
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/bootstrapvalidator/bootstrapValidator.min.css"/>
     <!-- Jasny Bootstrap -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/jasny-bootstrap/css/jasny-bootstrap.min.css">
     <!-- Bootstrap datetimepicker -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datetimepicker/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/datetimepicker/css/bootstrap-datetimepicker.min.css">
     <!-- Bootstrap Typeahead -->
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/typeahead/typeahead.min.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/plugin/typeahead/typeahead.min.css"> 
+    
+    <!-- Propios -->
+    <link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url();?>assets/css/propios.css" />
+    
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -68,36 +52,33 @@
     <!-- AdminLTE for demo purposes -->
     <!--<script src="<?php echo base_url();?>assets/js/demo.js"></script>-->
     <!--<script src="<?php echo base_url();?>assets/js/notify.js"></script>-->
-
-    <!-- funciones comunes al sistema -->
-    <script src="<?php echo base_url();?>assets/js/propios.js"></script>
+    <!-- Jquery UI 1.12.1 -->
+    <script src="<?php echo base_url();?>assets/js/jquery-ui.min.js"></script>
     <!-- DataTables 1.10.7 -->
     <script src="<?php echo base_url();?>assets/plugin/datatables/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url();?>assets/plugin/datatables/dataTables.bootstrap.min.js"></script>
-
-    <!-- Jquery UI 1.12.1 -->
-    <script src="<?php echo base_url();?>assets/js/jquery-ui.min.js"></script>
-
+    <!-- Bootstrap validator -->
+    <script src="<?php echo base_url();?>assets/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+    <!-- Jasny Bootstrap -->
+    <script src="<?php echo base_url();?>assets/plugin/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
+    <!-- Bootstrap datetimepicker -->
+    <script src="<?php echo base_url();?>assets/plugin/moment/moment-with-locales.min.js"></script>
+    <script src="<?php echo base_url();?>assets/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- Bootstrap Typeahead -->
+    <script src="<?php echo base_url();?>assets/plugin/typeahead/bootstrap3-typeahead.min.js"></script>
+    <script src="<?php echo base_url();?>assets/plugin/typeahead/typeahead.bundle.min.js"></script>
     <!-- Imprimir -->
     <script src="<?php echo base_url();?>assets/js/jquery.PrintArea.js"></script>    
+
+    <!-- funciones comunes al sistema -->
+    <script src="<?php echo base_url();?>assets/js/propios.js"></script>
 
     <!-- ChartJS 2.5.0 -->
     <!-- <script src="<?php //echo base_url();?>assets/plugin/chartjs/Chart.min.js"></script> -->
 
-    <!-- Jasny Bootstrap -->
-    <script src="<?php echo base_url();?>assets/plugin/jasny-bootstrap/js/jasny-bootstrap.min.js"></script>
-    
-    <!-- Bootstrap datetimepicker -->
-    <script src="<?php echo base_url();?>assets/plugin/moment/moment-with-locales.min.js"></script>
-    <script src="<?php echo base_url();?>assets/plugin/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-
-    <!-- Bootstrap Typeahead -->
-    <script src="<?php echo base_url();?>assets/plugin/typeahead/bootstrap3-typeahead.min.js"></script>
-    <script src="<?php echo base_url();?>assets/plugin/typeahead/typeahead.bundle.min.js"></script>
-
     <!-- iCheck - ->
-    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/iCheck/square/blue.css">
-    <link rel="stylesheet" href="<?php  //echo base_url();?>assets/css/square/green.css">-->
+    <link rel="stylesheet" href="<?php //echo base_url();?>assets/plugin/iCheck/square/blue.css">
+    <link rel="stylesheet" href="<?php //echo base_url();?>assets/css/square/green.css">-->
     <!-- iCheck - ->
     <script src="<?php  //echo base_url();?>assets/plugin/iCheck/icheck.min.js"></script>-->
 
@@ -107,15 +88,10 @@
 
     <!- - Bootstrap Color Picker - ->
     <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/colorpicker/bootstrap-colorpicker.min.css">
-    -->
-
-    <!-- FastClick - ->
-    <script src="<?php  //echo base_url();?>assets/plugin/fastclick/fastclick.min.js"></script>
+    - ->
 
     <!- - SlimScroll - ->
     <script src="<?php  //echo base_url();?>assets/plugin/slimScroll/jquery.slimscroll.min.js"></script>
-    <!- - FastClick - ->
-    <script src="<?php  //echo base_url();?>assets/plugin/fastclick/fastclick.min.js"></script>
 
     <!- - Select2 - ->
     <link rel="stylesheet" href="<?php  //echo base_url();?>assets/plugin/select2/select2.css">
@@ -127,18 +103,6 @@
     <script src="<?php  //echo base_url();?>assets/plugin/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="<?php  //echo base_url();?>assets/plugin/input-mask/jquery.inputmask.extensions.js"></script>
     -->
-    <!--<link rel="stylesheet" href="<?php  //echo base_url();?>code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">-->
-
-    <!-- <script src="<?php  //echo base_url();?>assets/plugin/fullcalendar/moment.min.js"></script>
-    <script src="<?php  //echo base_url();?>assets/plugin/fullcalendar/fullcalendar.min.js"></script> -->
-
-    <!-- <script src="<?php  //echo base_url();?>ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="<?php  //echo base_url();?>ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.js"></script> -->
-
-    <!-- bootstrap color picker -->
-    <script src="<?php  //echo base_url();?>assets/plugin/colorpicker/bootstrap-colorpicker.min.js"></script>
-
-
 </head>
 
 

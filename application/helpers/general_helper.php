@@ -1,5 +1,37 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+if (!function_exists('msjeSinPermisoVista')) {
+    function msjeSinPermisoVista($echo = TRUE)
+    {
+        $output = '
+            <section class="content">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="box">
+                    <div class="box-header">
+                      <h3 class="box-title text-yellow">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 
+                        No tiene permisos para ver esta página
+                      </h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                      <p>Si debiera ver la página y piensa que esto es un error contáctese con el soporte técnico.</p>
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </section><!-- /.content -->';
+        // Output
+        if ($echo == TRUE) {
+            echo $output;
+        }
+        else {
+            return $output;
+        }
+    }
+}
+
+
 /**
  * Dump helper. Función que vuelca variables en pantalla de una manera bien formateada. Basada en el helper 'Dump Helper' de Joos Van Veen.
  * @author Pablo Andrés Rojo
